@@ -1,4 +1,5 @@
 import { AffiliationType } from "./types";
+export declare const NOTICE: any;
 export declare class Inputs {
     static get token(): string;
     static get actionsToken(): string;

@@ -6,7 +6,7 @@ They can be identified in the workflow and action configs.
 Special notice has to be taken for the environment variable `GITHUB_TOKEN` 
 and context variable `github.token`.
 
-If you are certain this pull request is safe to check, confirm your approval using the button.
+If you are certain this pull request is safe to check, confirm your approval via the button.
 Otherwise, request changes from the author in a review.
 If you think it is clear that the author intentionally tries to circumvent security practices in order to gain access to the token
 or manipulate repository data, please follow the 

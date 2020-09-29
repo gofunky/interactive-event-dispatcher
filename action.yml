@@ -1,0 +1,76 @@
+name: interactive event dispatcher
+description: recoup various deficits of the default GitHub action and event system
+outputs:
+  triggered:
+    description: if `inputs.prefix` is enabled, only true if the prefix was matched, otherwise always true
+  command:
+    description: if `inputs.prefix` is enabled, contains the matched subsequent command if a command is given
+runs:
+  using: node12
+  main: dist/index.js
+branding:
+  icon: git-pull-request
+  color: gray-dark
+inputs:
+  token:
+    description: a repository-scoped personal access token (the GITHUB_TOKEN will not work)
+    required: true
+  actionsToken:
+    description: |
+      WARNING: Do not change this! It will be used for API requests that only the default token can perform.
+    required: false
+    default: ${{ github.token }}
+  event:
+    description: the name of the event to trigger
+    required: false
+    default: pull_request_comment
+  prefix:
+    description: only trigger events if this prefix is matched and pass the subsequent command (regex syntax is allowed)
+    required: false
+    default: ''
+  commandFilter:
+    description: only accept the given line-separated list of regular-expressed commands as triggers
+    required: false
+    default: ''
+  appendCommand:
+    description: append the command to the event's name that is to be triggered
+    required: false
+    default: 'false'
+  outsiderCommands:
+    description: also accept commands from non-affiliated users
+    required: false
+    default: 'false'
+  number:
+    description: override the number of the issue or pull request that triggers this action
+    required: false
+    default: ''
+  body:
+    description: override the body of the issue comment that triggers this action
+    required: false
+    default: ''
+  affiliation:
+    description: the required affiliation status of a collaborator who is allowed to approve forked pull requests
+    required: false
+    default: all
+  forwardChecks:
+    description: for adding checks for each triggered workflow
+    required: false
+    default: 'true'
+  interval:
+    description: the fetch interval for the triggered workflows in miliseconds
+    required: false
+    default: '500'
+  pullMode:
+    description: |
+      WARNING: Do not use this for workflows that execute code or checks beyond static code analysis on the target.
+      This will skip the affiliation check and always forward events without affiliation checks
+      and from any source (i.e. pull requests and issues). Check commands will not be processed.
+    required: false
+    default: 'true'
+  perPage:
+    description: |
+      For repositories with frequent and large numbers of comments or workflows, the API might not return all
+      nodes for all requests. That is because not every endpoint provides the appropriate filtering methods.
+      This input can compensate for this limitation by setting it up to 100.
+    required: false
+    default: '30'

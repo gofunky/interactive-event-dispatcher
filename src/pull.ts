@@ -9,18 +9,30 @@ import {Inputs} from "./inputs";
 import NodeCache from "node-cache";
 import {useAdapter} from "@type-cacheable/node-cache-adapter";
 import {CheckParams} from "./types";
+import {EventPayloads} from "@octokit/webhooks";
+import {LazyGetter} from "lazy-get-decorator";
 
 const client = new NodeCache()
 useAdapter(client)
 
-const NOTICE_HEADER = '<!-- pull request condition notice -->'
-const NOTICE = require('!!mustache-loader!html-loader!markdown-loader!../templates/notice.md')
-const CHECK_MSG = require('!!mustache-loader!html-loader!markdown-loader!../templates/check.md')
-const ACCEPTED_ASSOCIATIONS = ['OWNER', 'MEMBER', 'COLLABORATOR']
+export const NOTICE_HEADER = '<!-- pull request condition notice -->'
+export const NOTICE = require('!!mustache-loader!html-loader!markdown-loader!../templates/notice.md')
+export const CHECK_MSG = require('!!mustache-loader!html-loader!markdown-loader!../templates/check.md')
+export const ACCEPTED_ASSOCIATIONS = ['OWNER', 'MEMBER', 'COLLABORATOR']
+export const CHECK_NAME = 'Pending Check'
 
 export class PullRequestEvent extends Event {
+    @LazyGetter()
     get number(): number | undefined {
         return Inputs.number ?? github.context.payload.pull_request?.number
+    }
+
+    @LazyGetter()
+    get pullEvent(): EventPayloads.WebhookPayloadPullRequestPullRequest | undefined {
+        const payload = <EventPayloads.WebhookPayloadPullRequest>github.context.payload
+        if (payload.pull_request.title != undefined && payload.pull_request.title != '') {
+            return payload.pull_request
+        }
     }
 
     @Cacheable()
@@ -29,35 +41,35 @@ export class PullRequestEvent extends Event {
     }
 
     @Cacheable()
-    async pullRequestData(): Promise<PullsGetResponseData | undefined> {
+    async pullData(): Promise<PullsGetResponseData | EventPayloads.WebhookPayloadPullRequestPullRequest | undefined> {
         if (!this.number) {
             core.warning('The issue number could not be determined. No pull request data will be passed in the event.')
             return undefined
         }
-        return this.api.pullByNumber(this.number)
+        return this.pullEvent ?? await this.api.pullByNumber(this.number)
     }
 
     @Cacheable()
     async repository(): Promise<string> {
-        const data = await this.pullRequestData()
+        const data = await this.pullData()
         return data?.head.repo.full_name ?? await super.repository()
     }
 
     @Cacheable()
     async sha(): Promise<string> {
-        const data = await this.pullRequestData()
+        const data = await this.pullData()
         return data?.head.sha ?? await super.sha()
     }
 
     @Cacheable()
     async ref(): Promise<string> {
-        const data = await this.pullRequestData()
+        const data = await this.pullData()
         const pullRef = data?.merged ? 'head' : 'merge'
         return this.number ? `refs/pull/${this.number}/${pullRef}` : data?.head.ref ?? await super.ref()
     }
 
     async branchMatch(branch: string): Promise<boolean> {
-        const data = await this.pullRequestData()
+        const data = await this.pullData()
         return [
             `refs/pull/${this.number}/head`,
             `refs/pull/${this.number}/merge`,
@@ -70,7 +82,7 @@ export class PullRequestEvent extends Event {
     @Cacheable()
     async payload(): Promise<Payload> {
         const inner = await super.payload()
-        inner.pull_request = await this.pullRequestData() ?? inner.pull_request
+        inner.pull_request = await this.pullData() ?? inner.pull_request
         inner.number = this.number ?? inner.number
         return inner
     }
@@ -86,7 +98,7 @@ export class PullRequestEvent extends Event {
             return false
         }
 
-        const pullRequest = await this.pullRequestData()
+        const pullRequest = await this.pullData()
         if (!pullRequest) {
             core.info("Event condition check failed because the pull request could not be determined.")
             return false
@@ -113,16 +125,16 @@ export class PullRequestEvent extends Event {
             })
         }
 
-        const checkName = `Pending Check`
+        const sha = await this.sha()
         const short = await this.short()
         const approveAction = await this.api.getCheck({
             ref: await this.ref(),
             filter: 'latest',
-            name: checkName
+            name: CHECK_NAME
         })
         const checkData: CheckParams = {
-            name: checkName,
-            sha: await this.sha(),
+            name: CHECK_NAME,
+            sha: sha,
             status: "completed",
             conclusion: "action_required",
             output: {
@@ -139,10 +151,13 @@ export class PullRequestEvent extends Event {
             ]
         }
         if (approveAction.total_count == 1) {
-            await this.api.updateCheck({
-                checkId: approveAction.check_runs[0].id,
-                ...checkData
-            })
+            const matchedAction = approveAction.check_runs[0]
+            if (matchedAction.head_sha != sha) {
+                await this.api.updateCheck({
+                    checkId: matchedAction.id,
+                    ...checkData
+                })
+            }
         } else {
             await this.api.createCheck(checkData)
         }

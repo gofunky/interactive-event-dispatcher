@@ -9,6 +9,9 @@ import NodeCache from "node-cache";
 import {useAdapter} from "@type-cacheable/node-cache-adapter"
 import {IssuesGetCommentResponseData} from "@octokit/types"
 import {ReactionType} from "./types";
+import {LazyGetter} from "lazy-get-decorator";
+import {EventPayloads} from "@octokit/webhooks";
+import WebhookPayloadIssueCommentComment = EventPayloads.WebhookPayloadIssueCommentComment;
 
 const client = new NodeCache()
 useAdapter(client)
@@ -21,6 +24,7 @@ interface Match {
 
 export class PullRequestCommentEvent extends PullRequestEvent {
 
+    @LazyGetter()
     get number(): number {
         return super.number ?? github.context.issue.number
     }
@@ -38,13 +42,18 @@ export class PullRequestCommentEvent extends PullRequestEvent {
         return `${prefix}_${command}`
     }
 
-    @Cacheable()
-    async commentData(): Promise<IssuesGetCommentResponseData> {
-        const commentId = github.context.payload.comment?.id
-        if (!commentId) {
-            return <IssuesGetCommentResponseData>{}
+    @LazyGetter()
+    get commentEvent(): EventPayloads.WebhookPayloadIssueComment | undefined {
+        const payload = <EventPayloads.WebhookPayloadIssueComment>github.context.payload
+        if (payload.comment.id != undefined && payload.comment.id != 0) {
+            return payload
         }
-        return await this.api.commentById({commentId: commentId})
+    }
+
+    @Cacheable()
+    async commentData(): Promise<IssuesGetCommentResponseData | WebhookPayloadIssueCommentComment> {
+        const commentId = <number>github.context.payload.comment?.id
+        return this.commentEvent?.comment ?? await this.api.commentById({commentId: commentId})
     }
 
     @Cacheable()
@@ -86,6 +95,7 @@ export class PullRequestCommentEvent extends PullRequestEvent {
         return {triggered: false}
     }
 
+    @Cacheable()
     async fromCollaborator(): Promise<boolean> {
         const collaborators = await this.api.collaborators(Inputs.affiliation)
         const comment = await this.commentData()

@@ -2,6 +2,8 @@ import { Payload } from "./payload";
 import { PullRequestEvent } from "./pull";
 import { IssuesGetCommentResponseData } from "@octokit/types";
 import { ReactionType } from "./types";
+import { EventPayloads } from "@octokit/webhooks";
+import WebhookPayloadIssueCommentComment = EventPayloads.WebhookPayloadIssueCommentComment;
 interface Match {
     triggered: boolean;
     command?: string;
@@ -10,7 +12,8 @@ interface Match {
 export declare class PullRequestCommentEvent extends PullRequestEvent {
     get number(): number;
     triggerEvent(): Promise<string>;
-    commentData(): Promise<IssuesGetCommentResponseData>;
+    get commentEvent(): EventPayloads.WebhookPayloadIssueComment | undefined;
+    commentData(): Promise<IssuesGetCommentResponseData | WebhookPayloadIssueCommentComment>;
     body(): Promise<string>;
     command(): Promise<string>;
     feedback(reaction: ReactionType): Promise<void>;

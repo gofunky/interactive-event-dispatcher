@@ -12,7 +12,7 @@ They can be identified in the workflow and action configs.
 Special notice has to be taken for the environment variable `GITHUB_TOKEN` 
 and context variable `github.token`.
 
-Use the check action button to approve the check of the current pull request state and press `Approve Check`.
+Use the check action button to approve the check of the last commit and press `Approve Check`.
 To approve a specific commit, create a comment that contains `{{cmd}}`.
 </p>
 </details>
