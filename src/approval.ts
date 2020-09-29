@@ -46,6 +46,10 @@ export class PullRequestActionEvent extends PullRequestEvent {
             core.info('The requested action does not match the expected action.')
             return false
         }
+        if (github.context.payload.requested_action.identifier == undefined) {
+            core.info('The check run does not seem to be of type `requested_action`.')
+            return false
+        }
         if (await this.sha() == '') {
             core.warning('No sha was provided from the action request.')
             return false
