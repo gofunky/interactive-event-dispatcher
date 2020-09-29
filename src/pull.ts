@@ -1,19 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as core from "@actions/core"
 import { Event } from "./event"
-import {Cacheable} from "@type-cacheable/core";
 import * as github from "@actions/github";
 import {PullsGetResponseData} from "@octokit/types";
 import {Payload} from "./payload";
 import {Inputs} from "./inputs";
-import NodeCache from "node-cache";
-import {useAdapter} from "@type-cacheable/node-cache-adapter";
 import {CheckParams} from "./types";
 import {EventPayloads} from "@octokit/webhooks";
 import {LazyGetter} from "lazy-get-decorator";
-
-const client = new NodeCache()
-useAdapter(client)
+import {memoize} from "memoize-cache-decorator";
 
 export const NOTICE_HEADER = '<!-- pull request condition notice -->'
 export const NOTICE = require('!!mustache-loader!html-loader!markdown-loader!../templates/notice.md')
@@ -35,12 +30,12 @@ export class PullRequestEvent extends Event {
         }
     }
 
-    @Cacheable()
+    @memoize()
     async triggered(): Promise<boolean> {
         return await super.triggered() && await this.checkAffiliation()
     }
 
-    @Cacheable()
+    @memoize()
     async pullData(): Promise<PullsGetResponseData | EventPayloads.WebhookPayloadPullRequestPullRequest | undefined> {
         if (!this.number) {
             core.warning('The issue number could not be determined. No pull request data will be passed in the event.')
@@ -49,19 +44,19 @@ export class PullRequestEvent extends Event {
         return this.pullEvent ?? await this.api.pullByNumber(this.number)
     }
 
-    @Cacheable()
+    @memoize()
     async repository(): Promise<string> {
         const data = await this.pullData()
         return data?.head.repo.full_name ?? await super.repository()
     }
 
-    @Cacheable()
+    @memoize()
     async sha(): Promise<string> {
         const data = await this.pullData()
         return data?.head.sha ?? await super.sha()
     }
 
-    @Cacheable()
+    @memoize()
     async ref(): Promise<string> {
         const data = await this.pullData()
         const pullRef = data?.merged ? 'head' : 'merge'
@@ -79,7 +74,7 @@ export class PullRequestEvent extends Event {
         ].includes(branch)
     }
 
-    @Cacheable()
+    @memoize()
     async payload(): Promise<Payload> {
         const inner = await super.payload()
         inner.pull_request = await this.pullData() ?? inner.pull_request
@@ -87,7 +82,7 @@ export class PullRequestEvent extends Event {
         return inner
     }
 
-    @Cacheable()
+    @memoize()
     async checkAffiliation(): Promise<boolean> {
         if (!Inputs.pullMode) {
             core.info("Event condition check passed because `inputs.pullMode` is disabled.")

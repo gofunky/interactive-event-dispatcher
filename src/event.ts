@@ -3,9 +3,6 @@ import * as github from "@actions/github";
 import * as core from "@actions/core";
 import {Api} from "./api";
 import {Payload} from "./payload";
-import { useAdapter } from '@type-cacheable/node-cache-adapter'
-import NodeCache from "node-cache"
-import {Cacheable} from "@type-cacheable/core";
 import {
     ActionsGetJobForWorkflowRunResponseData,
     ActionsGetWorkflowResponseData,
@@ -13,14 +10,11 @@ import {
     ChecksUpdateResponseData
 } from "@octokit/types";
 import {CheckConclusionType, CheckParams, CheckStatusType} from "./types";
-
-const client = new NodeCache()
-useAdapter(client)
+import {memoize} from "memoize-cache-decorator";
 
 export class Event {
     api: Api
-    workflows = new Map<number, ActionsGetWorkflowResponseData>()
-    jobs = new Map<number, Array<ActionsGetJobForWorkflowRunResponseData>>()
+    runs = new Map<number, {jobs: ActionsGetJobForWorkflowRunResponseData[], wf: ActionsGetWorkflowResponseData}>()
     checks = new Map<number, ChecksCreateResponseData | ChecksUpdateResponseData>()
 
     constructor() {
@@ -35,33 +29,33 @@ export class Event {
         return github.context.eventName
     }
 
-    @Cacheable()
+    @memoize()
     async triggerEvent(): Promise<string> {
         return Inputs.event
     }
 
-    @Cacheable()
+    @memoize()
     async triggered(): Promise<boolean> {
         return true
     }
 
-    @Cacheable()
+    @memoize()
     async repository(): Promise<string> {
         return `${github.context.repo.owner}/${github.context.repo.repo}`
     }
 
-    @Cacheable()
+    @memoize()
     async sha(): Promise<string> {
         return github.context.sha
     }
 
-    @Cacheable()
+    @memoize()
     async short(): Promise<string> {
         const sha = await this.sha()
         return sha.substr(0, 7)
     }
 
-    @Cacheable()
+    @memoize()
     async ref(): Promise<string> {
         return github.context.ref
     }
@@ -70,7 +64,7 @@ export class Event {
         return branch == await this.ref()
     }
 
-    @Cacheable()
+    @memoize()
     async payload(): Promise<Payload> {
         return <Payload>{
             event: this.sourceEvent,
@@ -105,13 +99,13 @@ export class Event {
     async checkWorkflows(): Promise<void> {
         await this.sleep()
 
-        for (const [runId] of this.jobs) {
+        for (const [runId, {wf}] of this.runs) {
             const jobs = await this.api.jobsForWorkflow({
-                runId: runId,
+                runId,
                 filter: 'latest'
             })
-            this.jobs[runId] = jobs.jobs
-            await this.updateChecks()
+            this.runs.set(runId, {jobs: jobs.jobs, wf})
+            await this.updateChecks(jobs.jobs, wf)
         }
 
         await this.sleep()
@@ -129,18 +123,23 @@ export class Event {
                     runId: wfRun.id,
                     filter: 'latest'
                 })
-                this.jobs[wfRun.id] = jobs.jobs
+                const run = this.runs.get(wfRun.id)
+                let wf = run?.wf
 
-                if (!(wfRun.id in this.workflows.keys())) {
-                    this.workflows[wfRun.id] = await this.api.workflowById({
+                if (!wf) {
+                    wf = await this.api.workflowById({
                         workflowId: wfRun.workflow_id
                     })
                 }
-                await this.updateChecks()
+                this.runs.set(wfRun.id, {
+                    jobs: jobs.jobs,
+                    wf
+                })
+                await this.updateChecks(jobs.jobs, wf)
             }
         }
 
-        if (Array.from(this.jobs.values()).every(jobs => jobs.every(job => job.status == 'completed'))) {
+        if (Array.from(this.runs.values()).every((run) => run.jobs.every((job) => job.status == 'completed'))) {
             core.info("All triggered workflow runs are completed.")
             return
         }
@@ -148,41 +147,42 @@ export class Event {
         return this.checkWorkflows()
     }
 
-    async updateChecks(): Promise<void> {
+    async updateChecks(jobs: ActionsGetJobForWorkflowRunResponseData[], wf: ActionsGetWorkflowResponseData): Promise<void> {
         const eventName = await this.triggerEvent()
-        for (const [runId, jobs] of this.jobs) {
-            for (const job of jobs) {
-                const wf = this.workflows[runId]
-                const name = `${wf.name} / ${job.name} (${eventName})`
-                const jobData: CheckParams = {
-                    sha: await this.sha(),
-                    name: name,
-                    conclusion: job.conclusion ? <CheckConclusionType>job.conclusion : undefined,
-                    status: <CheckStatusType>job.status,
-                    completedAt: job.completed_at,
-                    startedAt: job.started_at,
-                    externalId: String(runId),
-                    detailsUrl: job.html_url
-                }
-                if (this.checks.has(job.id)) {
-                    this.checks[job.id] = await this.api.updateCheck({
-                        checkId: this.checks[job.id].id,
+        for (const job of jobs) {
+            const name = `${wf.name} / ${job.name} (${eventName})`
+            const jobData: CheckParams = {
+                sha: await this.sha(),
+                name,
+                conclusion: job.conclusion ? <CheckConclusionType>job.conclusion : undefined,
+                status: <CheckStatusType>job.status,
+                completedAt: job.completed_at,
+                startedAt: job.started_at,
+                externalId: String(job.id),
+                detailsUrl: job.html_url
+            }
+            const existing = this.checks.get(job.id)
+            if (existing) {
+                const updated = await this.api.updateCheck({
+                    checkId: existing.id,
+                    ...jobData
+                })
+                this.checks.set(job.id, updated)
+            } else {
+                const existing = await this.api.getCheck({
+                    ref: await this.ref(),
+                    filter: 'latest',
+                    name: name
+                })
+                if (existing.total_count == 1) {
+                    const updated = await this.api.updateCheck({
+                        checkId: existing.check_runs[0].id,
                         ...jobData
                     })
+                    this.checks.set(job.id, updated)
                 } else {
-                    const existing = await this.api.getCheck({
-                        ref: await this.ref(),
-                        filter: 'latest',
-                        name: name
-                    })
-                    if (existing.total_count == 1) {
-                        this.checks[job.id] = await this.api.updateCheck({
-                            checkId: existing.check_runs[0].id,
-                            ...jobData
-                        })
-                    } else {
-                        this.checks[job.id] = await this.api.createCheck(jobData)
-                    }
+                    const created = await this.api.createCheck(jobData)
+                    this.checks.set(job.id, created)
                 }
             }
         }

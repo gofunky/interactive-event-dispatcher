@@ -1,20 +1,15 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import {Cacheable} from "@type-cacheable/core";
 import * as github from "@actions/github";
 import {Payload} from "./payload";
 import {PullRequestEvent} from "./pull";
 import {Inputs} from "./inputs";
 import * as core from "@actions/core";
-import NodeCache from "node-cache";
-import {useAdapter} from "@type-cacheable/node-cache-adapter"
 import {IssuesGetCommentResponseData} from "@octokit/types"
 import {ReactionType} from "./types";
 import {LazyGetter} from "lazy-get-decorator";
 import {EventPayloads} from "@octokit/webhooks";
 import WebhookPayloadIssueCommentComment = EventPayloads.WebhookPayloadIssueCommentComment;
-
-const client = new NodeCache()
-useAdapter(client)
+import {memoize} from "memoize-cache-decorator";
 
 interface Match {
     triggered: boolean
@@ -29,7 +24,15 @@ export class PullRequestCommentEvent extends PullRequestEvent {
         return super.number ?? github.context.issue.number
     }
 
-    @Cacheable()
+    @LazyGetter()
+    get commentEvent(): EventPayloads.WebhookPayloadIssueComment | undefined {
+        const payload = <EventPayloads.WebhookPayloadIssueComment>github.context.payload
+        if (payload.comment.id != undefined && payload.comment.id != 0) {
+            return payload
+        }
+    }
+
+    @memoize()
     async triggerEvent(): Promise<string> {
         const prefix = await super.triggerEvent()
         if (!Inputs.appendCommand) {
@@ -42,27 +45,19 @@ export class PullRequestCommentEvent extends PullRequestEvent {
         return `${prefix}_${command}`
     }
 
-    @LazyGetter()
-    get commentEvent(): EventPayloads.WebhookPayloadIssueComment | undefined {
-        const payload = <EventPayloads.WebhookPayloadIssueComment>github.context.payload
-        if (payload.comment.id != undefined && payload.comment.id != 0) {
-            return payload
-        }
-    }
-
-    @Cacheable()
+    @memoize()
     async commentData(): Promise<IssuesGetCommentResponseData | WebhookPayloadIssueCommentComment> {
         const commentId = <number>github.context.payload.comment?.id
         return this.commentEvent?.comment ?? await this.api.commentById({commentId: commentId})
     }
 
-    @Cacheable()
+    @memoize()
     async body(): Promise<string> {
         const comment = await this.commentData()
         return Inputs.body ?? comment.body
     }
 
-    @Cacheable()
+    @memoize()
     async command(): Promise<string> {
         if (Inputs.prefix == '') {
             return ''
@@ -81,7 +76,6 @@ export class PullRequestCommentEvent extends PullRequestEvent {
         }
     }
 
-    @Cacheable()
     async matchedCheck(command: string): Promise<Match> {
         const checkExp = new RegExp(`^check\\s+([0-9a-f]+)$`)
         const checkMatch = checkExp.exec(command)
@@ -95,14 +89,14 @@ export class PullRequestCommentEvent extends PullRequestEvent {
         return {triggered: false}
     }
 
-    @Cacheable()
+    @memoize()
     async fromCollaborator(): Promise<boolean> {
         const collaborators = await this.api.collaborators(Inputs.affiliation)
         const comment = await this.commentData()
         return !!collaborators.find(col => col.id == comment.user.id)
     }
 
-    @Cacheable()
+    @memoize()
     async matchedPrefix(): Promise<Match> {
         const body = await this.body()
         const regex = new RegExp(`${Inputs.prefix}\\s*(.*)\\s*$`)
@@ -142,19 +136,19 @@ export class PullRequestCommentEvent extends PullRequestEvent {
         return {triggered: false, command: command}
     }
 
-    @Cacheable()
+    @memoize()
     async triggered(): Promise<boolean> {
         const {triggered: triggered} = await this.matchedPrefix()
         return await super.triggered() && triggered
     }
 
-    @Cacheable()
+    @memoize()
     async sha(): Promise<string> {
         const {sha: sha} = await this.matchedPrefix()
         return sha ?? await super.sha()
     }
 
-    @Cacheable()
+    @memoize()
     async payload(): Promise<Payload> {
         const inner = await super.payload()
         inner.body = await this.body()

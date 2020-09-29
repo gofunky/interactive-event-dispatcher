@@ -1,1 +1,7065 @@
-module.exports=(()=>{var __webpack_modules__={4558:function(e,t,r){"use strict";var s=this&&this.__createBinding||(Object.create?function(e,t,r,s){if(s===undefined)s=r;Object.defineProperty(e,s,{enumerable:true,get:function(){return t[r]}})}:function(e,t,r,s){if(s===undefined)s=r;e[s]=t[r]});var n=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:true,value:t})}:function(e,t){e["default"]=t});var o=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(e!=null)for(var r in e)if(r!=="default"&&Object.prototype.hasOwnProperty.call(e,r))s(t,e,r);n(t,e);return t};var i=this&&this.__awaiter||function(e,t,r,s){function adopt(e){return e instanceof r?e:new r(function(t){t(e)})}return new(r||(r=Promise))(function(r,n){function fulfilled(e){try{step(s.next(e))}catch(e){n(e)}}function rejected(e){try{step(s["throw"](e))}catch(e){n(e)}}function step(e){e.done?r(e.value):adopt(e.value).then(fulfilled,rejected)}step((s=s.apply(e,t||[])).next())})};Object.defineProperty(t,"__esModule",{value:true});const a=o(r(7398));const c=r(1889);const u=o(r(4170));const l=r(7630);const p=r(547);const d=r(1443);function run(){return i(this,void 0,void 0,function*(){let e;switch(u.context.eventName){case"check_run":{e=new l.PullRequestActionEvent;break}case"issue_comment":{e=new p.PullRequestCommentEvent;a.setOutput("command",yield e.command());break}case"pull_request"||0||0:{e=new d.PullRequestEvent;break}default:{e=new c.Event;break}}a.setOutput("triggered",yield e.triggered());yield e.dispatch()})}run().catch(a.setFailed)},1215:function(e,t,r){"use strict";var s=this&&this.__createBinding||(Object.create?function(e,t,r,s){if(s===undefined)s=r;Object.defineProperty(e,s,{enumerable:true,get:function(){return t[r]}})}:function(e,t,r,s){if(s===undefined)s=r;e[s]=t[r]});var n=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:true,value:t})}:function(e,t){e["default"]=t});var o=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(e!=null)for(var r in e)if(r!=="default"&&Object.prototype.hasOwnProperty.call(e,r))s(t,e,r);n(t,e);return t};var i=this&&this.__awaiter||function(e,t,r,s){function adopt(e){return e instanceof r?e:new r(function(t){t(e)})}return new(r||(r=Promise))(function(r,n){function fulfilled(e){try{step(s.next(e))}catch(e){n(e)}}function rejected(e){try{step(s["throw"](e))}catch(e){n(e)}}function step(e){e.done?r(e.value):adopt(e.value).then(fulfilled,rejected)}step((s=s.apply(e,t||[])).next())})};Object.defineProperty(t,"__esModule",{value:true});t.Api=void 0;const a=o(r(4170));const c=r(227);class Api{constructor({token:e,actionsToken:t,perPage:r}){this.octokit=a.getOctokit(e);this.actionsKit=a.getOctokit(t);this.repo={repo:a.context.repo.repo,owner:a.context.repo.owner};this.repoList=Object.assign(Object.assign({},this.repo),{per_page:r!==null&&r!==void 0?r:30});this.graphql=c.graphql.defaults({owner:a.context.repo.owner,repo:a.context.repo.repo,headers:{authorization:`token ${t}`}})}pullByNumber(e){return i(this,void 0,void 0,function*(){const{data:t}=yield this.octokit.pulls.get(Object.assign(Object.assign({},this.repo),{pull_number:e}));return t})}dispatchEvent({eventName:e,payload:t}){return i(this,void 0,void 0,function*(){return this.octokit.repos.createDispatchEvent(Object.assign(Object.assign({},this.repo),{event_type:e,client_payload:t}))})}collaborators(e="all"){return i(this,void 0,void 0,function*(){const{data:t}=yield this.octokit.repos.listCollaborators(Object.assign(Object.assign({},this.repoList),{affiliation:e}));return t})}commentList({issueNumber:e}){return i(this,void 0,void 0,function*(){const{data:t}=yield this.actionsKit.issues.listComments(Object.assign(Object.assign({},this.repoList),{issue_number:e}));return t})}respond({issueNumber:e,body:t}){return i(this,void 0,void 0,function*(){return this.actionsKit.issues.createComment(Object.assign(Object.assign({},this.repo),{issue_number:e,body:t}))})}commentById({commentId:e}){return i(this,void 0,void 0,function*(){const{data:t}=yield this.actionsKit.issues.getComment(Object.assign(Object.assign({},this.repo),{comment_id:e}));return t})}reactToComment({commentId:e,reaction:t}){return i(this,void 0,void 0,function*(){return this.actionsKit.reactions.createForIssueComment(Object.assign(Object.assign({},this.repo),{comment_id:e,content:t}))})}reactToIssue({reaction:e,issueNumber:t}){return i(this,void 0,void 0,function*(){return this.actionsKit.reactions.createForIssue(Object.assign(Object.assign({},this.repo),{issue_number:t,content:e}))})}listRuns({eventName:e,status:t}){return i(this,void 0,void 0,function*(){const{data:r}=yield this.octokit.actions.listWorkflowRunsForRepo(Object.assign(Object.assign({},this.repoList),{event:e,status:t}));return r})}workflowById({workflowId:e}){return i(this,void 0,void 0,function*(){const{data:t}=yield this.octokit.actions.getWorkflow(Object.assign(Object.assign({},this.repo),{workflow_id:e}));return t})}jobsForWorkflow({runId:e,filter:t}){return i(this,void 0,void 0,function*(){const{data:r}=yield this.octokit.actions.listJobsForWorkflowRun(Object.assign(Object.assign({},this.repoList),{run_id:e,filter:t}));return r})}getCheck({name:e,ref:t,filter:r}){return i(this,void 0,void 0,function*(){const{data:s}=yield this.actionsKit.checks.listForRef(Object.assign(Object.assign({},this.repoList),{ref:t,check_name:e,filter:r}));return s})}createCheck(e){return i(this,void 0,void 0,function*(){const{data:t}=yield this.actionsKit.checks.create(Object.assign(Object.assign({},this.repo),{name:e.name,head_sha:e.sha,status:e.status,conclusion:e.conclusion,actions:e.actions,details_url:e.detailsUrl,external_id:e.externalId,started_at:e.startedAt,completed_at:e.completedAt,output:e.output}));return t})}updateCheck(e){return i(this,void 0,void 0,function*(){const{data:t}=yield this.actionsKit.checks.update(Object.assign(Object.assign({},this.repo),{check_run_id:e.checkId,name:e.name,head_sha:e.sha,status:e.status,conclusion:e.conclusion,actions:e.actions,details_url:e.detailsUrl,external_id:e.externalId,started_at:e.startedAt,completed_at:e.completedAt,output:e.output}));return t})}minimizeComment({nodeId:e,reason:t}){return i(this,void 0,void 0,function*(){yield this.graphql({query:`                \n            mutation MinimizeComment($comment: ID!, $reason: ReportedContentClassifiers!) {\n              minimizeComment(input:{subjectId:$comment, classifier:$reason}) {\n                minimizedComment {\n                  isMinimized\n                }\n              }\n            }\n        `,comment:e,reason:t})})}}t.Api=Api},7630:function(e,t,r){"use strict";var s=this&&this.__createBinding||(Object.create?function(e,t,r,s){if(s===undefined)s=r;Object.defineProperty(e,s,{enumerable:true,get:function(){return t[r]}})}:function(e,t,r,s){if(s===undefined)s=r;e[s]=t[r]});var n=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:true,value:t})}:function(e,t){e["default"]=t});var o=this&&this.__decorate||function(e,t,r,s){var n=arguments.length,o=n<3?t:s===null?s=Object.getOwnPropertyDescriptor(t,r):s,i;if(typeof Reflect==="object"&&typeof Reflect.decorate==="function")o=Reflect.decorate(e,t,r,s);else for(var a=e.length-1;a>=0;a--)if(i=e[a])o=(n<3?i(o):n>3?i(t,r,o):i(t,r))||o;return n>3&&o&&Object.defineProperty(t,r,o),o};var i=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(e!=null)for(var r in e)if(r!=="default"&&Object.prototype.hasOwnProperty.call(e,r))s(t,e,r);n(t,e);return t};var a=this&&this.__awaiter||function(e,t,r,s){function adopt(e){return e instanceof r?e:new r(function(t){t(e)})}return new(r||(r=Promise))(function(r,n){function fulfilled(e){try{step(s.next(e))}catch(e){n(e)}}function rejected(e){try{step(s["throw"](e))}catch(e){n(e)}}function step(e){e.done?r(e.value):adopt(e.value).then(fulfilled,rejected)}step((s=s.apply(e,t||[])).next())})};var c=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:true});t.PullRequestActionEvent=void 0;const u=r(1443);const l=i(r(4170));const p=r(1205);const d=r(3702);const f=i(r(7398));const h=r(2443);const m=c(r(435));const g=r(993);const b=new m.default;g.useAdapter(b);class PullRequestActionEvent extends u.PullRequestEvent{get number(){var e;return(e=super.number)!==null&&e!==void 0?e:l.context.payload.requested_action.identifier}get checkEvent(){const e=l.context.payload;if(e.check_run.name!=undefined&&e.check_run.name!=""){return e}}sha(){const e=Object.create(null,{sha:{get:()=>super.sha}});var t,r;return a(this,void 0,void 0,function*(){return(r=(t=this.checkEvent)===null||t===void 0?void 0:t.check_run.head_sha)!==null&&r!==void 0?r:yield e.sha.call(this)})}triggered(){const e=Object.create(null,{triggered:{get:()=>super.triggered}});return a(this,void 0,void 0,function*(){return(yield e.triggered.call(this))&&(yield this.checkAction())})}fromCollaborator(){return a(this,void 0,void 0,function*(){const e=yield this.api.collaborators(d.Inputs.affiliation);return!!e.find(e=>{var t;return e.id==((t=this.checkEvent)===null||t===void 0?void 0:t.sender.id)})})}checkAction(){var e;return a(this,void 0,void 0,function*(){if(((e=this.checkEvent)===null||e===void 0?void 0:e.check_run.name)!=u.CHECK_NAME){f.info("The requested action does not match the expected action.");return false}if(l.context.payload.requested_action.identifier==undefined){f.info("The check run does not seem to be of type `requested_action`.");return false}if((yield this.sha())==""){f.warning("No sha was provided from the action request.");return false}if(!(yield this.fromCollaborator())){f.warning("Can not accept an action request from a non-affiliated user.");return false}return true})}}o([h.LazyGetter()],PullRequestActionEvent.prototype,"number",null);o([h.LazyGetter()],PullRequestActionEvent.prototype,"checkEvent",null);o([p.Cacheable()],PullRequestActionEvent.prototype,"sha",null);o([p.Cacheable()],PullRequestActionEvent.prototype,"triggered",null);o([p.Cacheable()],PullRequestActionEvent.prototype,"fromCollaborator",null);t.PullRequestActionEvent=PullRequestActionEvent},547:function(e,t,r){"use strict";var s=this&&this.__createBinding||(Object.create?function(e,t,r,s){if(s===undefined)s=r;Object.defineProperty(e,s,{enumerable:true,get:function(){return t[r]}})}:function(e,t,r,s){if(s===undefined)s=r;e[s]=t[r]});var n=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:true,value:t})}:function(e,t){e["default"]=t});var o=this&&this.__decorate||function(e,t,r,s){var n=arguments.length,o=n<3?t:s===null?s=Object.getOwnPropertyDescriptor(t,r):s,i;if(typeof Reflect==="object"&&typeof Reflect.decorate==="function")o=Reflect.decorate(e,t,r,s);else for(var a=e.length-1;a>=0;a--)if(i=e[a])o=(n<3?i(o):n>3?i(t,r,o):i(t,r))||o;return n>3&&o&&Object.defineProperty(t,r,o),o};var i=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(e!=null)for(var r in e)if(r!=="default"&&Object.prototype.hasOwnProperty.call(e,r))s(t,e,r);n(t,e);return t};var a=this&&this.__awaiter||function(e,t,r,s){function adopt(e){return e instanceof r?e:new r(function(t){t(e)})}return new(r||(r=Promise))(function(r,n){function fulfilled(e){try{step(s.next(e))}catch(e){n(e)}}function rejected(e){try{step(s["throw"](e))}catch(e){n(e)}}function step(e){e.done?r(e.value):adopt(e.value).then(fulfilled,rejected)}step((s=s.apply(e,t||[])).next())})};var c=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:true});t.PullRequestCommentEvent=void 0;const u=r(1205);const l=i(r(4170));const p=r(1443);const d=r(3702);const f=i(r(7398));const h=c(r(435));const m=r(993);const g=r(2443);const b=new h.default;m.useAdapter(b);class PullRequestCommentEvent extends p.PullRequestEvent{get number(){var e;return(e=super.number)!==null&&e!==void 0?e:l.context.issue.number}triggerEvent(){const e=Object.create(null,{triggerEvent:{get:()=>super.triggerEvent}});return a(this,void 0,void 0,function*(){const t=yield e.triggerEvent.call(this);if(!d.Inputs.appendCommand){return t}const r=yield this.command();if(r==""){return t}return`${t}_${r}`})}get commentEvent(){const e=l.context.payload;if(e.comment.id!=undefined&&e.comment.id!=0){return e}}commentData(){var e,t,r;return a(this,void 0,void 0,function*(){const s=(e=l.context.payload.comment)===null||e===void 0?void 0:e.id;return(r=(t=this.commentEvent)===null||t===void 0?void 0:t.comment)!==null&&r!==void 0?r:yield this.api.commentById({commentId:s})})}body(){var e;return a(this,void 0,void 0,function*(){const t=yield this.commentData();return(e=d.Inputs.body)!==null&&e!==void 0?e:t.body})}command(){return a(this,void 0,void 0,function*(){if(d.Inputs.prefix==""){return""}const{command:e}=yield this.matchedPrefix();return e!==null&&e!==void 0?e:""})}feedback(e){var t;return a(this,void 0,void 0,function*(){const r=(t=l.context.payload.comment)===null||t===void 0?void 0:t.id;if(r){yield this.api.reactToComment({reaction:e,commentId:r})}})}matchedCheck(e){return a(this,void 0,void 0,function*(){const t=new RegExp(`^check\\s+([0-9a-f]+)$`);const r=t.exec(e);if(r&&r.length>=2&&r[0]!=""){if(yield this.fromCollaborator()){yield this.feedback("rocket");return{triggered:true,command:"check",sha:r[1]}}return{triggered:false}}return{triggered:false}})}fromCollaborator(){return a(this,void 0,void 0,function*(){const e=yield this.api.collaborators(d.Inputs.affiliation);const t=yield this.commentData();return!!e.find(e=>e.id==t.user.id)})}matchedPrefix(){return a(this,void 0,void 0,function*(){const e=yield this.body();const t=new RegExp(`${d.Inputs.prefix}\\s*(.*)\\s*$`);const r=t.exec(e);if(!r||r.length<2||r[0]==""){f.info(`The issue comment does not match the given prefix.`);return{triggered:false}}const s=r[r.length];if(d.Inputs.pullMode){const e=yield this.matchedCheck(s);if(e.triggered){return e}}if(!d.Inputs.outsiderCommands&&!(yield this.fromCollaborator())){yield this.feedback("-1");f.warning("Can not accept a command from a non-affiliated user.");return{triggered:false,command:s}}if(d.Inputs.commandFilter.length==0){yield this.feedback("+1");f.info("The issue comment matches the given prefix.");return{triggered:true,command:s}}const n=d.Inputs.commandFilter.find(e=>e.exec(s));if(n){yield this.feedback("+1");f.warning(`The issue command '${s}' was accepted.`);return{triggered:true,command:s}}yield this.feedback("confused");f.warning(`The issue command '${s}' was not accepted.`);return{triggered:false,command:s}})}triggered(){const e=Object.create(null,{triggered:{get:()=>super.triggered}});return a(this,void 0,void 0,function*(){const{triggered:t}=yield this.matchedPrefix();return(yield e.triggered.call(this))&&t})}sha(){const e=Object.create(null,{sha:{get:()=>super.sha}});return a(this,void 0,void 0,function*(){const{sha:t}=yield this.matchedPrefix();return t!==null&&t!==void 0?t:yield e.sha.call(this)})}payload(){const e=Object.create(null,{payload:{get:()=>super.payload}});return a(this,void 0,void 0,function*(){const t=yield e.payload.call(this);t.body=yield this.body();t.command=yield this.command();t.comment=yield this.commentData();return t})}dispatch(){const e=Object.create(null,{dispatch:{get:()=>super.dispatch}});return a(this,void 0,void 0,function*(){yield e.dispatch.call(this);const{node_id:t}=yield this.commentData();yield this.api.minimizeComment({nodeId:t,reason:"RESOLVED"})})}}o([g.LazyGetter()],PullRequestCommentEvent.prototype,"number",null);o([u.Cacheable()],PullRequestCommentEvent.prototype,"triggerEvent",null);o([g.LazyGetter()],PullRequestCommentEvent.prototype,"commentEvent",null);o([u.Cacheable()],PullRequestCommentEvent.prototype,"commentData",null);o([u.Cacheable()],PullRequestCommentEvent.prototype,"body",null);o([u.Cacheable()],PullRequestCommentEvent.prototype,"command",null);o([u.Cacheable()],PullRequestCommentEvent.prototype,"matchedCheck",null);o([u.Cacheable()],PullRequestCommentEvent.prototype,"fromCollaborator",null);o([u.Cacheable()],PullRequestCommentEvent.prototype,"matchedPrefix",null);o([u.Cacheable()],PullRequestCommentEvent.prototype,"triggered",null);o([u.Cacheable()],PullRequestCommentEvent.prototype,"sha",null);o([u.Cacheable()],PullRequestCommentEvent.prototype,"payload",null);t.PullRequestCommentEvent=PullRequestCommentEvent},1889:function(e,t,r){"use strict";var s=this&&this.__createBinding||(Object.create?function(e,t,r,s){if(s===undefined)s=r;Object.defineProperty(e,s,{enumerable:true,get:function(){return t[r]}})}:function(e,t,r,s){if(s===undefined)s=r;e[s]=t[r]});var n=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:true,value:t})}:function(e,t){e["default"]=t});var o=this&&this.__decorate||function(e,t,r,s){var n=arguments.length,o=n<3?t:s===null?s=Object.getOwnPropertyDescriptor(t,r):s,i;if(typeof Reflect==="object"&&typeof Reflect.decorate==="function")o=Reflect.decorate(e,t,r,s);else for(var a=e.length-1;a>=0;a--)if(i=e[a])o=(n<3?i(o):n>3?i(t,r,o):i(t,r))||o;return n>3&&o&&Object.defineProperty(t,r,o),o};var i=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(e!=null)for(var r in e)if(r!=="default"&&Object.prototype.hasOwnProperty.call(e,r))s(t,e,r);n(t,e);return t};var a=this&&this.__awaiter||function(e,t,r,s){function adopt(e){return e instanceof r?e:new r(function(t){t(e)})}return new(r||(r=Promise))(function(r,n){function fulfilled(e){try{step(s.next(e))}catch(e){n(e)}}function rejected(e){try{step(s["throw"](e))}catch(e){n(e)}}function step(e){e.done?r(e.value):adopt(e.value).then(fulfilled,rejected)}step((s=s.apply(e,t||[])).next())})};var c=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:true});t.Event=void 0;const u=r(3702);const l=i(r(4170));const p=i(r(7398));const d=r(1215);const f=r(993);const h=c(r(435));const m=r(1205);const g=new h.default;f.useAdapter(g);class Event{constructor(){this.workflows=new Map;this.jobs=new Map;this.checks=new Map;this.api=new d.Api({token:u.Inputs.token,actionsToken:u.Inputs.actionsToken,perPage:u.Inputs.perPage})}get sourceEvent(){return l.context.eventName}triggerEvent(){return a(this,void 0,void 0,function*(){return u.Inputs.event})}triggered(){return a(this,void 0,void 0,function*(){return true})}repository(){return a(this,void 0,void 0,function*(){return`${l.context.repo.owner}/${l.context.repo.repo}`})}sha(){return a(this,void 0,void 0,function*(){return l.context.sha})}short(){return a(this,void 0,void 0,function*(){const e=yield this.sha();return e.substr(0,7)})}ref(){return a(this,void 0,void 0,function*(){return l.context.ref})}branchMatch(e){return a(this,void 0,void 0,function*(){return e==(yield this.ref())})}payload(){return a(this,void 0,void 0,function*(){return{event:this.sourceEvent,repository:yield this.repository(),ref:yield this.ref(),sha:yield this.sha()}})}sleep(){return a(this,void 0,void 0,function*(){return new Promise(e=>setTimeout(e,u.Inputs.interval))})}dispatch(){return a(this,void 0,void 0,function*(){if(!(yield this.triggered())){p.info("Skipping event dispatch because trigger condition is not true.");return}yield this.api.dispatchEvent({eventName:yield this.triggerEvent(),payload:yield this.payload()});if(!u.Inputs.forwardChecks){p.info("Skipping workflow check tracing because `inputs.forwardChecks` is disabled.");return}yield this.sleep();return this.checkWorkflows()})}checkWorkflows(){return a(this,void 0,void 0,function*(){yield this.sleep();for(const[e]of this.jobs){const t=yield this.api.jobsForWorkflow({runId:e,filter:"latest"});this.jobs[e]=t.jobs;yield this.updateChecks()}yield this.sleep();const e=yield this.api.listRuns({eventName:"repository_dispatch"});for(const t of e.workflow_runs){if(t.head_sha==(yield this.sha())&&t.head_repository.full_name==(yield this.repository())&&(yield this.branchMatch(t.head_branch))){const e=yield this.api.jobsForWorkflow({runId:t.id,filter:"latest"});this.jobs[t.id]=e.jobs;if(!(t.id in this.workflows.keys())){this.workflows[t.id]=yield this.api.workflowById({workflowId:t.workflow_id})}yield this.updateChecks()}}if(Array.from(this.jobs.values()).every(e=>e.every(e=>e.status=="completed"))){p.info("All triggered workflow runs are completed.");return}return this.checkWorkflows()})}updateChecks(){return a(this,void 0,void 0,function*(){const e=yield this.triggerEvent();for(const[t,r]of this.jobs){for(const s of r){const r=this.workflows[t];const n=`${r.name} / ${s.name} (${e})`;const o={sha:yield this.sha(),name:n,conclusion:s.conclusion?s.conclusion:undefined,status:s.status,completedAt:s.completed_at,startedAt:s.started_at,externalId:String(t),detailsUrl:s.html_url};if(this.checks.has(s.id)){this.checks[s.id]=yield this.api.updateCheck(Object.assign({checkId:this.checks[s.id].id},o))}else{const e=yield this.api.getCheck({ref:yield this.ref(),filter:"latest",name:n});if(e.total_count==1){this.checks[s.id]=yield this.api.updateCheck(Object.assign({checkId:e.check_runs[0].id},o))}else{this.checks[s.id]=yield this.api.createCheck(o)}}}}})}}o([m.Cacheable()],Event.prototype,"triggerEvent",null);o([m.Cacheable()],Event.prototype,"triggered",null);o([m.Cacheable()],Event.prototype,"repository",null);o([m.Cacheable()],Event.prototype,"sha",null);o([m.Cacheable()],Event.prototype,"short",null);o([m.Cacheable()],Event.prototype,"ref",null);o([m.Cacheable()],Event.prototype,"payload",null);t.Event=Event},3702:function(e,t,r){"use strict";var s=this&&this.__createBinding||(Object.create?function(e,t,r,s){if(s===undefined)s=r;Object.defineProperty(e,s,{enumerable:true,get:function(){return t[r]}})}:function(e,t,r,s){if(s===undefined)s=r;e[s]=t[r]});var n=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:true,value:t})}:function(e,t){e["default"]=t});var o=this&&this.__decorate||function(e,t,r,s){var n=arguments.length,o=n<3?t:s===null?s=Object.getOwnPropertyDescriptor(t,r):s,i;if(typeof Reflect==="object"&&typeof Reflect.decorate==="function")o=Reflect.decorate(e,t,r,s);else for(var a=e.length-1;a>=0;a--)if(i=e[a])o=(n<3?i(o):n>3?i(t,r,o):i(t,r))||o;return n>3&&o&&Object.defineProperty(t,r,o),o};var i=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(e!=null)for(var r in e)if(r!=="default"&&Object.prototype.hasOwnProperty.call(e,r))s(t,e,r);n(t,e);return t};Object.defineProperty(t,"__esModule",{value:true});t.Inputs=void 0;const a=i(r(7398));const c=r(2443);class Inputs{static get token(){return a.getInput("token")}static get actionsToken(){return a.getInput("actionsToken")}static get prefix(){return a.getInput("prefix")}static get commandFilter(){return a.getInput("commandFilter").split("\n").filter(e=>e!=="").map(e=>RegExp(e).compile())}static get outsiderCommands(){return a.getInput("outsiderCommands").toLowerCase()=="true"}static get body(){const e=a.getInput("body");if(e==""){return undefined}return e}static get number(){const e=Number(a.getInput("number"));if(e<=0){return undefined}return e}static get event(){return a.getInput("event")}static get pullMode(){return a.getInput("pullMode").toLowerCase()=="true"}static get forwardChecks(){return a.getInput("forwardChecks").toLowerCase()=="true"}static get appendCommand(){return a.getInput("appendCommand").toLowerCase()=="true"}static get interval(){return Number(a.getInput("interval"))}static get perPage(){return Number(a.getInput("perPage"))}static get affiliation(){const e=a.getInput("affiliation");return e}}o([c.LazyGetter(true,true)],Inputs,"token",null);o([c.LazyGetter(true,true)],Inputs,"actionsToken",null);o([c.LazyGetter(true,true)],Inputs,"prefix",null);o([c.LazyGetter(true,true)],Inputs,"commandFilter",null);o([c.LazyGetter(true,true)],Inputs,"outsiderCommands",null);o([c.LazyGetter(true,true)],Inputs,"body",null);o([c.LazyGetter(true,true)],Inputs,"number",null);o([c.LazyGetter(true,true)],Inputs,"event",null);o([c.LazyGetter(true,true)],Inputs,"pullMode",null);o([c.LazyGetter(true,true)],Inputs,"forwardChecks",null);o([c.LazyGetter(true,true)],Inputs,"appendCommand",null);o([c.LazyGetter(true,true,e=>e>=200)],Inputs,"interval",null);o([c.LazyGetter(true,true,e=>e>=10&&e<=100)],Inputs,"perPage",null);o([c.LazyGetter(true,true,e=>["direct","outside","all"].includes(e))],Inputs,"affiliation",null);t.Inputs=Inputs},1443:function(e,t,r){"use strict";var s=this&&this.__createBinding||(Object.create?function(e,t,r,s){if(s===undefined)s=r;Object.defineProperty(e,s,{enumerable:true,get:function(){return t[r]}})}:function(e,t,r,s){if(s===undefined)s=r;e[s]=t[r]});var n=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:true,value:t})}:function(e,t){e["default"]=t});var o=this&&this.__decorate||function(e,t,r,s){var n=arguments.length,o=n<3?t:s===null?s=Object.getOwnPropertyDescriptor(t,r):s,i;if(typeof Reflect==="object"&&typeof Reflect.decorate==="function")o=Reflect.decorate(e,t,r,s);else for(var a=e.length-1;a>=0;a--)if(i=e[a])o=(n<3?i(o):n>3?i(t,r,o):i(t,r))||o;return n>3&&o&&Object.defineProperty(t,r,o),o};var i=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(e!=null)for(var r in e)if(r!=="default"&&Object.prototype.hasOwnProperty.call(e,r))s(t,e,r);n(t,e);return t};var a=this&&this.__awaiter||function(e,t,r,s){function adopt(e){return e instanceof r?e:new r(function(t){t(e)})}return new(r||(r=Promise))(function(r,n){function fulfilled(e){try{step(s.next(e))}catch(e){n(e)}}function rejected(e){try{step(s["throw"](e))}catch(e){n(e)}}function step(e){e.done?r(e.value):adopt(e.value).then(fulfilled,rejected)}step((s=s.apply(e,t||[])).next())})};var c=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:true});t.PullRequestEvent=t.CHECK_NAME=t.ACCEPTED_ASSOCIATIONS=t.CHECK_MSG=t.NOTICE=t.NOTICE_HEADER=void 0;const u=i(r(7398));const l=r(1889);const p=r(1205);const d=i(r(4170));const f=r(3702);const h=c(r(435));const m=r(993);const g=r(2443);const b=new h.default;m.useAdapter(b);t.NOTICE_HEADER="\x3c!-- pull request condition notice --\x3e";t.NOTICE=r(177);t.CHECK_MSG=r(8212);t.ACCEPTED_ASSOCIATIONS=["OWNER","MEMBER","COLLABORATOR"];t.CHECK_NAME="Pending Check";class PullRequestEvent extends l.Event{get number(){var e,t;return(e=f.Inputs.number)!==null&&e!==void 0?e:(t=d.context.payload.pull_request)===null||t===void 0?void 0:t.number}get pullEvent(){const e=d.context.payload;if(e.pull_request.title!=undefined&&e.pull_request.title!=""){return e.pull_request}}triggered(){const e=Object.create(null,{triggered:{get:()=>super.triggered}});return a(this,void 0,void 0,function*(){return(yield e.triggered.call(this))&&(yield this.checkAffiliation())})}pullData(){var e;return a(this,void 0,void 0,function*(){if(!this.number){u.warning("The issue number could not be determined. No pull request data will be passed in the event.");return undefined}return(e=this.pullEvent)!==null&&e!==void 0?e:yield this.api.pullByNumber(this.number)})}repository(){const e=Object.create(null,{repository:{get:()=>super.repository}});var t;return a(this,void 0,void 0,function*(){const r=yield this.pullData();return(t=r===null||r===void 0?void 0:r.head.repo.full_name)!==null&&t!==void 0?t:yield e.repository.call(this)})}sha(){const e=Object.create(null,{sha:{get:()=>super.sha}});var t;return a(this,void 0,void 0,function*(){const r=yield this.pullData();return(t=r===null||r===void 0?void 0:r.head.sha)!==null&&t!==void 0?t:yield e.sha.call(this)})}ref(){const e=Object.create(null,{ref:{get:()=>super.ref}});var t;return a(this,void 0,void 0,function*(){const r=yield this.pullData();const s=(r===null||r===void 0?void 0:r.merged)?"head":"merge";return this.number?`refs/pull/${this.number}/${s}`:(t=r===null||r===void 0?void 0:r.head.ref)!==null&&t!==void 0?t:yield e.ref.call(this)})}branchMatch(e){return a(this,void 0,void 0,function*(){const t=yield this.pullData();return[`refs/pull/${this.number}/head`,`refs/pull/${this.number}/merge`,`pull/${this.number}/head`,`pull/${this.number}/merge`,t===null||t===void 0?void 0:t.head.ref].includes(e)})}payload(){const e=Object.create(null,{payload:{get:()=>super.payload}});var t,r;return a(this,void 0,void 0,function*(){const s=yield e.payload.call(this);s.pull_request=(t=yield this.pullData())!==null&&t!==void 0?t:s.pull_request;s.number=(r=this.number)!==null&&r!==void 0?r:s.number;return s})}checkAffiliation(){return a(this,void 0,void 0,function*(){if(!f.Inputs.pullMode){u.info("Event condition check passed because `inputs.pullMode` is disabled.");return true}if(!this.number){u.error("Event condition check failed because the issue number could not be determined.");return false}const e=yield this.pullData();if(!e){u.info("Event condition check failed because the pull request could not be determined.");return false}if(t.ACCEPTED_ASSOCIATIONS.includes(e.author_association)){u.info("Event condition check passed because the pull request author has the required association level.");return true}const r=yield this.api.commentList({issueNumber:this.number});const s=r.find(e=>e.body.includes(t.NOTICE_HEADER));if(!s){u.info("Notifying pull request author since the notice comment doesn't exist yet.");yield this.api.reactToIssue({issueNumber:this.number,reaction:"+1"});yield this.api.respond({issueNumber:this.number,body:t.NOTICE({user:e.user.id,cmd:f.Inputs.prefix!=""?`${f.Inputs.prefix} check <sha>`:"check <sha>"})+t.NOTICE_HEADER})}const n=yield this.sha();const o=yield this.short();const i=yield this.api.getCheck({ref:yield this.ref(),filter:"latest",name:t.CHECK_NAME});const a={name:t.CHECK_NAME,sha:n,status:"completed",conclusion:"action_required",output:{title:`Pending check of ${o}`,summary:`This pull request is waiting for an approval to run all of its checks`,text:t.CHECK_MSG},actions:[{label:"Approve Check",description:`Confirm that commit ${o} is safe to check`,identifier:String(this.number)}]};if(i.total_count==1){const e=i.check_runs[0];if(e.head_sha!=n){yield this.api.updateCheck(Object.assign({checkId:e.id},a))}}else{yield this.api.createCheck(a)}return false})}}o([g.LazyGetter()],PullRequestEvent.prototype,"number",null);o([g.LazyGetter()],PullRequestEvent.prototype,"pullEvent",null);o([p.Cacheable()],PullRequestEvent.prototype,"triggered",null);o([p.Cacheable()],PullRequestEvent.prototype,"pullData",null);o([p.Cacheable()],PullRequestEvent.prototype,"repository",null);o([p.Cacheable()],PullRequestEvent.prototype,"sha",null);o([p.Cacheable()],PullRequestEvent.prototype,"ref",null);o([p.Cacheable()],PullRequestEvent.prototype,"payload",null);o([p.Cacheable()],PullRequestEvent.prototype,"checkAffiliation",null);t.PullRequestEvent=PullRequestEvent},8866:function(e,t,r){"use strict";var s=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(e!=null)for(var r in e)if(Object.hasOwnProperty.call(e,r))t[r]=e[r];t["default"]=e;return t};Object.defineProperty(t,"__esModule",{value:true});const n=s(r(2087));function issueCommand(e,t,r){const s=new Command(e,t,r);process.stdout.write(s.toString()+n.EOL)}t.issueCommand=issueCommand;function issue(e,t=""){issueCommand(e,{},t)}t.issue=issue;const o="::";class Command{constructor(e,t,r){if(!e){e="missing.command"}this.command=e;this.properties=t;this.message=r}toString(){let e=o+this.command;if(this.properties&&Object.keys(this.properties).length>0){e+=" ";let t=true;for(const r in this.properties){if(this.properties.hasOwnProperty(r)){const s=this.properties[r];if(s){if(t){t=false}else{e+=","}e+=`${r}=${escapeProperty(s)}`}}}}e+=`${o}${escapeData(this.message)}`;return e}}function toCommandValue(e){if(e===null||e===undefined){return""}else if(typeof e==="string"||e instanceof String){return e}return JSON.stringify(e)}t.toCommandValue=toCommandValue;function escapeData(e){return toCommandValue(e).replace(/%/g,"%25").replace(/\r/g,"%0D").replace(/\n/g,"%0A")}function escapeProperty(e){return toCommandValue(e).replace(/%/g,"%25").replace(/\r/g,"%0D").replace(/\n/g,"%0A").replace(/:/g,"%3A").replace(/,/g,"%2C")}},7398:function(e,t,r){"use strict";var s=this&&this.__awaiter||function(e,t,r,s){function adopt(e){return e instanceof r?e:new r(function(t){t(e)})}return new(r||(r=Promise))(function(r,n){function fulfilled(e){try{step(s.next(e))}catch(e){n(e)}}function rejected(e){try{step(s["throw"](e))}catch(e){n(e)}}function step(e){e.done?r(e.value):adopt(e.value).then(fulfilled,rejected)}step((s=s.apply(e,t||[])).next())})};var n=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(e!=null)for(var r in e)if(Object.hasOwnProperty.call(e,r))t[r]=e[r];t["default"]=e;return t};Object.defineProperty(t,"__esModule",{value:true});const o=r(8866);const i=n(r(2087));const a=n(r(5622));var c;(function(e){e[e["Success"]=0]="Success";e[e["Failure"]=1]="Failure"})(c=t.ExitCode||(t.ExitCode={}));function exportVariable(e,t){const r=o.toCommandValue(t);process.env[e]=r;o.issueCommand("set-env",{name:e},r)}t.exportVariable=exportVariable;function setSecret(e){o.issueCommand("add-mask",{},e)}t.setSecret=setSecret;function addPath(e){o.issueCommand("add-path",{},e);process.env["PATH"]=`${e}${a.delimiter}${process.env["PATH"]}`}t.addPath=addPath;function getInput(e,t){const r=process.env[`INPUT_${e.replace(/ /g,"_").toUpperCase()}`]||"";if(t&&t.required&&!r){throw new Error(`Input required and not supplied: ${e}`)}return r.trim()}t.getInput=getInput;function setOutput(e,t){o.issueCommand("set-output",{name:e},t)}t.setOutput=setOutput;function setCommandEcho(e){o.issue("echo",e?"on":"off")}t.setCommandEcho=setCommandEcho;function setFailed(e){process.exitCode=c.Failure;error(e)}t.setFailed=setFailed;function isDebug(){return process.env["RUNNER_DEBUG"]==="1"}t.isDebug=isDebug;function debug(e){o.issueCommand("debug",{},e)}t.debug=debug;function error(e){o.issue("error",e instanceof Error?e.toString():e)}t.error=error;function warning(e){o.issue("warning",e instanceof Error?e.toString():e)}t.warning=warning;function info(e){process.stdout.write(e+i.EOL)}t.info=info;function startGroup(e){o.issue("group",e)}t.startGroup=startGroup;function endGroup(){o.issue("endgroup")}t.endGroup=endGroup;function group(e,t){return s(this,void 0,void 0,function*(){startGroup(e);let r;try{r=yield t()}finally{endGroup()}return r})}t.group=group;function saveState(e,t){o.issueCommand("save-state",{name:e},t)}t.saveState=saveState;function getState(e){return process.env[`STATE_${e}`]||""}t.getState=getState},7972:(e,t,r)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});t.Context=void 0;const s=r(5747);const n=r(2087);class Context{constructor(){this.payload={};if(process.env.GITHUB_EVENT_PATH){if(s.existsSync(process.env.GITHUB_EVENT_PATH)){this.payload=JSON.parse(s.readFileSync(process.env.GITHUB_EVENT_PATH,{encoding:"utf8"}))}else{const e=process.env.GITHUB_EVENT_PATH;process.stdout.write(`GITHUB_EVENT_PATH ${e} does not exist${n.EOL}`)}}this.eventName=process.env.GITHUB_EVENT_NAME;this.sha=process.env.GITHUB_SHA;this.ref=process.env.GITHUB_REF;this.workflow=process.env.GITHUB_WORKFLOW;this.action=process.env.GITHUB_ACTION;this.actor=process.env.GITHUB_ACTOR;this.job=process.env.GITHUB_JOB;this.runNumber=parseInt(process.env.GITHUB_RUN_NUMBER,10);this.runId=parseInt(process.env.GITHUB_RUN_ID,10)}get issue(){const e=this.payload;return Object.assign(Object.assign({},this.repo),{number:(e.issue||e.pull_request||e).number})}get repo(){if(process.env.GITHUB_REPOSITORY){const[e,t]=process.env.GITHUB_REPOSITORY.split("/");return{owner:e,repo:t}}if(this.payload.repository){return{owner:this.payload.repository.owner.login,repo:this.payload.repository.name}}throw new Error("context.repo requires a GITHUB_REPOSITORY environment variable like 'owner/repo'")}}t.Context=Context},4170:function(e,t,r){"use strict";var s=this&&this.__createBinding||(Object.create?function(e,t,r,s){if(s===undefined)s=r;Object.defineProperty(e,s,{enumerable:true,get:function(){return t[r]}})}:function(e,t,r,s){if(s===undefined)s=r;e[s]=t[r]});var n=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:true,value:t})}:function(e,t){e["default"]=t});var o=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(e!=null)for(var r in e)if(Object.hasOwnProperty.call(e,r))s(t,e,r);n(t,e);return t};Object.defineProperty(t,"__esModule",{value:true});t.getOctokit=t.context=void 0;const i=o(r(7972));const a=r(8488);t.context=new i.Context;function getOctokit(e,t){return new a.GitHub(a.getOctokitOptions(e,t))}t.getOctokit=getOctokit},8594:function(e,t,r){"use strict";var s=this&&this.__createBinding||(Object.create?function(e,t,r,s){if(s===undefined)s=r;Object.defineProperty(e,s,{enumerable:true,get:function(){return t[r]}})}:function(e,t,r,s){if(s===undefined)s=r;e[s]=t[r]});var n=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:true,value:t})}:function(e,t){e["default"]=t});var o=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(e!=null)for(var r in e)if(Object.hasOwnProperty.call(e,r))s(t,e,r);n(t,e);return t};Object.defineProperty(t,"__esModule",{value:true});t.getApiBaseUrl=t.getProxyAgent=t.getAuthString=void 0;const i=o(r(186));function getAuthString(e,t){if(!e&&!t.auth){throw new Error("Parameter token or opts.auth is required")}else if(e&&t.auth){throw new Error("Parameters token and opts.auth may not both be specified")}return typeof t.auth==="string"?t.auth:`token ${e}`}t.getAuthString=getAuthString;function getProxyAgent(e){const t=new i.HttpClient;return t.getAgent(e)}t.getProxyAgent=getProxyAgent;function getApiBaseUrl(){return process.env["GITHUB_API_URL"]||"https://api.github.com"}t.getApiBaseUrl=getApiBaseUrl},8488:function(e,t,r){"use strict";var s=this&&this.__createBinding||(Object.create?function(e,t,r,s){if(s===undefined)s=r;Object.defineProperty(e,s,{enumerable:true,get:function(){return t[r]}})}:function(e,t,r,s){if(s===undefined)s=r;e[s]=t[r]});var n=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:true,value:t})}:function(e,t){e["default"]=t});var o=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(e!=null)for(var r in e)if(Object.hasOwnProperty.call(e,r))s(t,e,r);n(t,e);return t};Object.defineProperty(t,"__esModule",{value:true});t.getOctokitOptions=t.GitHub=t.context=void 0;const i=o(r(7972));const a=o(r(8594));const c=r(1355);const u=r(66);const l=r(1762);t.context=new i.Context;const p=a.getApiBaseUrl();const d={baseUrl:p,request:{agent:a.getProxyAgent(p)}};t.GitHub=c.Octokit.plugin(u.restEndpointMethods,l.paginateRest).defaults(d);function getOctokitOptions(e,t){const r=Object.assign({},t||{});const s=a.getAuthString(e,r);if(s){r.auth=s}return r}t.getOctokitOptions=getOctokitOptions},186:(e,t,r)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});const s=r(8835);const n=r(8605);const o=r(7211);const i=r(7999);let a;var c;(function(e){e[e["OK"]=200]="OK";e[e["MultipleChoices"]=300]="MultipleChoices";e[e["MovedPermanently"]=301]="MovedPermanently";e[e["ResourceMoved"]=302]="ResourceMoved";e[e["SeeOther"]=303]="SeeOther";e[e["NotModified"]=304]="NotModified";e[e["UseProxy"]=305]="UseProxy";e[e["SwitchProxy"]=306]="SwitchProxy";e[e["TemporaryRedirect"]=307]="TemporaryRedirect";e[e["PermanentRedirect"]=308]="PermanentRedirect";e[e["BadRequest"]=400]="BadRequest";e[e["Unauthorized"]=401]="Unauthorized";e[e["PaymentRequired"]=402]="PaymentRequired";e[e["Forbidden"]=403]="Forbidden";e[e["NotFound"]=404]="NotFound";e[e["MethodNotAllowed"]=405]="MethodNotAllowed";e[e["NotAcceptable"]=406]="NotAcceptable";e[e["ProxyAuthenticationRequired"]=407]="ProxyAuthenticationRequired";e[e["RequestTimeout"]=408]="RequestTimeout";e[e["Conflict"]=409]="Conflict";e[e["Gone"]=410]="Gone";e[e["TooManyRequests"]=429]="TooManyRequests";e[e["InternalServerError"]=500]="InternalServerError";e[e["NotImplemented"]=501]="NotImplemented";e[e["BadGateway"]=502]="BadGateway";e[e["ServiceUnavailable"]=503]="ServiceUnavailable";e[e["GatewayTimeout"]=504]="GatewayTimeout"})(c=t.HttpCodes||(t.HttpCodes={}));var u;(function(e){e["Accept"]="accept";e["ContentType"]="content-type"})(u=t.Headers||(t.Headers={}));var l;(function(e){e["ApplicationJson"]="application/json"})(l=t.MediaTypes||(t.MediaTypes={}));function getProxyUrl(e){let t=i.getProxyUrl(s.parse(e));return t?t.href:""}t.getProxyUrl=getProxyUrl;const p=[c.MovedPermanently,c.ResourceMoved,c.SeeOther,c.TemporaryRedirect,c.PermanentRedirect];const d=[c.BadGateway,c.ServiceUnavailable,c.GatewayTimeout];const f=["OPTIONS","GET","DELETE","HEAD"];const h=10;const m=5;class HttpClientResponse{constructor(e){this.message=e}readBody(){return new Promise(async(e,t)=>{let r=Buffer.alloc(0);this.message.on("data",e=>{r=Buffer.concat([r,e])});this.message.on("end",()=>{e(r.toString())})})}}t.HttpClientResponse=HttpClientResponse;function isHttps(e){let t=s.parse(e);return t.protocol==="https:"}t.isHttps=isHttps;class HttpClient{constructor(e,t,r){this._ignoreSslError=false;this._allowRedirects=true;this._allowRedirectDowngrade=false;this._maxRedirects=50;this._allowRetries=false;this._maxRetries=1;this._keepAlive=false;this._disposed=false;this.userAgent=e;this.handlers=t||[];this.requestOptions=r;if(r){if(r.ignoreSslError!=null){this._ignoreSslError=r.ignoreSslError}this._socketTimeout=r.socketTimeout;if(r.allowRedirects!=null){this._allowRedirects=r.allowRedirects}if(r.allowRedirectDowngrade!=null){this._allowRedirectDowngrade=r.allowRedirectDowngrade}if(r.maxRedirects!=null){this._maxRedirects=Math.max(r.maxRedirects,0)}if(r.keepAlive!=null){this._keepAlive=r.keepAlive}if(r.allowRetries!=null){this._allowRetries=r.allowRetries}if(r.maxRetries!=null){this._maxRetries=r.maxRetries}}}options(e,t){return this.request("OPTIONS",e,null,t||{})}get(e,t){return this.request("GET",e,null,t||{})}del(e,t){return this.request("DELETE",e,null,t||{})}post(e,t,r){return this.request("POST",e,t,r||{})}patch(e,t,r){return this.request("PATCH",e,t,r||{})}put(e,t,r){return this.request("PUT",e,t,r||{})}head(e,t){return this.request("HEAD",e,null,t||{})}sendStream(e,t,r,s){return this.request(e,t,r,s)}async getJson(e,t={}){t[u.Accept]=this._getExistingOrDefaultHeader(t,u.Accept,l.ApplicationJson);let r=await this.get(e,t);return this._processResponse(r,this.requestOptions)}async postJson(e,t,r={}){let s=JSON.stringify(t,null,2);r[u.Accept]=this._getExistingOrDefaultHeader(r,u.Accept,l.ApplicationJson);r[u.ContentType]=this._getExistingOrDefaultHeader(r,u.ContentType,l.ApplicationJson);let n=await this.post(e,s,r);return this._processResponse(n,this.requestOptions)}async putJson(e,t,r={}){let s=JSON.stringify(t,null,2);r[u.Accept]=this._getExistingOrDefaultHeader(r,u.Accept,l.ApplicationJson);r[u.ContentType]=this._getExistingOrDefaultHeader(r,u.ContentType,l.ApplicationJson);let n=await this.put(e,s,r);return this._processResponse(n,this.requestOptions)}async patchJson(e,t,r={}){let s=JSON.stringify(t,null,2);r[u.Accept]=this._getExistingOrDefaultHeader(r,u.Accept,l.ApplicationJson);r[u.ContentType]=this._getExistingOrDefaultHeader(r,u.ContentType,l.ApplicationJson);let n=await this.patch(e,s,r);return this._processResponse(n,this.requestOptions)}async request(e,t,r,n){if(this._disposed){throw new Error("Client has already been disposed.")}let o=s.parse(t);let i=this._prepareRequest(e,o,n);let a=this._allowRetries&&f.indexOf(e)!=-1?this._maxRetries+1:1;let u=0;let l;while(u<a){l=await this.requestRaw(i,r);if(l&&l.message&&l.message.statusCode===c.Unauthorized){let e;for(let t=0;t<this.handlers.length;t++){if(this.handlers[t].canHandleAuthentication(l)){e=this.handlers[t];break}}if(e){return e.handleAuthentication(this,i,r)}else{return l}}let t=this._maxRedirects;while(p.indexOf(l.message.statusCode)!=-1&&this._allowRedirects&&t>0){const a=l.message.headers["location"];if(!a){break}let c=s.parse(a);if(o.protocol=="https:"&&o.protocol!=c.protocol&&!this._allowRedirectDowngrade){throw new Error("Redirect from HTTPS to HTTP protocol. This downgrade is not allowed for security reasons. If you want to allow this behavior, set the allowRedirectDowngrade option to true.")}await l.readBody();if(c.hostname!==o.hostname){for(let e in n){if(e.toLowerCase()==="authorization"){delete n[e]}}}i=this._prepareRequest(e,c,n);l=await this.requestRaw(i,r);t--}if(d.indexOf(l.message.statusCode)==-1){return l}u+=1;if(u<a){await l.readBody();await this._performExponentialBackoff(u)}}return l}dispose(){if(this._agent){this._agent.destroy()}this._disposed=true}requestRaw(e,t){return new Promise((r,s)=>{let n=function(e,t){if(e){s(e)}r(t)};this.requestRawWithCallback(e,t,n)})}requestRawWithCallback(e,t,r){let s;if(typeof t==="string"){e.options.headers["Content-Length"]=Buffer.byteLength(t,"utf8")}let n=false;let o=(e,t)=>{if(!n){n=true;r(e,t)}};let i=e.httpModule.request(e.options,e=>{let t=new HttpClientResponse(e);o(null,t)});i.on("socket",e=>{s=e});i.setTimeout(this._socketTimeout||3*6e4,()=>{if(s){s.end()}o(new Error("Request timeout: "+e.options.path),null)});i.on("error",function(e){o(e,null)});if(t&&typeof t==="string"){i.write(t,"utf8")}if(t&&typeof t!=="string"){t.on("close",function(){i.end()});t.pipe(i)}else{i.end()}}getAgent(e){let t=s.parse(e);return this._getAgent(t)}_prepareRequest(e,t,r){const s={};s.parsedUrl=t;const i=s.parsedUrl.protocol==="https:";s.httpModule=i?o:n;const a=i?443:80;s.options={};s.options.host=s.parsedUrl.hostname;s.options.port=s.parsedUrl.port?parseInt(s.parsedUrl.port):a;s.options.path=(s.parsedUrl.pathname||"")+(s.parsedUrl.search||"");s.options.method=e;s.options.headers=this._mergeHeaders(r);if(this.userAgent!=null){s.options.headers["user-agent"]=this.userAgent}s.options.agent=this._getAgent(s.parsedUrl);if(this.handlers){this.handlers.forEach(e=>{e.prepareRequest(s.options)})}return s}_mergeHeaders(e){const t=e=>Object.keys(e).reduce((t,r)=>(t[r.toLowerCase()]=e[r],t),{});if(this.requestOptions&&this.requestOptions.headers){return Object.assign({},t(this.requestOptions.headers),t(e))}return t(e||{})}_getExistingOrDefaultHeader(e,t,r){const s=e=>Object.keys(e).reduce((t,r)=>(t[r.toLowerCase()]=e[r],t),{});let n;if(this.requestOptions&&this.requestOptions.headers){n=s(this.requestOptions.headers)[t]}return e[t]||n||r}_getAgent(e){let t;let s=i.getProxyUrl(e);let c=s&&s.hostname;if(this._keepAlive&&c){t=this._proxyAgent}if(this._keepAlive&&!c){t=this._agent}if(!!t){return t}const u=e.protocol==="https:";let l=100;if(!!this.requestOptions){l=this.requestOptions.maxSockets||n.globalAgent.maxSockets}if(c){if(!a){a=r(5211)}const e={maxSockets:l,keepAlive:this._keepAlive,proxy:{proxyAuth:s.auth,host:s.hostname,port:s.port}};let n;const o=s.protocol==="https:";if(u){n=o?a.httpsOverHttps:a.httpsOverHttp}else{n=o?a.httpOverHttps:a.httpOverHttp}t=n(e);this._proxyAgent=t}if(this._keepAlive&&!t){const e={keepAlive:this._keepAlive,maxSockets:l};t=u?new o.Agent(e):new n.Agent(e);this._agent=t}if(!t){t=u?o.globalAgent:n.globalAgent}if(u&&this._ignoreSslError){t.options=Object.assign(t.options||{},{rejectUnauthorized:false})}return t}_performExponentialBackoff(e){e=Math.min(h,e);const t=m*Math.pow(2,e);return new Promise(e=>setTimeout(()=>e(),t))}static dateTimeDeserializer(e,t){if(typeof t==="string"){let e=new Date(t);if(!isNaN(e.valueOf())){return e}}return t}async _processResponse(e,t){return new Promise(async(r,s)=>{const n=e.message.statusCode;const o={statusCode:n,result:null,headers:{}};if(n==c.NotFound){r(o)}let i;let a;try{a=await e.readBody();if(a&&a.length>0){if(t&&t.deserializeDates){i=JSON.parse(a,HttpClient.dateTimeDeserializer)}else{i=JSON.parse(a)}o.result=i}o.headers=e.message.headers}catch(e){}if(n>299){let e;if(i&&i.message){e=i.message}else if(a&&a.length>0){e=a}else{e="Failed request: ("+n+")"}let t=new Error(e);t["statusCode"]=n;if(o.result){t["result"]=o.result}s(t)}else{r(o)}})}}t.HttpClient=HttpClient},7999:(e,t,r)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});const s=r(8835);function getProxyUrl(e){let t=e.protocol==="https:";let r;if(checkBypass(e)){return r}let n;if(t){n=process.env["https_proxy"]||process.env["HTTPS_PROXY"]}else{n=process.env["http_proxy"]||process.env["HTTP_PROXY"]}if(n){r=s.parse(n)}return r}t.getProxyUrl=getProxyUrl;function checkBypass(e){if(!e.hostname){return false}let t=process.env["no_proxy"]||process.env["NO_PROXY"]||"";if(!t){return false}let r;if(e.port){r=Number(e.port)}else if(e.protocol==="http:"){r=80}else if(e.protocol==="https:"){r=443}let s=[e.hostname.toUpperCase()];if(typeof r==="number"){s.push(`${s[0]}:${r}`)}for(let e of t.split(",").map(e=>e.trim().toUpperCase()).filter(e=>e)){if(s.some(t=>t===e)){return true}}return false}t.checkBypass=checkBypass},7622:(e,t)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});async function auth(e){const t=e.split(/\./).length===3?"app":/^v\d+\./.test(e)?"installation":"oauth";return{type:"token",token:e,tokenType:t}}function withAuthorizationPrefix(e){if(e.split(/\./).length===3){return`bearer ${e}`}return`token ${e}`}async function hook(e,t,r,s){const n=t.endpoint.merge(r,s);n.headers.authorization=withAuthorizationPrefix(e);return t(n)}const r=function createTokenAuth(e){if(!e){throw new Error("[@octokit/auth-token] No token passed to createTokenAuth")}if(typeof e!=="string"){throw new Error("[@octokit/auth-token] Token passed to createTokenAuth is not a string")}e=e.replace(/^(token|bearer) +/i,"");return Object.assign(auth.bind(null,e),{hook:hook.bind(null,e)})};t.createTokenAuth=r},1355:(e,t,r)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});var s=r(3567);var n=r(9617);var o=r(6956);var i=r(227);var a=r(7622);function _defineProperty(e,t,r){if(t in e){Object.defineProperty(e,t,{value:r,enumerable:true,configurable:true,writable:true})}else{e[t]=r}return e}function ownKeys(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var s=Object.getOwnPropertySymbols(e);if(t)s=s.filter(function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable});r.push.apply(r,s)}return r}function _objectSpread2(e){for(var t=1;t<arguments.length;t++){var r=arguments[t]!=null?arguments[t]:{};if(t%2){ownKeys(Object(r),true).forEach(function(t){_defineProperty(e,t,r[t])})}else if(Object.getOwnPropertyDescriptors){Object.defineProperties(e,Object.getOwnPropertyDescriptors(r))}else{ownKeys(Object(r)).forEach(function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))})}}return e}const c="3.1.2";class Octokit{constructor(e={}){const t=new n.Collection;const r={baseUrl:o.request.endpoint.DEFAULTS.baseUrl,headers:{},request:Object.assign({},e.request,{hook:t.bind(null,"request")}),mediaType:{previews:[],format:""}};r.headers["user-agent"]=[e.userAgent,`octokit-core.js/${c} ${s.getUserAgent()}`].filter(Boolean).join(" ");if(e.baseUrl){r.baseUrl=e.baseUrl}if(e.previews){r.mediaType.previews=e.previews}if(e.timeZone){r.headers["time-zone"]=e.timeZone}this.request=o.request.defaults(r);this.graphql=i.withCustomRequest(this.request).defaults(_objectSpread2(_objectSpread2({},r),{},{baseUrl:r.baseUrl.replace(/\/api\/v3$/,"/api")}));this.log=Object.assign({debug:()=>{},info:()=>{},warn:console.warn.bind(console),error:console.error.bind(console)},e.log);this.hook=t;if(!e.authStrategy){if(!e.auth){this.auth=(async()=>({type:"unauthenticated"}))}else{const r=a.createTokenAuth(e.auth);t.wrap("request",r.hook);this.auth=r}}else{const r=e.authStrategy(Object.assign({request:this.request},e.auth));t.wrap("request",r.hook);this.auth=r}const u=this.constructor;u.plugins.forEach(t=>{Object.assign(this,t(this,e))})}static defaults(e){const t=class extends(this){constructor(...t){const r=t[0]||{};if(typeof e==="function"){super(e(r));return}super(Object.assign({},e,r,r.userAgent&&e.userAgent?{userAgent:`${r.userAgent} ${e.userAgent}`}:null))}};return t}static plugin(...e){var t;const r=this.plugins;const s=(t=class extends(this){},t.plugins=r.concat(e.filter(e=>!r.includes(e))),t);return s}}Octokit.VERSION=c;Octokit.plugins=[];t.Octokit=Octokit},8069:(e,t,r)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});var s=r(2829);var n=r(3567);function lowercaseKeys(e){if(!e){return{}}return Object.keys(e).reduce((t,r)=>{t[r.toLowerCase()]=e[r];return t},{})}function mergeDeep(e,t){const r=Object.assign({},e);Object.keys(t).forEach(n=>{if(s.isPlainObject(t[n])){if(!(n in e))Object.assign(r,{[n]:t[n]});else r[n]=mergeDeep(e[n],t[n])}else{Object.assign(r,{[n]:t[n]})}});return r}function merge(e,t,r){if(typeof t==="string"){let[e,s]=t.split(" ");r=Object.assign(s?{method:e,url:s}:{url:e},r)}else{r=Object.assign({},t)}r.headers=lowercaseKeys(r.headers);const s=mergeDeep(e||{},r);if(e&&e.mediaType.previews.length){s.mediaType.previews=e.mediaType.previews.filter(e=>!s.mediaType.previews.includes(e)).concat(s.mediaType.previews)}s.mediaType.previews=s.mediaType.previews.map(e=>e.replace(/-preview/,""));return s}function addQueryParameters(e,t){const r=/\?/.test(e)?"&":"?";const s=Object.keys(t);if(s.length===0){return e}return e+r+s.map(e=>{if(e==="q"){return"q="+t.q.split("+").map(encodeURIComponent).join("+")}return`${e}=${encodeURIComponent(t[e])}`}).join("&")}const o=/\{[^}]+\}/g;function removeNonChars(e){return e.replace(/^\W+|\W+$/g,"").split(/,/)}function extractUrlVariableNames(e){const t=e.match(o);if(!t){return[]}return t.map(removeNonChars).reduce((e,t)=>e.concat(t),[])}function omit(e,t){return Object.keys(e).filter(e=>!t.includes(e)).reduce((t,r)=>{t[r]=e[r];return t},{})}function encodeReserved(e){return e.split(/(%[0-9A-Fa-f]{2})/g).map(function(e){if(!/%[0-9A-Fa-f]/.test(e)){e=encodeURI(e).replace(/%5B/g,"[").replace(/%5D/g,"]")}return e}).join("")}function encodeUnreserved(e){return encodeURIComponent(e).replace(/[!'()*]/g,function(e){return"%"+e.charCodeAt(0).toString(16).toUpperCase()})}function encodeValue(e,t,r){t=e==="+"||e==="#"?encodeReserved(t):encodeUnreserved(t);if(r){return encodeUnreserved(r)+"="+t}else{return t}}function isDefined(e){return e!==undefined&&e!==null}function isKeyOperator(e){return e===";"||e==="&"||e==="?"}function getValues(e,t,r,s){var n=e[r],o=[];if(isDefined(n)&&n!==""){if(typeof n==="string"||typeof n==="number"||typeof n==="boolean"){n=n.toString();if(s&&s!=="*"){n=n.substring(0,parseInt(s,10))}o.push(encodeValue(t,n,isKeyOperator(t)?r:""))}else{if(s==="*"){if(Array.isArray(n)){n.filter(isDefined).forEach(function(e){o.push(encodeValue(t,e,isKeyOperator(t)?r:""))})}else{Object.keys(n).forEach(function(e){if(isDefined(n[e])){o.push(encodeValue(t,n[e],e))}})}}else{const e=[];if(Array.isArray(n)){n.filter(isDefined).forEach(function(r){e.push(encodeValue(t,r))})}else{Object.keys(n).forEach(function(r){if(isDefined(n[r])){e.push(encodeUnreserved(r));e.push(encodeValue(t,n[r].toString()))}})}if(isKeyOperator(t)){o.push(encodeUnreserved(r)+"="+e.join(","))}else if(e.length!==0){o.push(e.join(","))}}}}else{if(t===";"){if(isDefined(n)){o.push(encodeUnreserved(r))}}else if(n===""&&(t==="&"||t==="?")){o.push(encodeUnreserved(r)+"=")}else if(n===""){o.push("")}}return o}function parseUrl(e){return{expand:expand.bind(null,e)}}function expand(e,t){var r=["+","#",".","/",";","?","&"];return e.replace(/\{([^\{\}]+)\}|([^\{\}]+)/g,function(e,s,n){if(s){let e="";const n=[];if(r.indexOf(s.charAt(0))!==-1){e=s.charAt(0);s=s.substr(1)}s.split(/,/g).forEach(function(r){var s=/([^:\*]*)(?::(\d+)|(\*))?/.exec(r);n.push(getValues(t,e,s[1],s[2]||s[3]))});if(e&&e!=="+"){var o=",";if(e==="?"){o="&"}else if(e!=="#"){o=e}return(n.length!==0?e:"")+n.join(o)}else{return n.join(",")}}else{return encodeReserved(n)}})}function parse(e){let t=e.method.toUpperCase();let r=(e.url||"/").replace(/:([a-z]\w+)/g,"{+$1}");let s=Object.assign({},e.headers);let n;let o=omit(e,["method","baseUrl","url","headers","request","mediaType"]);const i=extractUrlVariableNames(r);r=parseUrl(r).expand(o);if(!/^http/.test(r)){r=e.baseUrl+r}const a=Object.keys(e).filter(e=>i.includes(e)).concat("baseUrl");const c=omit(o,a);const u=/application\/octet-stream/i.test(s.accept);if(!u){if(e.mediaType.format){s.accept=s.accept.split(/,/).map(t=>t.replace(/application\/vnd(\.\w+)(\.v3)?(\.\w+)?(\+json)?$/,`application/vnd$1$2.${e.mediaType.format}`)).join(",")}if(e.mediaType.previews.length){const t=s.accept.match(/[\w-]+(?=-preview)/g)||[];s.accept=t.concat(e.mediaType.previews).map(t=>{const r=e.mediaType.format?`.${e.mediaType.format}`:"+json";return`application/vnd.github.${t}-preview${r}`}).join(",")}}if(["GET","HEAD"].includes(t)){r=addQueryParameters(r,c)}else{if("data"in c){n=c.data}else{if(Object.keys(c).length){n=c}else{s["content-length"]=0}}}if(!s["content-type"]&&typeof n!=="undefined"){s["content-type"]="application/json; charset=utf-8"}if(["PATCH","PUT"].includes(t)&&typeof n==="undefined"){n=""}return Object.assign({method:t,url:r,headers:s},typeof n!=="undefined"?{body:n}:null,e.request?{request:e.request}:null)}function endpointWithDefaults(e,t,r){return parse(merge(e,t,r))}function withDefaults(e,t){const r=merge(e,t);const s=endpointWithDefaults.bind(null,r);return Object.assign(s,{DEFAULTS:r,defaults:withDefaults.bind(null,r),merge:merge.bind(null,r),parse:parse})}const i="6.0.6";const a=`octokit-endpoint.js/${i} ${n.getUserAgent()}`;const c={method:"GET",baseUrl:"https://api.github.com",headers:{accept:"application/vnd.github.v3+json","user-agent":a},mediaType:{format:"",previews:[]}};const u=withDefaults(null,c);t.endpoint=u},227:(e,t,r)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});var s=r(6956);var n=r(3567);const o="4.5.6";class GraphqlError extends Error{constructor(e,t){const r=t.data.errors[0].message;super(r);Object.assign(this,t.data);Object.assign(this,{headers:t.headers});this.name="GraphqlError";this.request=e;if(Error.captureStackTrace){Error.captureStackTrace(this,this.constructor)}}}const i=["method","baseUrl","url","headers","request","query","mediaType"];const a=/\/api\/v3\/?$/;function graphql(e,t,r){if(typeof t==="string"&&r&&"query"in r){return Promise.reject(new Error(`[@octokit/graphql] "query" cannot be used as variable name`))}const s=typeof t==="string"?Object.assign({query:t},r):t;const n=Object.keys(s).reduce((e,t)=>{if(i.includes(t)){e[t]=s[t];return e}if(!e.variables){e.variables={}}e.variables[t]=s[t];return e},{});const o=s.baseUrl||e.endpoint.DEFAULTS.baseUrl;if(a.test(o)){n.url=o.replace(a,"/api/graphql")}return e(n).then(e=>{if(e.data.errors){const t={};for(const r of Object.keys(e.headers)){t[r]=e.headers[r]}throw new GraphqlError(n,{headers:t,data:e.data})}return e.data.data})}function withDefaults(e,t){const r=e.defaults(t);const n=(e,t)=>{return graphql(r,e,t)};return Object.assign(n,{defaults:withDefaults.bind(null,r),endpoint:s.request.endpoint})}const c=withDefaults(s.request,{headers:{"user-agent":`octokit-graphql.js/${o} ${n.getUserAgent()}`},method:"POST",url:"/graphql"});function withCustomRequest(e){return withDefaults(e,{method:"POST",url:"/graphql"})}t.graphql=c;t.withCustomRequest=withCustomRequest},1762:(e,t)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});const r="2.4.0";function normalizePaginatedListResponse(e){const t="total_count"in e.data&&!("url"in e.data);if(!t)return e;const r=e.data.incomplete_results;const s=e.data.repository_selection;const n=e.data.total_count;delete e.data.incomplete_results;delete e.data.repository_selection;delete e.data.total_count;const o=Object.keys(e.data)[0];const i=e.data[o];e.data=i;if(typeof r!=="undefined"){e.data.incomplete_results=r}if(typeof s!=="undefined"){e.data.repository_selection=s}e.data.total_count=n;return e}function iterator(e,t,r){const s=typeof t==="function"?t.endpoint(r):e.request.endpoint(t,r);const n=typeof t==="function"?t:e.request;const o=s.method;const i=s.headers;let a=s.url;return{[Symbol.asyncIterator]:()=>({next(){if(!a){return Promise.resolve({done:true})}return n({method:o,url:a,headers:i}).then(normalizePaginatedListResponse).then(e=>{a=((e.headers.link||"").match(/<([^>]+)>;\s*rel="next"/)||[])[1];return{value:e}})}})}}function paginate(e,t,r,s){if(typeof r==="function"){s=r;r=undefined}return gather(e,[],iterator(e,t,r)[Symbol.asyncIterator](),s)}function gather(e,t,r,s){return r.next().then(n=>{if(n.done){return t}let o=false;function done(){o=true}t=t.concat(s?s(n.value,done):n.value.data);if(o){return t}return gather(e,t,r,s)})}function paginateRest(e){return{paginate:Object.assign(paginate.bind(null,e),{iterator:iterator.bind(null,e)})}}paginateRest.VERSION=r;t.paginateRest=paginateRest},66:(e,t)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});const r={actions:{addSelectedRepoToOrgSecret:["PUT /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"],cancelWorkflowRun:["POST /repos/{owner}/{repo}/actions/runs/{run_id}/cancel"],createOrUpdateOrgSecret:["PUT /orgs/{org}/actions/secrets/{secret_name}"],createOrUpdateRepoSecret:["PUT /repos/{owner}/{repo}/actions/secrets/{secret_name}"],createRegistrationTokenForOrg:["POST /orgs/{org}/actions/runners/registration-token"],createRegistrationTokenForRepo:["POST /repos/{owner}/{repo}/actions/runners/registration-token"],createRemoveTokenForOrg:["POST /orgs/{org}/actions/runners/remove-token"],createRemoveTokenForRepo:["POST /repos/{owner}/{repo}/actions/runners/remove-token"],createWorkflowDispatch:["POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches"],deleteArtifact:["DELETE /repos/{owner}/{repo}/actions/artifacts/{artifact_id}"],deleteOrgSecret:["DELETE /orgs/{org}/actions/secrets/{secret_name}"],deleteRepoSecret:["DELETE /repos/{owner}/{repo}/actions/secrets/{secret_name}"],deleteSelfHostedRunnerFromOrg:["DELETE /orgs/{org}/actions/runners/{runner_id}"],deleteSelfHostedRunnerFromRepo:["DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}"],deleteWorkflowRun:["DELETE /repos/{owner}/{repo}/actions/runs/{run_id}"],deleteWorkflowRunLogs:["DELETE /repos/{owner}/{repo}/actions/runs/{run_id}/logs"],downloadArtifact:["GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}"],downloadJobLogsForWorkflowRun:["GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs"],downloadWorkflowRunLogs:["GET /repos/{owner}/{repo}/actions/runs/{run_id}/logs"],getArtifact:["GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}"],getJobForWorkflowRun:["GET /repos/{owner}/{repo}/actions/jobs/{job_id}"],getOrgPublicKey:["GET /orgs/{org}/actions/secrets/public-key"],getOrgSecret:["GET /orgs/{org}/actions/secrets/{secret_name}"],getRepoPublicKey:["GET /repos/{owner}/{repo}/actions/secrets/public-key"],getRepoSecret:["GET /repos/{owner}/{repo}/actions/secrets/{secret_name}"],getSelfHostedRunnerForOrg:["GET /orgs/{org}/actions/runners/{runner_id}"],getSelfHostedRunnerForRepo:["GET /repos/{owner}/{repo}/actions/runners/{runner_id}"],getWorkflow:["GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}"],getWorkflowRun:["GET /repos/{owner}/{repo}/actions/runs/{run_id}"],getWorkflowRunUsage:["GET /repos/{owner}/{repo}/actions/runs/{run_id}/timing"],getWorkflowUsage:["GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing"],listArtifactsForRepo:["GET /repos/{owner}/{repo}/actions/artifacts"],listJobsForWorkflowRun:["GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs"],listOrgSecrets:["GET /orgs/{org}/actions/secrets"],listRepoSecrets:["GET /repos/{owner}/{repo}/actions/secrets"],listRepoWorkflows:["GET /repos/{owner}/{repo}/actions/workflows"],listRunnerApplicationsForOrg:["GET /orgs/{org}/actions/runners/downloads"],listRunnerApplicationsForRepo:["GET /repos/{owner}/{repo}/actions/runners/downloads"],listSelectedReposForOrgSecret:["GET /orgs/{org}/actions/secrets/{secret_name}/repositories"],listSelfHostedRunnersForOrg:["GET /orgs/{org}/actions/runners"],listSelfHostedRunnersForRepo:["GET /repos/{owner}/{repo}/actions/runners"],listWorkflowRunArtifacts:["GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts"],listWorkflowRuns:["GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs"],listWorkflowRunsForRepo:["GET /repos/{owner}/{repo}/actions/runs"],reRunWorkflow:["POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun"],removeSelectedRepoFromOrgSecret:["DELETE /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"],setSelectedReposForOrgSecret:["PUT /orgs/{org}/actions/secrets/{secret_name}/repositories"]},activity:{checkRepoIsStarredByAuthenticatedUser:["GET /user/starred/{owner}/{repo}"],deleteRepoSubscription:["DELETE /repos/{owner}/{repo}/subscription"],deleteThreadSubscription:["DELETE /notifications/threads/{thread_id}/subscription"],getFeeds:["GET /feeds"],getRepoSubscription:["GET /repos/{owner}/{repo}/subscription"],getThread:["GET /notifications/threads/{thread_id}"],getThreadSubscriptionForAuthenticatedUser:["GET /notifications/threads/{thread_id}/subscription"],listEventsForAuthenticatedUser:["GET /users/{username}/events"],listNotificationsForAuthenticatedUser:["GET /notifications"],listOrgEventsForAuthenticatedUser:["GET /users/{username}/events/orgs/{org}"],listPublicEvents:["GET /events"],listPublicEventsForRepoNetwork:["GET /networks/{owner}/{repo}/events"],listPublicEventsForUser:["GET /users/{username}/events/public"],listPublicOrgEvents:["GET /orgs/{org}/events"],listReceivedEventsForUser:["GET /users/{username}/received_events"],listReceivedPublicEventsForUser:["GET /users/{username}/received_events/public"],listRepoEvents:["GET /repos/{owner}/{repo}/events"],listRepoNotificationsForAuthenticatedUser:["GET /repos/{owner}/{repo}/notifications"],listReposStarredByAuthenticatedUser:["GET /user/starred"],listReposStarredByUser:["GET /users/{username}/starred"],listReposWatchedByUser:["GET /users/{username}/subscriptions"],listStargazersForRepo:["GET /repos/{owner}/{repo}/stargazers"],listWatchedReposForAuthenticatedUser:["GET /user/subscriptions"],listWatchersForRepo:["GET /repos/{owner}/{repo}/subscribers"],markNotificationsAsRead:["PUT /notifications"],markRepoNotificationsAsRead:["PUT /repos/{owner}/{repo}/notifications"],markThreadAsRead:["PATCH /notifications/threads/{thread_id}"],setRepoSubscription:["PUT /repos/{owner}/{repo}/subscription"],setThreadSubscription:["PUT /notifications/threads/{thread_id}/subscription"],starRepoForAuthenticatedUser:["PUT /user/starred/{owner}/{repo}"],unstarRepoForAuthenticatedUser:["DELETE /user/starred/{owner}/{repo}"]},apps:{addRepoToInstallation:["PUT /user/installations/{installation_id}/repositories/{repository_id}"],checkToken:["POST /applications/{client_id}/token"],createContentAttachment:["POST /content_references/{content_reference_id}/attachments",{mediaType:{previews:["corsair"]}}],createFromManifest:["POST /app-manifests/{code}/conversions"],createInstallationAccessToken:["POST /app/installations/{installation_id}/access_tokens"],deleteAuthorization:["DELETE /applications/{client_id}/grant"],deleteInstallation:["DELETE /app/installations/{installation_id}"],deleteToken:["DELETE /applications/{client_id}/token"],getAuthenticated:["GET /app"],getBySlug:["GET /apps/{app_slug}"],getInstallation:["GET /app/installations/{installation_id}"],getOrgInstallation:["GET /orgs/{org}/installation"],getRepoInstallation:["GET /repos/{owner}/{repo}/installation"],getSubscriptionPlanForAccount:["GET /marketplace_listing/accounts/{account_id}"],getSubscriptionPlanForAccountStubbed:["GET /marketplace_listing/stubbed/accounts/{account_id}"],getUserInstallation:["GET /users/{username}/installation"],listAccountsForPlan:["GET /marketplace_listing/plans/{plan_id}/accounts"],listAccountsForPlanStubbed:["GET /marketplace_listing/stubbed/plans/{plan_id}/accounts"],listInstallationReposForAuthenticatedUser:["GET /user/installations/{installation_id}/repositories"],listInstallations:["GET /app/installations"],listInstallationsForAuthenticatedUser:["GET /user/installations"],listPlans:["GET /marketplace_listing/plans"],listPlansStubbed:["GET /marketplace_listing/stubbed/plans"],listReposAccessibleToInstallation:["GET /installation/repositories"],listSubscriptionsForAuthenticatedUser:["GET /user/marketplace_purchases"],listSubscriptionsForAuthenticatedUserStubbed:["GET /user/marketplace_purchases/stubbed"],removeRepoFromInstallation:["DELETE /user/installations/{installation_id}/repositories/{repository_id}"],resetToken:["PATCH /applications/{client_id}/token"],revokeInstallationAccessToken:["DELETE /installation/token"],suspendInstallation:["PUT /app/installations/{installation_id}/suspended"],unsuspendInstallation:["DELETE /app/installations/{installation_id}/suspended"]},billing:{getGithubActionsBillingOrg:["GET /orgs/{org}/settings/billing/actions"],getGithubActionsBillingUser:["GET /users/{username}/settings/billing/actions"],getGithubPackagesBillingOrg:["GET /orgs/{org}/settings/billing/packages"],getGithubPackagesBillingUser:["GET /users/{username}/settings/billing/packages"],getSharedStorageBillingOrg:["GET /orgs/{org}/settings/billing/shared-storage"],getSharedStorageBillingUser:["GET /users/{username}/settings/billing/shared-storage"]},checks:{create:["POST /repos/{owner}/{repo}/check-runs",{mediaType:{previews:["antiope"]}}],createSuite:["POST /repos/{owner}/{repo}/check-suites",{mediaType:{previews:["antiope"]}}],get:["GET /repos/{owner}/{repo}/check-runs/{check_run_id}",{mediaType:{previews:["antiope"]}}],getSuite:["GET /repos/{owner}/{repo}/check-suites/{check_suite_id}",{mediaType:{previews:["antiope"]}}],listAnnotations:["GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations",{mediaType:{previews:["antiope"]}}],listForRef:["GET /repos/{owner}/{repo}/commits/{ref}/check-runs",{mediaType:{previews:["antiope"]}}],listForSuite:["GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs",{mediaType:{previews:["antiope"]}}],listSuitesForRef:["GET /repos/{owner}/{repo}/commits/{ref}/check-suites",{mediaType:{previews:["antiope"]}}],rerequestSuite:["POST /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest",{mediaType:{previews:["antiope"]}}],setSuitesPreferences:["PATCH /repos/{owner}/{repo}/check-suites/preferences",{mediaType:{previews:["antiope"]}}],update:["PATCH /repos/{owner}/{repo}/check-runs/{check_run_id}",{mediaType:{previews:["antiope"]}}]},codeScanning:{getAlert:["GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",{},{renamedParameters:{alert_id:"alert_number"}}],listAlertsForRepo:["GET /repos/{owner}/{repo}/code-scanning/alerts"],listRecentAnalyses:["GET /repos/{owner}/{repo}/code-scanning/analyses"],updateAlert:["PATCH /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}"],uploadSarif:["POST /repos/{owner}/{repo}/code-scanning/sarifs"]},codesOfConduct:{getAllCodesOfConduct:["GET /codes_of_conduct",{mediaType:{previews:["scarlet-witch"]}}],getConductCode:["GET /codes_of_conduct/{key}",{mediaType:{previews:["scarlet-witch"]}}],getForRepo:["GET /repos/{owner}/{repo}/community/code_of_conduct",{mediaType:{previews:["scarlet-witch"]}}]},emojis:{get:["GET /emojis"]},gists:{checkIsStarred:["GET /gists/{gist_id}/star"],create:["POST /gists"],createComment:["POST /gists/{gist_id}/comments"],delete:["DELETE /gists/{gist_id}"],deleteComment:["DELETE /gists/{gist_id}/comments/{comment_id}"],fork:["POST /gists/{gist_id}/forks"],get:["GET /gists/{gist_id}"],getComment:["GET /gists/{gist_id}/comments/{comment_id}"],getRevision:["GET /gists/{gist_id}/{sha}"],list:["GET /gists"],listComments:["GET /gists/{gist_id}/comments"],listCommits:["GET /gists/{gist_id}/commits"],listForUser:["GET /users/{username}/gists"],listForks:["GET /gists/{gist_id}/forks"],listPublic:["GET /gists/public"],listStarred:["GET /gists/starred"],star:["PUT /gists/{gist_id}/star"],unstar:["DELETE /gists/{gist_id}/star"],update:["PATCH /gists/{gist_id}"],updateComment:["PATCH /gists/{gist_id}/comments/{comment_id}"]},git:{createBlob:["POST /repos/{owner}/{repo}/git/blobs"],createCommit:["POST /repos/{owner}/{repo}/git/commits"],createRef:["POST /repos/{owner}/{repo}/git/refs"],createTag:["POST /repos/{owner}/{repo}/git/tags"],createTree:["POST /repos/{owner}/{repo}/git/trees"],deleteRef:["DELETE /repos/{owner}/{repo}/git/refs/{ref}"],getBlob:["GET /repos/{owner}/{repo}/git/blobs/{file_sha}"],getCommit:["GET /repos/{owner}/{repo}/git/commits/{commit_sha}"],getRef:["GET /repos/{owner}/{repo}/git/ref/{ref}"],getTag:["GET /repos/{owner}/{repo}/git/tags/{tag_sha}"],getTree:["GET /repos/{owner}/{repo}/git/trees/{tree_sha}"],listMatchingRefs:["GET /repos/{owner}/{repo}/git/matching-refs/{ref}"],updateRef:["PATCH /repos/{owner}/{repo}/git/refs/{ref}"]},gitignore:{getAllTemplates:["GET /gitignore/templates"],getTemplate:["GET /gitignore/templates/{name}"]},interactions:{getRestrictionsForOrg:["GET /orgs/{org}/interaction-limits",{mediaType:{previews:["sombra"]}}],getRestrictionsForRepo:["GET /repos/{owner}/{repo}/interaction-limits",{mediaType:{previews:["sombra"]}}],removeRestrictionsForOrg:["DELETE /orgs/{org}/interaction-limits",{mediaType:{previews:["sombra"]}}],removeRestrictionsForRepo:["DELETE /repos/{owner}/{repo}/interaction-limits",{mediaType:{previews:["sombra"]}}],setRestrictionsForOrg:["PUT /orgs/{org}/interaction-limits",{mediaType:{previews:["sombra"]}}],setRestrictionsForRepo:["PUT /repos/{owner}/{repo}/interaction-limits",{mediaType:{previews:["sombra"]}}]},issues:{addAssignees:["POST /repos/{owner}/{repo}/issues/{issue_number}/assignees"],addLabels:["POST /repos/{owner}/{repo}/issues/{issue_number}/labels"],checkUserCanBeAssigned:["GET /repos/{owner}/{repo}/assignees/{assignee}"],create:["POST /repos/{owner}/{repo}/issues"],createComment:["POST /repos/{owner}/{repo}/issues/{issue_number}/comments"],createLabel:["POST /repos/{owner}/{repo}/labels"],createMilestone:["POST /repos/{owner}/{repo}/milestones"],deleteComment:["DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}"],deleteLabel:["DELETE /repos/{owner}/{repo}/labels/{name}"],deleteMilestone:["DELETE /repos/{owner}/{repo}/milestones/{milestone_number}"],get:["GET /repos/{owner}/{repo}/issues/{issue_number}"],getComment:["GET /repos/{owner}/{repo}/issues/comments/{comment_id}"],getEvent:["GET /repos/{owner}/{repo}/issues/events/{event_id}"],getLabel:["GET /repos/{owner}/{repo}/labels/{name}"],getMilestone:["GET /repos/{owner}/{repo}/milestones/{milestone_number}"],list:["GET /issues"],listAssignees:["GET /repos/{owner}/{repo}/assignees"],listComments:["GET /repos/{owner}/{repo}/issues/{issue_number}/comments"],listCommentsForRepo:["GET /repos/{owner}/{repo}/issues/comments"],listEvents:["GET /repos/{owner}/{repo}/issues/{issue_number}/events"],listEventsForRepo:["GET /repos/{owner}/{repo}/issues/events"],listEventsForTimeline:["GET /repos/{owner}/{repo}/issues/{issue_number}/timeline",{mediaType:{previews:["mockingbird"]}}],listForAuthenticatedUser:["GET /user/issues"],listForOrg:["GET /orgs/{org}/issues"],listForRepo:["GET /repos/{owner}/{repo}/issues"],listLabelsForMilestone:["GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels"],listLabelsForRepo:["GET /repos/{owner}/{repo}/labels"],listLabelsOnIssue:["GET /repos/{owner}/{repo}/issues/{issue_number}/labels"],listMilestones:["GET /repos/{owner}/{repo}/milestones"],lock:["PUT /repos/{owner}/{repo}/issues/{issue_number}/lock"],removeAllLabels:["DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels"],removeAssignees:["DELETE /repos/{owner}/{repo}/issues/{issue_number}/assignees"],removeLabel:["DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}"],setLabels:["PUT /repos/{owner}/{repo}/issues/{issue_number}/labels"],unlock:["DELETE /repos/{owner}/{repo}/issues/{issue_number}/lock"],update:["PATCH /repos/{owner}/{repo}/issues/{issue_number}"],updateComment:["PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}"],updateLabel:["PATCH /repos/{owner}/{repo}/labels/{name}"],updateMilestone:["PATCH /repos/{owner}/{repo}/milestones/{milestone_number}"]},licenses:{get:["GET /licenses/{license}"],getAllCommonlyUsed:["GET /licenses"],getForRepo:["GET /repos/{owner}/{repo}/license"]},markdown:{render:["POST /markdown"],renderRaw:["POST /markdown/raw",{headers:{"content-type":"text/plain; charset=utf-8"}}]},meta:{get:["GET /meta"]},migrations:{cancelImport:["DELETE /repos/{owner}/{repo}/import"],deleteArchiveForAuthenticatedUser:["DELETE /user/migrations/{migration_id}/archive",{mediaType:{previews:["wyandotte"]}}],deleteArchiveForOrg:["DELETE /orgs/{org}/migrations/{migration_id}/archive",{mediaType:{previews:["wyandotte"]}}],downloadArchiveForOrg:["GET /orgs/{org}/migrations/{migration_id}/archive",{mediaType:{previews:["wyandotte"]}}],getArchiveForAuthenticatedUser:["GET /user/migrations/{migration_id}/archive",{mediaType:{previews:["wyandotte"]}}],getCommitAuthors:["GET /repos/{owner}/{repo}/import/authors"],getImportStatus:["GET /repos/{owner}/{repo}/import"],getLargeFiles:["GET /repos/{owner}/{repo}/import/large_files"],getStatusForAuthenticatedUser:["GET /user/migrations/{migration_id}",{mediaType:{previews:["wyandotte"]}}],getStatusForOrg:["GET /orgs/{org}/migrations/{migration_id}",{mediaType:{previews:["wyandotte"]}}],listForAuthenticatedUser:["GET /user/migrations",{mediaType:{previews:["wyandotte"]}}],listForOrg:["GET /orgs/{org}/migrations",{mediaType:{previews:["wyandotte"]}}],listReposForOrg:["GET /orgs/{org}/migrations/{migration_id}/repositories",{mediaType:{previews:["wyandotte"]}}],listReposForUser:["GET /user/migrations/{migration_id}/repositories",{mediaType:{previews:["wyandotte"]}}],mapCommitAuthor:["PATCH /repos/{owner}/{repo}/import/authors/{author_id}"],setLfsPreference:["PATCH /repos/{owner}/{repo}/import/lfs"],startForAuthenticatedUser:["POST /user/migrations"],startForOrg:["POST /orgs/{org}/migrations"],startImport:["PUT /repos/{owner}/{repo}/import"],unlockRepoForAuthenticatedUser:["DELETE /user/migrations/{migration_id}/repos/{repo_name}/lock",{mediaType:{previews:["wyandotte"]}}],unlockRepoForOrg:["DELETE /orgs/{org}/migrations/{migration_id}/repos/{repo_name}/lock",{mediaType:{previews:["wyandotte"]}}],updateImport:["PATCH /repos/{owner}/{repo}/import"]},orgs:{blockUser:["PUT /orgs/{org}/blocks/{username}"],checkBlockedUser:["GET /orgs/{org}/blocks/{username}"],checkMembershipForUser:["GET /orgs/{org}/members/{username}"],checkPublicMembershipForUser:["GET /orgs/{org}/public_members/{username}"],convertMemberToOutsideCollaborator:["PUT /orgs/{org}/outside_collaborators/{username}"],createInvitation:["POST /orgs/{org}/invitations"],createWebhook:["POST /orgs/{org}/hooks"],deleteWebhook:["DELETE /orgs/{org}/hooks/{hook_id}"],get:["GET /orgs/{org}"],getMembershipForAuthenticatedUser:["GET /user/memberships/orgs/{org}"],getMembershipForUser:["GET /orgs/{org}/memberships/{username}"],getWebhook:["GET /orgs/{org}/hooks/{hook_id}"],list:["GET /organizations"],listAppInstallations:["GET /orgs/{org}/installations"],listBlockedUsers:["GET /orgs/{org}/blocks"],listForAuthenticatedUser:["GET /user/orgs"],listForUser:["GET /users/{username}/orgs"],listInvitationTeams:["GET /orgs/{org}/invitations/{invitation_id}/teams"],listMembers:["GET /orgs/{org}/members"],listMembershipsForAuthenticatedUser:["GET /user/memberships/orgs"],listOutsideCollaborators:["GET /orgs/{org}/outside_collaborators"],listPendingInvitations:["GET /orgs/{org}/invitations"],listPublicMembers:["GET /orgs/{org}/public_members"],listWebhooks:["GET /orgs/{org}/hooks"],pingWebhook:["POST /orgs/{org}/hooks/{hook_id}/pings"],removeMember:["DELETE /orgs/{org}/members/{username}"],removeMembershipForUser:["DELETE /orgs/{org}/memberships/{username}"],removeOutsideCollaborator:["DELETE /orgs/{org}/outside_collaborators/{username}"],removePublicMembershipForAuthenticatedUser:["DELETE /orgs/{org}/public_members/{username}"],setMembershipForUser:["PUT /orgs/{org}/memberships/{username}"],setPublicMembershipForAuthenticatedUser:["PUT /orgs/{org}/public_members/{username}"],unblockUser:["DELETE /orgs/{org}/blocks/{username}"],update:["PATCH /orgs/{org}"],updateMembershipForAuthenticatedUser:["PATCH /user/memberships/orgs/{org}"],updateWebhook:["PATCH /orgs/{org}/hooks/{hook_id}"]},projects:{addCollaborator:["PUT /projects/{project_id}/collaborators/{username}",{mediaType:{previews:["inertia"]}}],createCard:["POST /projects/columns/{column_id}/cards",{mediaType:{previews:["inertia"]}}],createColumn:["POST /projects/{project_id}/columns",{mediaType:{previews:["inertia"]}}],createForAuthenticatedUser:["POST /user/projects",{mediaType:{previews:["inertia"]}}],createForOrg:["POST /orgs/{org}/projects",{mediaType:{previews:["inertia"]}}],createForRepo:["POST /repos/{owner}/{repo}/projects",{mediaType:{previews:["inertia"]}}],delete:["DELETE /projects/{project_id}",{mediaType:{previews:["inertia"]}}],deleteCard:["DELETE /projects/columns/cards/{card_id}",{mediaType:{previews:["inertia"]}}],deleteColumn:["DELETE /projects/columns/{column_id}",{mediaType:{previews:["inertia"]}}],get:["GET /projects/{project_id}",{mediaType:{previews:["inertia"]}}],getCard:["GET /projects/columns/cards/{card_id}",{mediaType:{previews:["inertia"]}}],getColumn:["GET /projects/columns/{column_id}",{mediaType:{previews:["inertia"]}}],getPermissionForUser:["GET /projects/{project_id}/collaborators/{username}/permission",{mediaType:{previews:["inertia"]}}],listCards:["GET /projects/columns/{column_id}/cards",{mediaType:{previews:["inertia"]}}],listCollaborators:["GET /projects/{project_id}/collaborators",{mediaType:{previews:["inertia"]}}],listColumns:["GET /projects/{project_id}/columns",{mediaType:{previews:["inertia"]}}],listForOrg:["GET /orgs/{org}/projects",{mediaType:{previews:["inertia"]}}],listForRepo:["GET /repos/{owner}/{repo}/projects",{mediaType:{previews:["inertia"]}}],listForUser:["GET /users/{username}/projects",{mediaType:{previews:["inertia"]}}],moveCard:["POST /projects/columns/cards/{card_id}/moves",{mediaType:{previews:["inertia"]}}],moveColumn:["POST /projects/columns/{column_id}/moves",{mediaType:{previews:["inertia"]}}],removeCollaborator:["DELETE /projects/{project_id}/collaborators/{username}",{mediaType:{previews:["inertia"]}}],update:["PATCH /projects/{project_id}",{mediaType:{previews:["inertia"]}}],updateCard:["PATCH /projects/columns/cards/{card_id}",{mediaType:{previews:["inertia"]}}],updateColumn:["PATCH /projects/columns/{column_id}",{mediaType:{previews:["inertia"]}}]},pulls:{checkIfMerged:["GET /repos/{owner}/{repo}/pulls/{pull_number}/merge"],create:["POST /repos/{owner}/{repo}/pulls"],createReplyForReviewComment:["POST /repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies"],createReview:["POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews"],createReviewComment:["POST /repos/{owner}/{repo}/pulls/{pull_number}/comments"],deletePendingReview:["DELETE /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"],deleteReviewComment:["DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}"],dismissReview:["PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/dismissals"],get:["GET /repos/{owner}/{repo}/pulls/{pull_number}"],getReview:["GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"],getReviewComment:["GET /repos/{owner}/{repo}/pulls/comments/{comment_id}"],list:["GET /repos/{owner}/{repo}/pulls"],listCommentsForReview:["GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments"],listCommits:["GET /repos/{owner}/{repo}/pulls/{pull_number}/commits"],listFiles:["GET /repos/{owner}/{repo}/pulls/{pull_number}/files"],listRequestedReviewers:["GET /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"],listReviewComments:["GET /repos/{owner}/{repo}/pulls/{pull_number}/comments"],listReviewCommentsForRepo:["GET /repos/{owner}/{repo}/pulls/comments"],listReviews:["GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews"],merge:["PUT /repos/{owner}/{repo}/pulls/{pull_number}/merge"],removeRequestedReviewers:["DELETE /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"],requestReviewers:["POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"],submitReview:["POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/events"],update:["PATCH /repos/{owner}/{repo}/pulls/{pull_number}"],updateBranch:["PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch",{mediaType:{previews:["lydian"]}}],updateReview:["PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"],updateReviewComment:["PATCH /repos/{owner}/{repo}/pulls/comments/{comment_id}"]},rateLimit:{get:["GET /rate_limit"]},reactions:{createForCommitComment:["POST /repos/{owner}/{repo}/comments/{comment_id}/reactions",{mediaType:{previews:["squirrel-girl"]}}],createForIssue:["POST /repos/{owner}/{repo}/issues/{issue_number}/reactions",{mediaType:{previews:["squirrel-girl"]}}],createForIssueComment:["POST /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",{mediaType:{previews:["squirrel-girl"]}}],createForPullRequestReviewComment:["POST /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",{mediaType:{previews:["squirrel-girl"]}}],createForTeamDiscussionCommentInOrg:["POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions",{mediaType:{previews:["squirrel-girl"]}}],createForTeamDiscussionInOrg:["POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions",{mediaType:{previews:["squirrel-girl"]}}],deleteForCommitComment:["DELETE /repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}",{mediaType:{previews:["squirrel-girl"]}}],deleteForIssue:["DELETE /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}",{mediaType:{previews:["squirrel-girl"]}}],deleteForIssueComment:["DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}",{mediaType:{previews:["squirrel-girl"]}}],deleteForPullRequestComment:["DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}",{mediaType:{previews:["squirrel-girl"]}}],deleteForTeamDiscussion:["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions/{reaction_id}",{mediaType:{previews:["squirrel-girl"]}}],deleteForTeamDiscussionComment:["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions/{reaction_id}",{mediaType:{previews:["squirrel-girl"]}}],deleteLegacy:["DELETE /reactions/{reaction_id}",{mediaType:{previews:["squirrel-girl"]}},{deprecated:"octokit.reactions.deleteLegacy() is deprecated, see https://developer.github.com/v3/reactions/#delete-a-reaction-legacy"}],listForCommitComment:["GET /repos/{owner}/{repo}/comments/{comment_id}/reactions",{mediaType:{previews:["squirrel-girl"]}}],listForIssue:["GET /repos/{owner}/{repo}/issues/{issue_number}/reactions",{mediaType:{previews:["squirrel-girl"]}}],listForIssueComment:["GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",{mediaType:{previews:["squirrel-girl"]}}],listForPullRequestReviewComment:["GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",{mediaType:{previews:["squirrel-girl"]}}],listForTeamDiscussionCommentInOrg:["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions",{mediaType:{previews:["squirrel-girl"]}}],listForTeamDiscussionInOrg:["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions",{mediaType:{previews:["squirrel-girl"]}}]},repos:{acceptInvitation:["PATCH /user/repository_invitations/{invitation_id}"],addAppAccessRestrictions:["POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",{},{mapToData:"apps"}],addCollaborator:["PUT /repos/{owner}/{repo}/collaborators/{username}"],addStatusCheckContexts:["POST /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",{},{mapToData:"contexts"}],addTeamAccessRestrictions:["POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",{},{mapToData:"teams"}],addUserAccessRestrictions:["POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",{},{mapToData:"users"}],checkCollaborator:["GET /repos/{owner}/{repo}/collaborators/{username}"],checkVulnerabilityAlerts:["GET /repos/{owner}/{repo}/vulnerability-alerts",{mediaType:{previews:["dorian"]}}],compareCommits:["GET /repos/{owner}/{repo}/compare/{base}...{head}"],createCommitComment:["POST /repos/{owner}/{repo}/commits/{commit_sha}/comments"],createCommitSignatureProtection:["POST /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",{mediaType:{previews:["zzzax"]}}],createCommitStatus:["POST /repos/{owner}/{repo}/statuses/{sha}"],createDeployKey:["POST /repos/{owner}/{repo}/keys"],createDeployment:["POST /repos/{owner}/{repo}/deployments"],createDeploymentStatus:["POST /repos/{owner}/{repo}/deployments/{deployment_id}/statuses"],createDispatchEvent:["POST /repos/{owner}/{repo}/dispatches"],createForAuthenticatedUser:["POST /user/repos"],createFork:["POST /repos/{owner}/{repo}/forks"],createInOrg:["POST /orgs/{org}/repos"],createOrUpdateFileContents:["PUT /repos/{owner}/{repo}/contents/{path}"],createPagesSite:["POST /repos/{owner}/{repo}/pages",{mediaType:{previews:["switcheroo"]}}],createRelease:["POST /repos/{owner}/{repo}/releases"],createUsingTemplate:["POST /repos/{template_owner}/{template_repo}/generate",{mediaType:{previews:["baptiste"]}}],createWebhook:["POST /repos/{owner}/{repo}/hooks"],declineInvitation:["DELETE /user/repository_invitations/{invitation_id}"],delete:["DELETE /repos/{owner}/{repo}"],deleteAccessRestrictions:["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions"],deleteAdminBranchProtection:["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"],deleteBranchProtection:["DELETE /repos/{owner}/{repo}/branches/{branch}/protection"],deleteCommitComment:["DELETE /repos/{owner}/{repo}/comments/{comment_id}"],deleteCommitSignatureProtection:["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",{mediaType:{previews:["zzzax"]}}],deleteDeployKey:["DELETE /repos/{owner}/{repo}/keys/{key_id}"],deleteDeployment:["DELETE /repos/{owner}/{repo}/deployments/{deployment_id}"],deleteFile:["DELETE /repos/{owner}/{repo}/contents/{path}"],deleteInvitation:["DELETE /repos/{owner}/{repo}/invitations/{invitation_id}"],deletePagesSite:["DELETE /repos/{owner}/{repo}/pages",{mediaType:{previews:["switcheroo"]}}],deletePullRequestReviewProtection:["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"],deleteRelease:["DELETE /repos/{owner}/{repo}/releases/{release_id}"],deleteReleaseAsset:["DELETE /repos/{owner}/{repo}/releases/assets/{asset_id}"],deleteWebhook:["DELETE /repos/{owner}/{repo}/hooks/{hook_id}"],disableAutomatedSecurityFixes:["DELETE /repos/{owner}/{repo}/automated-security-fixes",{mediaType:{previews:["london"]}}],disableVulnerabilityAlerts:["DELETE /repos/{owner}/{repo}/vulnerability-alerts",{mediaType:{previews:["dorian"]}}],downloadArchive:["GET /repos/{owner}/{repo}/{archive_format}/{ref}"],enableAutomatedSecurityFixes:["PUT /repos/{owner}/{repo}/automated-security-fixes",{mediaType:{previews:["london"]}}],enableVulnerabilityAlerts:["PUT /repos/{owner}/{repo}/vulnerability-alerts",{mediaType:{previews:["dorian"]}}],get:["GET /repos/{owner}/{repo}"],getAccessRestrictions:["GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions"],getAdminBranchProtection:["GET /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"],getAllStatusCheckContexts:["GET /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"],getAllTopics:["GET /repos/{owner}/{repo}/topics",{mediaType:{previews:["mercy"]}}],getAppsWithAccessToProtectedBranch:["GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"],getBranch:["GET /repos/{owner}/{repo}/branches/{branch}"],getBranchProtection:["GET /repos/{owner}/{repo}/branches/{branch}/protection"],getClones:["GET /repos/{owner}/{repo}/traffic/clones"],getCodeFrequencyStats:["GET /repos/{owner}/{repo}/stats/code_frequency"],getCollaboratorPermissionLevel:["GET /repos/{owner}/{repo}/collaborators/{username}/permission"],getCombinedStatusForRef:["GET /repos/{owner}/{repo}/commits/{ref}/status"],getCommit:["GET /repos/{owner}/{repo}/commits/{ref}"],getCommitActivityStats:["GET /repos/{owner}/{repo}/stats/commit_activity"],getCommitComment:["GET /repos/{owner}/{repo}/comments/{comment_id}"],getCommitSignatureProtection:["GET /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",{mediaType:{previews:["zzzax"]}}],getCommunityProfileMetrics:["GET /repos/{owner}/{repo}/community/profile",{mediaType:{previews:["black-panther"]}}],getContent:["GET /repos/{owner}/{repo}/contents/{path}"],getContributorsStats:["GET /repos/{owner}/{repo}/stats/contributors"],getDeployKey:["GET /repos/{owner}/{repo}/keys/{key_id}"],getDeployment:["GET /repos/{owner}/{repo}/deployments/{deployment_id}"],getDeploymentStatus:["GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}"],getLatestPagesBuild:["GET /repos/{owner}/{repo}/pages/builds/latest"],getLatestRelease:["GET /repos/{owner}/{repo}/releases/latest"],getPages:["GET /repos/{owner}/{repo}/pages"],getPagesBuild:["GET /repos/{owner}/{repo}/pages/builds/{build_id}"],getParticipationStats:["GET /repos/{owner}/{repo}/stats/participation"],getPullRequestReviewProtection:["GET /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"],getPunchCardStats:["GET /repos/{owner}/{repo}/stats/punch_card"],getReadme:["GET /repos/{owner}/{repo}/readme"],getRelease:["GET /repos/{owner}/{repo}/releases/{release_id}"],getReleaseAsset:["GET /repos/{owner}/{repo}/releases/assets/{asset_id}"],getReleaseByTag:["GET /repos/{owner}/{repo}/releases/tags/{tag}"],getStatusChecksProtection:["GET /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"],getTeamsWithAccessToProtectedBranch:["GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"],getTopPaths:["GET /repos/{owner}/{repo}/traffic/popular/paths"],getTopReferrers:["GET /repos/{owner}/{repo}/traffic/popular/referrers"],getUsersWithAccessToProtectedBranch:["GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"],getViews:["GET /repos/{owner}/{repo}/traffic/views"],getWebhook:["GET /repos/{owner}/{repo}/hooks/{hook_id}"],listBranches:["GET /repos/{owner}/{repo}/branches"],listBranchesForHeadCommit:["GET /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head",{mediaType:{previews:["groot"]}}],listCollaborators:["GET /repos/{owner}/{repo}/collaborators"],listCommentsForCommit:["GET /repos/{owner}/{repo}/commits/{commit_sha}/comments"],listCommitCommentsForRepo:["GET /repos/{owner}/{repo}/comments"],listCommitStatusesForRef:["GET /repos/{owner}/{repo}/commits/{ref}/statuses"],listCommits:["GET /repos/{owner}/{repo}/commits"],listContributors:["GET /repos/{owner}/{repo}/contributors"],listDeployKeys:["GET /repos/{owner}/{repo}/keys"],listDeploymentStatuses:["GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses"],listDeployments:["GET /repos/{owner}/{repo}/deployments"],listForAuthenticatedUser:["GET /user/repos"],listForOrg:["GET /orgs/{org}/repos"],listForUser:["GET /users/{username}/repos"],listForks:["GET /repos/{owner}/{repo}/forks"],listInvitations:["GET /repos/{owner}/{repo}/invitations"],listInvitationsForAuthenticatedUser:["GET /user/repository_invitations"],listLanguages:["GET /repos/{owner}/{repo}/languages"],listPagesBuilds:["GET /repos/{owner}/{repo}/pages/builds"],listPublic:["GET /repositories"],listPullRequestsAssociatedWithCommit:["GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls",{mediaType:{previews:["groot"]}}],listReleaseAssets:["GET /repos/{owner}/{repo}/releases/{release_id}/assets"],listReleases:["GET /repos/{owner}/{repo}/releases"],listTags:["GET /repos/{owner}/{repo}/tags"],listTeams:["GET /repos/{owner}/{repo}/teams"],listWebhooks:["GET /repos/{owner}/{repo}/hooks"],merge:["POST /repos/{owner}/{repo}/merges"],pingWebhook:["POST /repos/{owner}/{repo}/hooks/{hook_id}/pings"],removeAppAccessRestrictions:["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",{},{mapToData:"apps"}],removeCollaborator:["DELETE /repos/{owner}/{repo}/collaborators/{username}"],removeStatusCheckContexts:["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",{},{mapToData:"contexts"}],removeStatusCheckProtection:["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"],removeTeamAccessRestrictions:["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",{},{mapToData:"teams"}],removeUserAccessRestrictions:["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",{},{mapToData:"users"}],replaceAllTopics:["PUT /repos/{owner}/{repo}/topics",{mediaType:{previews:["mercy"]}}],requestPagesBuild:["POST /repos/{owner}/{repo}/pages/builds"],setAdminBranchProtection:["POST /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"],setAppAccessRestrictions:["PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",{},{mapToData:"apps"}],setStatusCheckContexts:["PUT /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",{},{mapToData:"contexts"}],setTeamAccessRestrictions:["PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",{},{mapToData:"teams"}],setUserAccessRestrictions:["PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",{},{mapToData:"users"}],testPushWebhook:["POST /repos/{owner}/{repo}/hooks/{hook_id}/tests"],transfer:["POST /repos/{owner}/{repo}/transfer"],update:["PATCH /repos/{owner}/{repo}"],updateBranchProtection:["PUT /repos/{owner}/{repo}/branches/{branch}/protection"],updateCommitComment:["PATCH /repos/{owner}/{repo}/comments/{comment_id}"],updateInformationAboutPagesSite:["PUT /repos/{owner}/{repo}/pages"],updateInvitation:["PATCH /repos/{owner}/{repo}/invitations/{invitation_id}"],updatePullRequestReviewProtection:["PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"],updateRelease:["PATCH /repos/{owner}/{repo}/releases/{release_id}"],updateReleaseAsset:["PATCH /repos/{owner}/{repo}/releases/assets/{asset_id}"],updateStatusCheckPotection:["PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"],updateWebhook:["PATCH /repos/{owner}/{repo}/hooks/{hook_id}"],uploadReleaseAsset:["POST /repos/{owner}/{repo}/releases/{release_id}/assets{?name,label}",{baseUrl:"https://uploads.github.com"}]},search:{code:["GET /search/code"],commits:["GET /search/commits",{mediaType:{previews:["cloak"]}}],issuesAndPullRequests:["GET /search/issues"],labels:["GET /search/labels"],repos:["GET /search/repositories"],topics:["GET /search/topics",{mediaType:{previews:["mercy"]}}],users:["GET /search/users"]},teams:{addOrUpdateMembershipForUserInOrg:["PUT /orgs/{org}/teams/{team_slug}/memberships/{username}"],addOrUpdateProjectPermissionsInOrg:["PUT /orgs/{org}/teams/{team_slug}/projects/{project_id}",{mediaType:{previews:["inertia"]}}],addOrUpdateRepoPermissionsInOrg:["PUT /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}"],checkPermissionsForProjectInOrg:["GET /orgs/{org}/teams/{team_slug}/projects/{project_id}",{mediaType:{previews:["inertia"]}}],checkPermissionsForRepoInOrg:["GET /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}"],create:["POST /orgs/{org}/teams"],createDiscussionCommentInOrg:["POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments"],createDiscussionInOrg:["POST /orgs/{org}/teams/{team_slug}/discussions"],deleteDiscussionCommentInOrg:["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}"],deleteDiscussionInOrg:["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}"],deleteInOrg:["DELETE /orgs/{org}/teams/{team_slug}"],getByName:["GET /orgs/{org}/teams/{team_slug}"],getDiscussionCommentInOrg:["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}"],getDiscussionInOrg:["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}"],getMembershipForUserInOrg:["GET /orgs/{org}/teams/{team_slug}/memberships/{username}"],list:["GET /orgs/{org}/teams"],listChildInOrg:["GET /orgs/{org}/teams/{team_slug}/teams"],listDiscussionCommentsInOrg:["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments"],listDiscussionsInOrg:["GET /orgs/{org}/teams/{team_slug}/discussions"],listForAuthenticatedUser:["GET /user/teams"],listMembersInOrg:["GET /orgs/{org}/teams/{team_slug}/members"],listPendingInvitationsInOrg:["GET /orgs/{org}/teams/{team_slug}/invitations"],listProjectsInOrg:["GET /orgs/{org}/teams/{team_slug}/projects",{mediaType:{previews:["inertia"]}}],listReposInOrg:["GET /orgs/{org}/teams/{team_slug}/repos"],removeMembershipForUserInOrg:["DELETE /orgs/{org}/teams/{team_slug}/memberships/{username}"],removeProjectInOrg:["DELETE /orgs/{org}/teams/{team_slug}/projects/{project_id}"],removeRepoInOrg:["DELETE /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}"],updateDiscussionCommentInOrg:["PATCH /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}"],updateDiscussionInOrg:["PATCH /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}"],updateInOrg:["PATCH /orgs/{org}/teams/{team_slug}"]},users:{addEmailForAuthenticated:["POST /user/emails"],block:["PUT /user/blocks/{username}"],checkBlocked:["GET /user/blocks/{username}"],checkFollowingForUser:["GET /users/{username}/following/{target_user}"],checkPersonIsFollowedByAuthenticated:["GET /user/following/{username}"],createGpgKeyForAuthenticated:["POST /user/gpg_keys"],createPublicSshKeyForAuthenticated:["POST /user/keys"],deleteEmailForAuthenticated:["DELETE /user/emails"],deleteGpgKeyForAuthenticated:["DELETE /user/gpg_keys/{gpg_key_id}"],deletePublicSshKeyForAuthenticated:["DELETE /user/keys/{key_id}"],follow:["PUT /user/following/{username}"],getAuthenticated:["GET /user"],getByUsername:["GET /users/{username}"],getContextForUser:["GET /users/{username}/hovercard"],getGpgKeyForAuthenticated:["GET /user/gpg_keys/{gpg_key_id}"],getPublicSshKeyForAuthenticated:["GET /user/keys/{key_id}"],list:["GET /users"],listBlockedByAuthenticated:["GET /user/blocks"],listEmailsForAuthenticated:["GET /user/emails"],listFollowedByAuthenticated:["GET /user/following"],listFollowersForAuthenticatedUser:["GET /user/followers"],listFollowersForUser:["GET /users/{username}/followers"],listFollowingForUser:["GET /users/{username}/following"],listGpgKeysForAuthenticated:["GET /user/gpg_keys"],listGpgKeysForUser:["GET /users/{username}/gpg_keys"],listPublicEmailsForAuthenticated:["GET /user/public_emails"],listPublicKeysForUser:["GET /users/{username}/keys"],listPublicSshKeysForAuthenticated:["GET /user/keys"],setPrimaryEmailVisibilityForAuthenticated:["PATCH /user/email/visibility"],unblock:["DELETE /user/blocks/{username}"],unfollow:["DELETE /user/following/{username}"],updateAuthenticated:["PATCH /user"]}};const s="4.2.0";function endpointsToMethods(e,t){const r={};for(const[s,n]of Object.entries(t)){for(const[t,o]of Object.entries(n)){const[n,i,a]=o;const[c,u]=n.split(/ /);const l=Object.assign({method:c,url:u},i);if(!r[s]){r[s]={}}const p=r[s];if(a){p[t]=decorate(e,s,t,l,a);continue}p[t]=e.request.defaults(l)}}return r}function decorate(e,t,r,s,n){const o=e.request.defaults(s);function withDecorations(...s){let i=o.endpoint.merge(...s);if(n.mapToData){i=Object.assign({},i,{data:i[n.mapToData],[n.mapToData]:undefined});return o(i)}if(n.renamed){const[s,o]=n.renamed;e.log.warn(`octokit.${t}.${r}() has been renamed to octokit.${s}.${o}()`)}if(n.deprecated){e.log.warn(n.deprecated)}if(n.renamedParameters){const i=o.endpoint.merge(...s);for(const[s,o]of Object.entries(n.renamedParameters)){if(s in i){e.log.warn(`"${s}" parameter is deprecated for "octokit.${t}.${r}()". Use "${o}" instead`);if(!(o in i)){i[o]=i[s]}delete i[s]}}return o(i)}return o(...s)}return Object.assign(withDecorations,o)}function restEndpointMethods(e){return endpointsToMethods(e,r)}restEndpointMethods.VERSION=s;t.restEndpointMethods=restEndpointMethods},2637:(e,t,r)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});function _interopDefault(e){return e&&typeof e==="object"&&"default"in e?e["default"]:e}var s=r(8306);var n=_interopDefault(r(6385));const o=n(e=>console.warn(e));class RequestError extends Error{constructor(e,t,r){super(e);if(Error.captureStackTrace){Error.captureStackTrace(this,this.constructor)}this.name="HttpError";this.status=t;Object.defineProperty(this,"code",{get(){o(new s.Deprecation("[@octokit/request-error] `error.code` is deprecated, use `error.status`."));return t}});this.headers=r.headers||{};const n=Object.assign({},r.request);if(r.request.headers.authorization){n.headers=Object.assign({},r.request.headers,{authorization:r.request.headers.authorization.replace(/ .*$/," [REDACTED]")})}n.url=n.url.replace(/\bclient_secret=\w+/g,"client_secret=[REDACTED]").replace(/\baccess_token=\w+/g,"access_token=[REDACTED]");this.request=n}}t.RequestError=RequestError},6956:(e,t,r)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});function _interopDefault(e){return e&&typeof e==="object"&&"default"in e?e["default"]:e}var s=r(8069);var n=r(3567);var o=r(2829);var i=_interopDefault(r(282));var a=r(2637);const c="5.4.9";function getBufferResponse(e){return e.arrayBuffer()}function fetchWrapper(e){if(o.isPlainObject(e.body)||Array.isArray(e.body)){e.body=JSON.stringify(e.body)}let t={};let r;let s;const n=e.request&&e.request.fetch||i;return n(e.url,Object.assign({method:e.method,body:e.body,headers:e.headers,redirect:e.redirect},e.request)).then(n=>{s=n.url;r=n.status;for(const e of n.headers){t[e[0]]=e[1]}if(r===204||r===205){return}if(e.method==="HEAD"){if(r<400){return}throw new a.RequestError(n.statusText,r,{headers:t,request:e})}if(r===304){throw new a.RequestError("Not modified",r,{headers:t,request:e})}if(r>=400){return n.text().then(s=>{const n=new a.RequestError(s,r,{headers:t,request:e});try{let e=JSON.parse(n.message);Object.assign(n,e);let t=e.errors;n.message=n.message+": "+t.map(JSON.stringify).join(", ")}catch(e){}throw n})}const o=n.headers.get("content-type");if(/application\/json/.test(o)){return n.json()}if(!o||/^text\/|charset=utf-8$/.test(o)){return n.text()}return getBufferResponse(n)}).then(e=>{return{status:r,url:s,headers:t,data:e}}).catch(r=>{if(r instanceof a.RequestError){throw r}throw new a.RequestError(r.message,500,{headers:t,request:e})})}function withDefaults(e,t){const r=e.defaults(t);const s=function(e,t){const s=r.merge(e,t);if(!s.request||!s.request.hook){return fetchWrapper(r.parse(s))}const n=(e,t)=>{return fetchWrapper(r.parse(r.merge(e,t)))};Object.assign(n,{endpoint:r,defaults:withDefaults.bind(null,r)});return s.request.hook(n,s)};return Object.assign(s,{endpoint:r,defaults:withDefaults.bind(null,r)})}const u=withDefaults(s.endpoint,{headers:{"user-agent":`octokit-request.js/${c} ${n.getUserAgent()}`}});t.request=u},7274:(e,t,r)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});const s=r(3437);const n=r(4145);const o=r(9900);class CacheManager{constructor(){this.client=null;this.fallbackClient=null;this.options={excludeContext:true,ttlSeconds:0,debug:false,clearStrategy:new n.DefaultClearStrategy,strategy:new s.DefaultStrategy,updateStrategy:new o.DefaultUpdateStrategy}}setClient(e){this.client=e;if(this.options&&!this.options.ttlSeconds){this.options.ttlSeconds=this.client.getClientTTL()}}setFallbackClient(e){this.fallbackClient=e}setOptions(e){this.options=e}}t.default=CacheManager},8411:function(e,t,r){"use strict";var s=this&&this.__awaiter||function(e,t,r,s){function adopt(e){return e instanceof r?e:new r(function(t){t(e)})}return new(r||(r=Promise))(function(r,n){function fulfilled(e){try{step(s.next(e))}catch(e){n(e)}}function rejected(e){try{step(s["throw"](e))}catch(e){n(e)}}function step(e){e.done?r(e.value):adopt(e.value).then(fulfilled,rejected)}step((s=s.apply(e,t||[])).next())})};Object.defineProperty(t,"__esModule",{value:true});t.CacheClear=void 0;const n=r(2561);const o=r(1205);const i=r(4145);function CacheClear(e){return(t,r,a)=>{const c=a.value;return Object.assign(Object.assign({},a),{value:function(...t){return s(this,void 0,void 0,function*(){try{const s=e&&e.client?e.client:o.default.client;const a=e&&e.fallbackClient?e.fallbackClient:o.default.fallbackClient;if(e&&e.noop&&n.determineOp(e.noop,t,this)){return c.apply(this,t)}if(!s){if(o.default.options.debug){console.warn("type-cacheable @CacheClear was not set up with a caching client. Without a client, type-cacheable is not serving a purpose.")}return c.apply(this,t)}const u=!o.default.options.excludeContext?this:undefined;const l=n.getFinalKey(e&&e.cacheKey,e&&e.hashKey,r,t,u);const p=(e===null||e===void 0?void 0:e.hashKey)&&!(e===null||e===void 0?void 0:e.cacheKey);const d=n.getCacheClearStrategy((e===null||e===void 0?void 0:e.strategy)||o.default.options.clearStrategy||new i.DefaultClearStrategy,t,u);yield d.handle({debug:o.default.options.debug,originalMethod:c,originalMethodScope:this,originalMethodArgs:t,client:s,fallbackClient:a,key:l,isPattern:e===null||e===void 0?void 0:e.isPattern,hashesToClear:p?n.extractKey(e===null||e===void 0?void 0:e.hashKey,t,u):undefined})}catch(e){if(o.default.options.debug){console.warn(`type-cacheable CacheClear failed to clear cached on method ${r} value: ${e.message}`)}}return c.apply(this,t)})}})}}t.CacheClear=CacheClear},3782:function(e,t,r){"use strict";var s=this&&this.__awaiter||function(e,t,r,s){function adopt(e){return e instanceof r?e:new r(function(t){t(e)})}return new(r||(r=Promise))(function(r,n){function fulfilled(e){try{step(s.next(e))}catch(e){n(e)}}function rejected(e){try{step(s["throw"](e))}catch(e){n(e)}}function step(e){e.done?r(e.value):adopt(e.value).then(fulfilled,rejected)}step((s=s.apply(e,t||[])).next())})};Object.defineProperty(t,"__esModule",{value:true});t.CacheUpdate=void 0;const n=r(2561);const o=r(1205);const i=r(4145);const a=r(9900);function CacheUpdate(e){return(t,r,c)=>{const u=c.value;return Object.assign(Object.assign({},c),{value:function(...t){return s(this,void 0,void 0,function*(){const s=e&&e.client?e.client:o.default.client;const c=e&&e.fallbackClient?e.fallbackClient:o.default.fallbackClient;if(e&&e.noop&&n.determineOp(e.noop,t,this)){return u.apply(this,t)}if(!s){if(o.default.options.debug){console.warn("type-cacheable @CacheUpdate was not set up with a caching client. Without a client, type-cacheable is not serving a purpose.")}return u.apply(this,t)}const l=yield u.apply(this,t);const p=!o.default.options.excludeContext?this:undefined;const d=n.getFinalKey(e&&e.cacheKey,e&&e.hashKey,r,t,p,l);const f=e&&e.ttlSeconds?n.getTTL(e.ttlSeconds,t,p):o.default.options.ttlSeconds||undefined;const h=n.getCacheUpdateStrategy((e===null||e===void 0?void 0:e.strategy)||o.default.options.updateStrategy||new a.DefaultUpdateStrategy,t,p,l);const m=n.getFinalKey(e&&e.cacheKeysToClear,e&&e.hashKey,r,t,p);const g=n.getCacheClearStrategy((e===null||e===void 0?void 0:e.clearStrategy)||o.default.options.clearStrategy||new i.DefaultClearStrategy,t,p);const b={debug:o.default.options.debug,originalMethod:u,originalMethodScope:this,originalMethodArgs:t,client:s,fallbackClient:c,key:d,ttl:f,result:l};const y={debug:o.default.options.debug,originalMethod:u,originalMethodScope:this,originalMethodArgs:t,client:s,fallbackClient:c,key:m};if(e===null||e===void 0?void 0:e.clearAndUpdateInParallel){const e=[h.handle(b)];if(m.length){e.push(g.handle(y))}const[t]=yield Promise.all(e);return t}const w=yield h.handle(b);if(m.length){yield g.handle(y)}return w})}})}}t.CacheUpdate=CacheUpdate},299:function(e,t,r){"use strict";var s=this&&this.__awaiter||function(e,t,r,s){function adopt(e){return e instanceof r?e:new r(function(t){t(e)})}return new(r||(r=Promise))(function(r,n){function fulfilled(e){try{step(s.next(e))}catch(e){n(e)}}function rejected(e){try{step(s["throw"](e))}catch(e){n(e)}}function step(e){e.done?r(e.value):adopt(e.value).then(fulfilled,rejected)}step((s=s.apply(e,t||[])).next())})};Object.defineProperty(t,"__esModule",{value:true});t.Cacheable=void 0;const n=r(2561);const o=r(1205);const i=r(3437);function Cacheable(e){return(t,r,a)=>{const c=a.value;return Object.assign(Object.assign({},a),{value:function(...t){return s(this,void 0,void 0,function*(){const s=e&&e.client?e.client:o.default.client;const a=e&&e.fallbackClient?e.fallbackClient:o.default.fallbackClient;if(e&&e.noop&&n.determineOp(e.noop,t,this)){return c.apply(this,t)}if(!s){if(o.default.options.debug){console.warn("type-cacheable @Cacheable was not set up with a caching client. Without a client, type-cacheable is not serving a purpose.")}return c.apply(this,t)}const u=!o.default.options.excludeContext?this:undefined;const l=n.getFinalKey(e&&e.cacheKey,e&&e.hashKey,r,t,u);const p=e&&e.ttlSeconds?n.getTTL(e.ttlSeconds,t,u):o.default.options.ttlSeconds||undefined;const d=n.getCacheStrategy((e===null||e===void 0?void 0:e.strategy)||o.default.options.strategy||new i.DefaultStrategy,t,u);return d.handle({debug:o.default.options.debug,originalMethod:c,originalMethodScope:this,originalMethodArgs:t,client:s,fallbackClient:a,key:l,ttl:p})})}})}}t.Cacheable=Cacheable},3998:(e,t,r)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});t.CacheUpdate=t.CacheClear=t.Cacheable=void 0;var s=r(299);Object.defineProperty(t,"Cacheable",{enumerable:true,get:function(){return s.Cacheable}});var n=r(8411);Object.defineProperty(t,"CacheClear",{enumerable:true,get:function(){return n.CacheClear}});var o=r(3782);Object.defineProperty(t,"CacheUpdate",{enumerable:true,get:function(){return o.CacheUpdate}})},1205:function(e,t,r){"use strict";var s=this&&this.__createBinding||(Object.create?function(e,t,r,s){if(s===undefined)s=r;Object.defineProperty(e,s,{enumerable:true,get:function(){return t[r]}})}:function(e,t,r,s){if(s===undefined)s=r;e[s]=t[r]});var n=this&&this.__exportStar||function(e,t){for(var r in e)if(r!=="default"&&!Object.prototype.hasOwnProperty.call(t,r))s(t,e,r)};Object.defineProperty(t,"__esModule",{value:true});const o=r(7274);n(r(3998),t);n(r(4258),t);n(r(3437),t);n(r(2561),t);t.default=new o.default},4258:(e,t)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true})},4145:function(e,t){"use strict";var r=this&&this.__awaiter||function(e,t,r,s){function adopt(e){return e instanceof r?e:new r(function(t){t(e)})}return new(r||(r=Promise))(function(r,n){function fulfilled(e){try{step(s.next(e))}catch(e){n(e)}}function rejected(e){try{step(s["throw"](e))}catch(e){n(e)}}function step(e){e.done?r(e.value):adopt(e.value).then(fulfilled,rejected)}step((s=s.apply(e,t||[])).next())})};Object.defineProperty(t,"__esModule",{value:true});t.DefaultClearStrategy=void 0;class DefaultClearStrategy{constructor(){this.handleDelete=((e,t)=>r(this,void 0,void 0,function*(){if(t.hashesToClear){yield e.delHash(t.hashesToClear)}else if(t.isPattern){if(Array.isArray(t.key)){const r=(yield Promise.all(t.key.map(e.keys))).reduce((e,t)=>[...e,...t],[]);yield e.del(r)}else{yield e.del(yield e.keys(t.key))}}else{yield e.del(t.key)}}))}handle(e){return r(this,void 0,void 0,function*(){try{yield this.handleDelete(e.client,e)}catch(t){if(e.fallbackClient){try{yield this.handleDelete(e.fallbackClient,e)}catch(r){if(e.debug){console.warn(`type-cacheable CacheClear failure on method ${e.originalMethod.name} due to client error: ${t.message} and fallback client failure: ${r.message}`)}}return}else{if(e.debug){console.warn(`type-cacheable CacheClear failure on method ${e.originalMethod.name} due to client error: ${t.message}`)}}}})}}t.DefaultClearStrategy=DefaultClearStrategy},9690:function(e,t){"use strict";var r=this&&this.__awaiter||function(e,t,r,s){function adopt(e){return e instanceof r?e:new r(function(t){t(e)})}return new(r||(r=Promise))(function(r,n){function fulfilled(e){try{step(s.next(e))}catch(e){n(e)}}function rejected(e){try{step(s["throw"](e))}catch(e){n(e)}}function step(e){e.done?r(e.value):adopt(e.value).then(fulfilled,rejected)}step((s=s.apply(e,t||[])).next())})};Object.defineProperty(t,"__esModule",{value:true});t.DefaultStrategy=void 0;class DefaultStrategy{handle(e){return r(this,void 0,void 0,function*(){try{const t=yield e.client.get(e.key);if(t!==undefined&&t!==null){return t}}catch(t){if(e.fallbackClient){try{const t=yield e.fallbackClient.get(e.key);if(t!==undefined&&t!==null){return t}}catch(e){}}if(e.debug){console.warn(`type-cacheable Cacheable cache miss on method ${e.originalMethod.name} due to client error: ${t.message}`)}}const t=yield e.originalMethod.apply(e.originalMethodScope,e.originalMethodArgs);try{yield e.client.set(e.key,t,e.ttl)}catch(r){if(e.fallbackClient){try{yield e.fallbackClient.set(e.key,t,e.ttl)}catch(e){}}if(e.debug){console.warn(`type-cacheable Cacheable set cache failure on method ${e.originalMethod.name} due to client error: ${r.message}`)}}return t})}}t.DefaultStrategy=DefaultStrategy},9900:function(e,t){"use strict";var r=this&&this.__awaiter||function(e,t,r,s){function adopt(e){return e instanceof r?e:new r(function(t){t(e)})}return new(r||(r=Promise))(function(r,n){function fulfilled(e){try{step(s.next(e))}catch(e){n(e)}}function rejected(e){try{step(s["throw"](e))}catch(e){n(e)}}function step(e){e.done?r(e.value):adopt(e.value).then(fulfilled,rejected)}step((s=s.apply(e,t||[])).next())})};Object.defineProperty(t,"__esModule",{value:true});t.DefaultUpdateStrategy=void 0;class DefaultUpdateStrategy{handle(e){return r(this,void 0,void 0,function*(){try{yield e.client.set(e.key,e.result,e.ttl)}catch(t){if(e.fallbackClient){try{yield e.fallbackClient.set(e.key,e.result,e.ttl)}catch(e){}}if(e.debug){console.warn(`type-cacheable CacheUpdate set cache failure on method ${e.originalMethod.name} due to client error: ${t.message}`)}}return e.result})}}t.DefaultUpdateStrategy=DefaultUpdateStrategy},3437:(e,t,r)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});t.DefaultStrategy=void 0;var s=r(9690);Object.defineProperty(t,"DefaultStrategy",{enumerable:true,get:function(){return s.DefaultStrategy}})},2810:(e,t)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});t.determineOp=void 0;t.determineOp=((e,t,r)=>{return e instanceof Function?e(t,r):e})},6270:(e,t)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});t.getCacheClearStrategy=void 0;t.getCacheClearStrategy=((e,t,r)=>{return e instanceof Function?e(t,r):e})},7078:(e,t,r)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});t.getFinalKey=t.getCacheKey=t.extractKey=void 0;const s=r(6417);const n=r(6440);t.extractKey=((e="",t,r,s)=>{return e instanceof Function?e(t,r,s):e});t.getCacheKey=((e="",r,o,i,a)=>{if(e){return t.extractKey(e,o,i,a)}const c={args:o,methodName:r,context:i};const u=n(c);return s.createHash("md5").update(u).digest("hex")});t.getFinalKey=((e="",r="",s,n,o,i)=>{const a=t.getCacheKey(e,s,n,o,i);const c=t.extractKey(r,n,o,i);if(Array.isArray(a)){return a.map(e=>c?`${c}:${e}`:e)}return c?`${c}:${a}`:a})},753:(e,t)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});t.getCacheStrategy=void 0;t.getCacheStrategy=((e,t,r)=>{return e instanceof Function?e(t,r):e})},1476:(e,t)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});t.getCacheUpdateStrategy=void 0;t.getCacheUpdateStrategy=((e,t,r,s)=>e instanceof Function?e(t,r,s):e)},6411:(e,t)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});t.getTTL=void 0;t.getTTL=((e,t,r)=>{return e instanceof Function?e(t,r):e})},2561:(e,t,r)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});t.parseIfRequired=t.getTTL=t.getCacheUpdateStrategy=t.getCacheClearStrategy=t.getCacheStrategy=t.getFinalKey=t.getCacheKey=t.extractKey=t.determineOp=void 0;var s=r(2810);Object.defineProperty(t,"determineOp",{enumerable:true,get:function(){return s.determineOp}});var n=r(7078);Object.defineProperty(t,"extractKey",{enumerable:true,get:function(){return n.extractKey}});Object.defineProperty(t,"getCacheKey",{enumerable:true,get:function(){return n.getCacheKey}});Object.defineProperty(t,"getFinalKey",{enumerable:true,get:function(){return n.getFinalKey}});var o=r(753);Object.defineProperty(t,"getCacheStrategy",{enumerable:true,get:function(){return o.getCacheStrategy}});var i=r(6270);Object.defineProperty(t,"getCacheClearStrategy",{enumerable:true,get:function(){return i.getCacheClearStrategy}});var a=r(1476);Object.defineProperty(t,"getCacheUpdateStrategy",{enumerable:true,get:function(){return a.getCacheUpdateStrategy}});var c=r(6411);Object.defineProperty(t,"getTTL",{enumerable:true,get:function(){return c.getTTL}});var u=r(2274);Object.defineProperty(t,"parseIfRequired",{enumerable:true,get:function(){return u.parseIfRequired}})},2274:(e,t)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});t.parseIfRequired=void 0;t.parseIfRequired=(e=>{try{return JSON.parse(e)}catch(t){return e}})},993:function(e,t,r){"use strict";var s=this&&this.__awaiter||function(e,t,r,s){function adopt(e){return e instanceof r?e:new r(function(t){t(e)})}return new(r||(r=Promise))(function(r,n){function fulfilled(e){try{step(s.next(e))}catch(e){n(e)}}function rejected(e){try{step(s["throw"](e))}catch(e){n(e)}}function step(e){e.done?r(e.value):adopt(e.value).then(fulfilled,rejected)}step((s=s.apply(e,t||[])).next())})};Object.defineProperty(t,"__esModule",{value:true});t.useAdapter=t.NodeCacheAdapter=void 0;const n=r(1205);class NodeCacheAdapter{constructor(e){this.nodeCacheClient=e;this.get=this.get.bind(this);this.del=this.del.bind(this);this.delHash=this.delHash.bind(this);this.getClientTTL=this.getClientTTL.bind(this);this.keys=this.keys.bind(this);this.set=this.set.bind(this)}getClientTTL(){return this.nodeCacheClient.options.stdTTL||0}get(e){return s(this,void 0,void 0,function*(){return this.nodeCacheClient.get(e)})}set(e,t,r){return s(this,void 0,void 0,function*(){if(r){this.nodeCacheClient.set(e,t,r);return}this.nodeCacheClient.set(e,t)})}del(e){return s(this,void 0,void 0,function*(){return this.nodeCacheClient.del(e)})}keys(e){return s(this,void 0,void 0,function*(){const t=this.nodeCacheClient.keys();const r=new RegExp(e,"g");const s=[];for(const e of t){if(Array.isArray(e.match(r))){s.push(e)}}return s})}delHash(e){return s(this,void 0,void 0,function*(){const t=Array.isArray(e)?e:[e];const r=t.map(e=>this.keys(e).then(this.del));yield Promise.all(r);return})}}t.NodeCacheAdapter=NodeCacheAdapter;t.useAdapter=((e,t)=>{const r=new NodeCacheAdapter(e);if(t){n.default.setFallbackClient(r)}else{n.default.setClient(r)}})},9617:(e,t,r)=>{var s=r(1599);var n=r(6189);var o=r(8945);var i=Function.bind;var a=i.bind(i);function bindApi(e,t,r){var s=a(o,null).apply(null,r?[t,r]:[t]);e.api={remove:s};e.remove=s;["before","error","after","wrap"].forEach(function(s){var o=r?[t,s,r]:[t,s];e[s]=e.api[s]=a(n,null).apply(null,o)})}function HookSingular(){var e="h";var t={registry:{}};var r=s.bind(null,t,e);bindApi(r,t,e);return r}function HookCollection(){var e={registry:{}};var t=s.bind(null,e);bindApi(t,e);return t}var c=false;function Hook(){if(!c){console.warn('[before-after-hook]: "Hook()" repurposing warning, use "Hook.Collection()". Read more: https://git.io/upgrade-before-after-hook-to-1.4');c=true}return HookCollection()}Hook.Singular=HookSingular.bind();Hook.Collection=HookCollection.bind();e.exports=Hook;e.exports.Hook=Hook;e.exports.Singular=Hook.Singular;e.exports.Collection=Hook.Collection},6189:e=>{e.exports=addHook;function addHook(e,t,r,s){var n=s;if(!e.registry[r]){e.registry[r]=[]}if(t==="before"){s=function(e,t){return Promise.resolve().then(n.bind(null,t)).then(e.bind(null,t))}}if(t==="after"){s=function(e,t){var r;return Promise.resolve().then(e.bind(null,t)).then(function(e){r=e;return n(r,t)}).then(function(){return r})}}if(t==="error"){s=function(e,t){return Promise.resolve().then(e.bind(null,t)).catch(function(e){return n(e,t)})}}e.registry[r].push({hook:s,orig:n})}},1599:e=>{e.exports=register;function register(e,t,r,s){if(typeof r!=="function"){throw new Error("method for before hook must be a function")}if(!s){s={}}if(Array.isArray(t)){return t.reverse().reduce(function(t,r){return register.bind(null,e,r,t,s)},r)()}return Promise.resolve().then(function(){if(!e.registry[t]){return r(s)}return e.registry[t].reduce(function(e,t){return t.hook.bind(null,e,s)},r)()})}},8945:e=>{e.exports=removeHook;function removeHook(e,t,r){if(!e.registry[t]){return}var s=e.registry[t].map(function(e){return e.orig}).indexOf(r);if(s===-1){return}e.registry[t].splice(s,1)}},7493:e=>{var t=function(){"use strict";function _instanceof(e,t){return t!=null&&e instanceof t}var e;try{e=Map}catch(t){e=function(){}}var t;try{t=Set}catch(e){t=function(){}}var r;try{r=Promise}catch(e){r=function(){}}function clone(s,n,o,i,a){if(typeof n==="object"){o=n.depth;i=n.prototype;a=n.includeNonEnumerable;n=n.circular}var c=[];var u=[];var l=typeof Buffer!="undefined";if(typeof n=="undefined")n=true;if(typeof o=="undefined")o=Infinity;function _clone(s,o){if(s===null)return null;if(o===0)return s;var p;var d;if(typeof s!="object"){return s}if(_instanceof(s,e)){p=new e}else if(_instanceof(s,t)){p=new t}else if(_instanceof(s,r)){p=new r(function(e,t){s.then(function(t){e(_clone(t,o-1))},function(e){t(_clone(e,o-1))})})}else if(clone.__isArray(s)){p=[]}else if(clone.__isRegExp(s)){p=new RegExp(s.source,__getRegExpFlags(s));if(s.lastIndex)p.lastIndex=s.lastIndex}else if(clone.__isDate(s)){p=new Date(s.getTime())}else if(l&&Buffer.isBuffer(s)){if(Buffer.allocUnsafe){p=Buffer.allocUnsafe(s.length)}else{p=new Buffer(s.length)}s.copy(p);return p}else if(_instanceof(s,Error)){p=Object.create(s)}else{if(typeof i=="undefined"){d=Object.getPrototypeOf(s);p=Object.create(d)}else{p=Object.create(i);d=i}}if(n){var f=c.indexOf(s);if(f!=-1){return u[f]}c.push(s);u.push(p)}if(_instanceof(s,e)){s.forEach(function(e,t){var r=_clone(t,o-1);var s=_clone(e,o-1);p.set(r,s)})}if(_instanceof(s,t)){s.forEach(function(e){var t=_clone(e,o-1);p.add(t)})}for(var h in s){var m;if(d){m=Object.getOwnPropertyDescriptor(d,h)}if(m&&m.set==null){continue}p[h]=_clone(s[h],o-1)}if(Object.getOwnPropertySymbols){var g=Object.getOwnPropertySymbols(s);for(var h=0;h<g.length;h++){var b=g[h];var y=Object.getOwnPropertyDescriptor(s,b);if(y&&!y.enumerable&&!a){continue}p[b]=_clone(s[b],o-1);if(!y.enumerable){Object.defineProperty(p,b,{enumerable:false})}}}if(a){var w=Object.getOwnPropertyNames(s);for(var h=0;h<w.length;h++){var T=w[h];var y=Object.getOwnPropertyDescriptor(s,T);if(y&&y.enumerable){continue}p[T]=_clone(s[T],o-1);Object.defineProperty(p,T,{enumerable:false})}}return p}return _clone(s,o)}clone.clonePrototype=function clonePrototype(e){if(e===null)return null;var t=function(){};t.prototype=e;return new t};function __objToStr(e){return Object.prototype.toString.call(e)}clone.__objToStr=__objToStr;function __isDate(e){return typeof e==="object"&&__objToStr(e)==="[object Date]"}clone.__isDate=__isDate;function __isArray(e){return typeof e==="object"&&__objToStr(e)==="[object Array]"}clone.__isArray=__isArray;function __isRegExp(e){return typeof e==="object"&&__objToStr(e)==="[object RegExp]"}clone.__isRegExp=__isRegExp;function __getRegExpFlags(e){var t="";if(e.global)t+="g";if(e.ignoreCase)t+="i";if(e.multiline)t+="m";return t}clone.__getRegExpFlags=__getRegExpFlags;return clone}();if(true&&e.exports){e.exports=t}},8306:(e,t)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});class Deprecation extends Error{constructor(e){super(e);if(Error.captureStackTrace){Error.captureStackTrace(this,this.constructor)}this.name="Deprecation"}}t.Deprecation=Deprecation},2829:(e,t)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});function isObject(e){return Object.prototype.toString.call(e)==="[object Object]"}function isPlainObject(e){var t,r;if(isObject(e)===false)return false;t=e.constructor;if(t===undefined)return true;r=t.prototype;if(isObject(r)===false)return false;if(r.hasOwnProperty("isPrototypeOf")===false){return false}return true}t.isPlainObject=isPlainObject},2443:(e,t,r)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});var s=r(9468);var n=r(6993);var o=r(7815);function LazyGetter(e,t,r){if(r===void 0){r=s.defaultFilter}var i;var a;var c=null;var u;function decorator(s,l,p){c=arguments;if(l===undefined){if(typeof i==="undefined"){u=false;a=s.key;i=Object.assign({},s.descriptor||s)}return o.decorateNew(s,e,t,r)}else{if(typeof i==="undefined"){u=true;a=l;i=Object.assign({},p||Object.getOwnPropertyDescriptor(s,l))}return n.decorateLegacy(s,l,p,e,t,r)}}decorator.reset=e?thrower:function(e){if(!e){throw new Error("Unable to restore descriptor on an undefined target")}if(!i){throw new Error("Unable to restore descriptor. Did you remember to apply your decorator to a method?")}Object.defineProperty(e,a,i);var t=decorator.apply(null,c);Object.defineProperty(e,a,u?t:t.descriptor||t)};return decorator}t.LazyGetter=LazyGetter;function thrower(){throw new Error("This decoration modifies the class prototype and cannot be reset.")}},9468:(e,t)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});function defaultFilter(){return true}t.defaultFilter=defaultFilter;function validateAndExtractMethodFromDescriptor(e){var t=e.get;if(!t){throw new Error("@LazyGetter can only decorate getters!")}else if(!e.configurable){throw new Error("@LazyGetter target must be configurable")}return t}t.validateAndExtractMethodFromDescriptor=validateAndExtractMethodFromDescriptor;function getterCommon(e,t,r,s,n,o,i,a,c,u){var l=n.apply(o,i);if(u(l)){var p={configurable:!c,enumerable:s,value:l};if(r||a){Object.defineProperty(e,t,p)}if(!r){Object.defineProperty(o,t,p)}}return l}t.getterCommon=getterCommon},6993:(e,t,r)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});var s=r(9468);function decorateLegacy(e,t,r,n,o,i){if(!r){r=Object.getOwnPropertyDescriptor(e,t);if(!r){var a=new Error("@LazyGetter is unable to determine the property descriptor");a.$target=e;a.$key=t;throw a}}var c=s.validateAndExtractMethodFromDescriptor(r);return Object.assign({},r,{get:function(){return s.getterCommon(e,t,Object.getPrototypeOf(e)===Function.prototype,!!r.enumerable,c,this,arguments,n,o,i)}})}t.decorateLegacy=decorateLegacy},7815:(e,t,r)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});var s=r(9468);function decorateNew(e,t,r,n){var o=Object.assign({},e);if(o.descriptor){o.descriptor=Object.assign({},o.descriptor)}var i=o.descriptor||o;var a=s.validateAndExtractMethodFromDescriptor(i);var c=e.placement==="static";i.get=function(){return s.getterCommon(c?this:Object.getPrototypeOf(this),o.key,c,!!i.enumerable,a,this,arguments,t,r,n)};return o}t.decorateNew=decorateNew},435:function(e,t,r){(function(){var t;t=e.exports=r(9278);t.version="5.1.2"}).call(this)},9278:function(e,t,r){(function(){var t,s,n,o=[].splice,i=function(e,t){if(!(e instanceof t)){throw new Error("Bound instance method accessed before binding")}},a=[].indexOf;n=r(7493);t=r(8614).EventEmitter;e.exports=s=function(){class NodeCache extends t{constructor(e={}){super();this.get=this.get.bind(this);this.mget=this.mget.bind(this);this.set=this.set.bind(this);this.mset=this.mset.bind(this);this.del=this.del.bind(this);this.take=this.take.bind(this);this.ttl=this.ttl.bind(this);this.getTtl=this.getTtl.bind(this);this.keys=this.keys.bind(this);this.has=this.has.bind(this);this.getStats=this.getStats.bind(this);this.flushAll=this.flushAll.bind(this);this.flushStats=this.flushStats.bind(this);this.close=this.close.bind(this);this._checkData=this._checkData.bind(this);this._check=this._check.bind(this);this._isInvalidKey=this._isInvalidKey.bind(this);this._wrap=this._wrap.bind(this);this._getValLength=this._getValLength.bind(this);this._error=this._error.bind(this);this._initErrors=this._initErrors.bind(this);this.options=e;this._initErrors();this.data={};this.options=Object.assign({forceString:false,objectValueSize:80,promiseValueSize:80,arrayValueSize:40,stdTTL:0,checkperiod:600,useClones:true,deleteOnExpire:true,enableLegacyCallbacks:false,maxKeys:-1},this.options);if(this.options.enableLegacyCallbacks){console.warn("WARNING! node-cache legacy callback support will drop in v6.x");["get","mget","set","del","ttl","getTtl","keys","has"].forEach(e=>{var t;t=this[e];this[e]=function(...e){var r,s,n,i;n=e,[...e]=n,[r]=o.call(e,-1);if(typeof r==="function"){try{i=t(...e);r(null,i)}catch(e){s=e;r(s)}}else{return t(...e,r)}}})}this.stats={hits:0,misses:0,keys:0,ksize:0,vsize:0};this.validKeyTypes=["string","number"];this._checkData();return}get(e){var t,r;i(this,NodeCache);if((r=this._isInvalidKey(e))!=null){throw r}if(this.data[e]!=null&&this._check(e,this.data[e])){this.stats.hits++;t=this._unwrap(this.data[e]);return t}else{this.stats.misses++;return void 0}}mget(e){var t,r,s,n,o,a;i(this,NodeCache);if(!Array.isArray(e)){t=this._error("EKEYSTYPE");throw t}a={};for(s=0,o=e.length;s<o;s++){n=e[s];if((r=this._isInvalidKey(n))!=null){throw r}if(this.data[n]!=null&&this._check(n,this.data[n])){this.stats.hits++;a[n]=this._unwrap(this.data[n])}else{this.stats.misses++}}return a}set(e,t,r){var s,n,o;i(this,NodeCache);if(this.options.maxKeys>-1&&this.stats.keys>=this.options.maxKeys){s=this._error("ECACHEFULL");throw s}if(this.options.forceString&&!typeof t==="string"){t=JSON.stringify(t)}if(r==null){r=this.options.stdTTL}if((n=this._isInvalidKey(e))!=null){throw n}o=false;if(this.data[e]){o=true;this.stats.vsize-=this._getValLength(this._unwrap(this.data[e],false))}this.data[e]=this._wrap(t,r);this.stats.vsize+=this._getValLength(t);if(!o){this.stats.ksize+=this._getKeyLength(e);this.stats.keys++}this.emit("set",e,t);return true}mset(e){var t,r,s,n,o,a,c,u,l,p;i(this,NodeCache);if(this.options.maxKeys>-1&&this.stats.keys+e.length>=this.options.maxKeys){t=this._error("ECACHEFULL");throw t}for(s=0,c=e.length;s<c;s++){a=e[s];({key:o,val:p,ttl:l}=a);if(l&&typeof l!=="number"){t=this._error("ETTLTYPE");throw t}if((r=this._isInvalidKey(o))!=null){throw r}}for(n=0,u=e.length;n<u;n++){a=e[n];({key:o,val:p,ttl:l}=a);this.set(o,p,l)}return true}del(e){var t,r,s,n,o,a;i(this,NodeCache);if(!Array.isArray(e)){e=[e]}t=0;for(s=0,o=e.length;s<o;s++){n=e[s];if((r=this._isInvalidKey(n))!=null){throw r}if(this.data[n]!=null){this.stats.vsize-=this._getValLength(this._unwrap(this.data[n],false));this.stats.ksize-=this._getKeyLength(n);this.stats.keys--;t++;a=this.data[n];delete this.data[n];this.emit("del",n,a.v)}}return t}take(e){var t;i(this,NodeCache);t=this.get(e);if(t!=null){this.del(e)}return t}ttl(e,t){var r;i(this,NodeCache);t||(t=this.options.stdTTL);if(!e){return false}if((r=this._isInvalidKey(e))!=null){throw r}if(this.data[e]!=null&&this._check(e,this.data[e])){if(t>=0){this.data[e]=this._wrap(this.data[e].v,t,false)}else{this.del(e)}return true}else{return false}}getTtl(e){var t,r;i(this,NodeCache);if(!e){return void 0}if((r=this._isInvalidKey(e))!=null){throw r}if(this.data[e]!=null&&this._check(e,this.data[e])){t=this.data[e].t;return t}else{return void 0}}keys(){var e;i(this,NodeCache);e=Object.keys(this.data);return e}has(e){var t;i(this,NodeCache);t=this.data[e]!=null&&this._check(e,this.data[e]);return t}getStats(){i(this,NodeCache);return this.stats}flushAll(e=true){i(this,NodeCache);this.data={};this.stats={hits:0,misses:0,keys:0,ksize:0,vsize:0};this._killCheckPeriod();this._checkData(e);this.emit("flush")}flushStats(){i(this,NodeCache);this.stats={hits:0,misses:0,keys:0,ksize:0,vsize:0};this.emit("flush_stats")}close(){i(this,NodeCache);this._killCheckPeriod()}_checkData(e=true){var t,r,s;i(this,NodeCache);r=this.data;for(t in r){s=r[t];this._check(t,s)}if(e&&this.options.checkperiod>0){this.checkTimeout=setTimeout(this._checkData,this.options.checkperiod*1e3,e);if(this.checkTimeout!=null&&this.checkTimeout.unref!=null){this.checkTimeout.unref()}}}_killCheckPeriod(){if(this.checkTimeout!=null){return clearTimeout(this.checkTimeout)}}_check(e,t){var r;i(this,NodeCache);r=true;if(t.t!==0&&t.t<Date.now()){if(this.options.deleteOnExpire){r=false;this.del(e)}this.emit("expired",e,this._unwrap(t))}return r}_isInvalidKey(e){var t;i(this,NodeCache);if(t=typeof e,a.call(this.validKeyTypes,t)<0){return this._error("EKEYTYPE",{type:typeof e})}}_wrap(e,t,r=true){var s,o,a,c;i(this,NodeCache);if(!this.options.useClones){r=false}o=Date.now();s=0;c=1e3;if(t===0){s=0}else if(t){s=o+t*c}else{if(this.options.stdTTL===0){s=this.options.stdTTL}else{s=o+this.options.stdTTL*c}}return a={t:s,v:r?n(e):e}}_unwrap(e,t=true){if(!this.options.useClones){t=false}if(e.v!=null){if(t){return n(e.v)}else{return e.v}}return null}_getKeyLength(e){return e.toString().length}_getValLength(e){i(this,NodeCache);if(typeof e==="string"){return e.length}else if(this.options.forceString){return JSON.stringify(e).length}else if(Array.isArray(e)){return this.options.arrayValueSize*e.length}else if(typeof e==="number"){return 8}else if(typeof(e!=null?e.then:void 0)==="function"){return this.options.promiseValueSize}else if(typeof Buffer!=="undefined"&&Buffer!==null?Buffer.isBuffer(e):void 0){return e.length}else if(e!=null&&typeof e==="object"){return this.options.objectValueSize*Object.keys(e).length}else if(typeof e==="boolean"){return 8}else{return 0}}_error(e,t={}){var r;i(this,NodeCache);r=new Error;r.name=e;r.errorcode=e;r.message=this.ERRORS[e]!=null?this.ERRORS[e](t):"-";r.data=t;return r}_initErrors(){var e,t,r;i(this,NodeCache);this.ERRORS={};r=this._ERRORS;for(t in r){e=r[t];this.ERRORS[t]=this.createErrorMessage(e)}}createErrorMessage(e){return function(t){return e.replace("__key",t.type)}}}NodeCache.prototype._ERRORS={ENOTFOUND:"Key `__key` not found",ECACHEFULL:"Cache max keys amount exceeded",EKEYTYPE:"The key argument has to be of type `string` or `number`. Found: `__key`",EKEYSTYPE:"The keys argument has to be an array.",ETTLTYPE:"The ttl argument has to be a number."};return NodeCache}.call(this)}).call(this)},282:(e,t,r)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});function _interopDefault(e){return e&&typeof e==="object"&&"default"in e?e["default"]:e}var s=_interopDefault(r(2413));var n=_interopDefault(r(8605));var o=_interopDefault(r(8835));var i=_interopDefault(r(7211));var a=_interopDefault(r(8761));const c=s.Readable;const u=Symbol("buffer");const l=Symbol("type");class Blob{constructor(){this[l]="";const e=arguments[0];const t=arguments[1];const r=[];let s=0;if(e){const t=e;const n=Number(t.length);for(let e=0;e<n;e++){const n=t[e];let o;if(n instanceof Buffer){o=n}else if(ArrayBuffer.isView(n)){o=Buffer.from(n.buffer,n.byteOffset,n.byteLength)}else if(n instanceof ArrayBuffer){o=Buffer.from(n)}else if(n instanceof Blob){o=n[u]}else{o=Buffer.from(typeof n==="string"?n:String(n))}s+=o.length;r.push(o)}}this[u]=Buffer.concat(r);let n=t&&t.type!==undefined&&String(t.type).toLowerCase();if(n&&!/[^\u0020-\u007E]/.test(n)){this[l]=n}}get size(){return this[u].length}get type(){return this[l]}text(){return Promise.resolve(this[u].toString())}arrayBuffer(){const e=this[u];const t=e.buffer.slice(e.byteOffset,e.byteOffset+e.byteLength);return Promise.resolve(t)}stream(){const e=new c;e._read=function(){};e.push(this[u]);e.push(null);return e}toString(){return"[object Blob]"}slice(){const e=this.size;const t=arguments[0];const r=arguments[1];let s,n;if(t===undefined){s=0}else if(t<0){s=Math.max(e+t,0)}else{s=Math.min(t,e)}if(r===undefined){n=e}else if(r<0){n=Math.max(e+r,0)}else{n=Math.min(r,e)}const o=Math.max(n-s,0);const i=this[u];const a=i.slice(s,s+o);const c=new Blob([],{type:arguments[2]});c[u]=a;return c}}Object.defineProperties(Blob.prototype,{size:{enumerable:true},type:{enumerable:true},slice:{enumerable:true}});Object.defineProperty(Blob.prototype,Symbol.toStringTag,{value:"Blob",writable:false,enumerable:false,configurable:true});function FetchError(e,t,r){Error.call(this,e);this.message=e;this.type=t;if(r){this.code=this.errno=r.code}Error.captureStackTrace(this,this.constructor)}FetchError.prototype=Object.create(Error.prototype);FetchError.prototype.constructor=FetchError;FetchError.prototype.name="FetchError";let p;try{p=r(4228).convert}catch(e){}const d=Symbol("Body internals");const f=s.PassThrough;function Body(e){var t=this;var r=arguments.length>1&&arguments[1]!==undefined?arguments[1]:{},n=r.size;let o=n===undefined?0:n;var i=r.timeout;let a=i===undefined?0:i;if(e==null){e=null}else if(isURLSearchParams(e)){e=Buffer.from(e.toString())}else if(isBlob(e))   ;else if(Buffer.isBuffer(e))   ;else if(Object.prototype.toString.call(e)==="[object ArrayBuffer]"){e=Buffer.from(e)}else if(ArrayBuffer.isView(e)){e=Buffer.from(e.buffer,e.byteOffset,e.byteLength)}else if(e instanceof s)   ;else{e=Buffer.from(String(e))}this[d]={body:e,disturbed:false,error:null};this.size=o;this.timeout=a;if(e instanceof s){e.on("error",function(e){const r=e.name==="AbortError"?e:new FetchError(`Invalid response body while trying to fetch ${t.url}: ${e.message}`,"system",e);t[d].error=r})}}Body.prototype={get body(){return this[d].body},get bodyUsed(){return this[d].disturbed},arrayBuffer(){return consumeBody.call(this).then(function(e){return e.buffer.slice(e.byteOffset,e.byteOffset+e.byteLength)})},blob(){let e=this.headers&&this.headers.get("content-type")||"";return consumeBody.call(this).then(function(t){return Object.assign(new Blob([],{type:e.toLowerCase()}),{[u]:t})})},json(){var e=this;return consumeBody.call(this).then(function(t){try{return JSON.parse(t.toString())}catch(t){return Body.Promise.reject(new FetchError(`invalid json response body at ${e.url} reason: ${t.message}`,"invalid-json"))}})},text(){return consumeBody.call(this).then(function(e){return e.toString()})},buffer(){return consumeBody.call(this)},textConverted(){var e=this;return consumeBody.call(this).then(function(t){return convertBody(t,e.headers)})}};Object.defineProperties(Body.prototype,{body:{enumerable:true},bodyUsed:{enumerable:true},arrayBuffer:{enumerable:true},blob:{enumerable:true},json:{enumerable:true},text:{enumerable:true}});Body.mixIn=function(e){for(const t of Object.getOwnPropertyNames(Body.prototype)){if(!(t in e)){const r=Object.getOwnPropertyDescriptor(Body.prototype,t);Object.defineProperty(e,t,r)}}};function consumeBody(){var e=this;if(this[d].disturbed){return Body.Promise.reject(new TypeError(`body used already for: ${this.url}`))}this[d].disturbed=true;if(this[d].error){return Body.Promise.reject(this[d].error)}let t=this.body;if(t===null){return Body.Promise.resolve(Buffer.alloc(0))}if(isBlob(t)){t=t.stream()}if(Buffer.isBuffer(t)){return Body.Promise.resolve(t)}if(!(t instanceof s)){return Body.Promise.resolve(Buffer.alloc(0))}let r=[];let n=0;let o=false;return new Body.Promise(function(s,i){let a;if(e.timeout){a=setTimeout(function(){o=true;i(new FetchError(`Response timeout while trying to fetch ${e.url} (over ${e.timeout}ms)`,"body-timeout"))},e.timeout)}t.on("error",function(t){if(t.name==="AbortError"){o=true;i(t)}else{i(new FetchError(`Invalid response body while trying to fetch ${e.url}: ${t.message}`,"system",t))}});t.on("data",function(t){if(o||t===null){return}if(e.size&&n+t.length>e.size){o=true;i(new FetchError(`content size at ${e.url} over limit: ${e.size}`,"max-size"));return}n+=t.length;r.push(t)});t.on("end",function(){if(o){return}clearTimeout(a);try{s(Buffer.concat(r,n))}catch(t){i(new FetchError(`Could not create Buffer from response body for ${e.url}: ${t.message}`,"system",t))}})})}function convertBody(e,t){if(typeof p!=="function"){throw new Error("The package `encoding` must be installed to use the textConverted() function")}const r=t.get("content-type");let s="utf-8";let n,o;if(r){n=/charset=([^;]*)/i.exec(r)}o=e.slice(0,1024).toString();if(!n&&o){n=/<meta.+?charset=(['"])(.+?)\1/i.exec(o)}if(!n&&o){n=/<meta[\s]+?http-equiv=(['"])content-type\1[\s]+?content=(['"])(.+?)\2/i.exec(o);if(!n){n=/<meta[\s]+?content=(['"])(.+?)\1[\s]+?http-equiv=(['"])content-type\3/i.exec(o);if(n){n.pop()}}if(n){n=/charset=(.*)/i.exec(n.pop())}}if(!n&&o){n=/<\?xml.+?encoding=(['"])(.+?)\1/i.exec(o)}if(n){s=n.pop();if(s==="gb2312"||s==="gbk"){s="gb18030"}}return p(e,"UTF-8",s).toString()}function isURLSearchParams(e){if(typeof e!=="object"||typeof e.append!=="function"||typeof e.delete!=="function"||typeof e.get!=="function"||typeof e.getAll!=="function"||typeof e.has!=="function"||typeof e.set!=="function"){return false}return e.constructor.name==="URLSearchParams"||Object.prototype.toString.call(e)==="[object URLSearchParams]"||typeof e.sort==="function"}function isBlob(e){return typeof e==="object"&&typeof e.arrayBuffer==="function"&&typeof e.type==="string"&&typeof e.stream==="function"&&typeof e.constructor==="function"&&typeof e.constructor.name==="string"&&/^(Blob|File)$/.test(e.constructor.name)&&/^(Blob|File)$/.test(e[Symbol.toStringTag])}function clone(e){let t,r;let n=e.body;if(e.bodyUsed){throw new Error("cannot clone body after it is used")}if(n instanceof s&&typeof n.getBoundary!=="function"){t=new f;r=new f;n.pipe(t);n.pipe(r);e[d].body=t;n=r}return n}function extractContentType(e){if(e===null){return null}else if(typeof e==="string"){return"text/plain;charset=UTF-8"}else if(isURLSearchParams(e)){return"application/x-www-form-urlencoded;charset=UTF-8"}else if(isBlob(e)){return e.type||null}else if(Buffer.isBuffer(e)){return null}else if(Object.prototype.toString.call(e)==="[object ArrayBuffer]"){return null}else if(ArrayBuffer.isView(e)){return null}else if(typeof e.getBoundary==="function"){return`multipart/form-data;boundary=${e.getBoundary()}`}else if(e instanceof s){return null}else{return"text/plain;charset=UTF-8"}}function getTotalBytes(e){const t=e.body;if(t===null){return 0}else if(isBlob(t)){return t.size}else if(Buffer.isBuffer(t)){return t.length}else if(t&&typeof t.getLengthSync==="function"){if(t._lengthRetrievers&&t._lengthRetrievers.length==0||t.hasKnownLength&&t.hasKnownLength()){return t.getLengthSync()}return null}else{return null}}function writeToStream(e,t){const r=t.body;if(r===null){e.end()}else if(isBlob(r)){r.stream().pipe(e)}else if(Buffer.isBuffer(r)){e.write(r);e.end()}else{r.pipe(e)}}Body.Promise=global.Promise;const h=/[^\^_`a-zA-Z\-0-9!#$%&'*+.|~]/;const m=/[^\t\x20-\x7e\x80-\xff]/;function validateName(e){e=`${e}`;if(h.test(e)||e===""){throw new TypeError(`${e} is not a legal HTTP header name`)}}function validateValue(e){e=`${e}`;if(m.test(e)){throw new TypeError(`${e} is not a legal HTTP header value`)}}function find(e,t){t=t.toLowerCase();for(const r in e){if(r.toLowerCase()===t){return r}}return undefined}const g=Symbol("map");class Headers{constructor(){let e=arguments.length>0&&arguments[0]!==undefined?arguments[0]:undefined;this[g]=Object.create(null);if(e instanceof Headers){const t=e.raw();const r=Object.keys(t);for(const e of r){for(const r of t[e]){this.append(e,r)}}return}if(e==null)   ;else if(typeof e==="object"){const t=e[Symbol.iterator];if(t!=null){if(typeof t!=="function"){throw new TypeError("Header pairs must be iterable")}const r=[];for(const t of e){if(typeof t!=="object"||typeof t[Symbol.iterator]!=="function"){throw new TypeError("Each header pair must be iterable")}r.push(Array.from(t))}for(const e of r){if(e.length!==2){throw new TypeError("Each header pair must be a name/value tuple")}this.append(e[0],e[1])}}else{for(const t of Object.keys(e)){const r=e[t];this.append(t,r)}}}else{throw new TypeError("Provided initializer must be an object")}}get(e){e=`${e}`;validateName(e);const t=find(this[g],e);if(t===undefined){return null}return this[g][t].join(", ")}forEach(e){let t=arguments.length>1&&arguments[1]!==undefined?arguments[1]:undefined;let r=getHeaders(this);let s=0;while(s<r.length){var n=r[s];const o=n[0],i=n[1];e.call(t,i,o,this);r=getHeaders(this);s++}}set(e,t){e=`${e}`;t=`${t}`;validateName(e);validateValue(t);const r=find(this[g],e);this[g][r!==undefined?r:e]=[t]}append(e,t){e=`${e}`;t=`${t}`;validateName(e);validateValue(t);const r=find(this[g],e);if(r!==undefined){this[g][r].push(t)}else{this[g][e]=[t]}}has(e){e=`${e}`;validateName(e);return find(this[g],e)!==undefined}delete(e){e=`${e}`;validateName(e);const t=find(this[g],e);if(t!==undefined){delete this[g][t]}}raw(){return this[g]}keys(){return createHeadersIterator(this,"key")}values(){return createHeadersIterator(this,"value")}[Symbol.iterator](){return createHeadersIterator(this,"key+value")}}Headers.prototype.entries=Headers.prototype[Symbol.iterator];Object.defineProperty(Headers.prototype,Symbol.toStringTag,{value:"Headers",writable:false,enumerable:false,configurable:true});Object.defineProperties(Headers.prototype,{get:{enumerable:true},forEach:{enumerable:true},set:{enumerable:true},append:{enumerable:true},has:{enumerable:true},delete:{enumerable:true},keys:{enumerable:true},values:{enumerable:true},entries:{enumerable:true}});function getHeaders(e){let t=arguments.length>1&&arguments[1]!==undefined?arguments[1]:"key+value";const r=Object.keys(e[g]).sort();return r.map(t==="key"?function(e){return e.toLowerCase()}:t==="value"?function(t){return e[g][t].join(", ")}:function(t){return[t.toLowerCase(),e[g][t].join(", ")]})}const b=Symbol("internal");function createHeadersIterator(e,t){const r=Object.create(y);r[b]={target:e,kind:t,index:0};return r}const y=Object.setPrototypeOf({next(){if(!this||Object.getPrototypeOf(this)!==y){throw new TypeError("Value of `this` is not a HeadersIterator")}var e=this[b];const t=e.target,r=e.kind,s=e.index;const n=getHeaders(t,r);const o=n.length;if(s>=o){return{value:undefined,done:true}}this[b].index=s+1;return{value:n[s],done:false}}},Object.getPrototypeOf(Object.getPrototypeOf([][Symbol.iterator]())));Object.defineProperty(y,Symbol.toStringTag,{value:"HeadersIterator",writable:false,enumerable:false,configurable:true});function exportNodeCompatibleHeaders(e){const t=Object.assign({__proto__:null},e[g]);const r=find(e[g],"Host");if(r!==undefined){t[r]=t[r][0]}return t}function createHeadersLenient(e){const t=new Headers;for(const r of Object.keys(e)){if(h.test(r)){continue}if(Array.isArray(e[r])){for(const s of e[r]){if(m.test(s)){continue}if(t[g][r]===undefined){t[g][r]=[s]}else{t[g][r].push(s)}}}else if(!m.test(e[r])){t[g][r]=[e[r]]}}return t}const w=Symbol("Response internals");const T=n.STATUS_CODES;class Response{constructor(){let e=arguments.length>0&&arguments[0]!==undefined?arguments[0]:null;let t=arguments.length>1&&arguments[1]!==undefined?arguments[1]:{};Body.call(this,e,t);const r=t.status||200;const s=new Headers(t.headers);if(e!=null&&!s.has("Content-Type")){const t=extractContentType(e);if(t){s.append("Content-Type",t)}}this[w]={url:t.url,status:r,statusText:t.statusText||T[r],headers:s,counter:t.counter}}get url(){return this[w].url||""}get status(){return this[w].status}get ok(){return this[w].status>=200&&this[w].status<300}get redirected(){return this[w].counter>0}get statusText(){return this[w].statusText}get headers(){return this[w].headers}clone(){return new Response(clone(this),{url:this.url,status:this.status,statusText:this.statusText,headers:this.headers,ok:this.ok,redirected:this.redirected})}}Body.mixIn(Response.prototype);Object.defineProperties(Response.prototype,{url:{enumerable:true},status:{enumerable:true},ok:{enumerable:true},redirected:{enumerable:true},statusText:{enumerable:true},headers:{enumerable:true},clone:{enumerable:true}});Object.defineProperty(Response.prototype,Symbol.toStringTag,{value:"Response",writable:false,enumerable:false,configurable:true});const _=Symbol("Request internals");const v=o.parse;const E=o.format;const O="destroy"in s.Readable.prototype;function isRequest(e){return typeof e==="object"&&typeof e[_]==="object"}function isAbortSignal(e){const t=e&&typeof e==="object"&&Object.getPrototypeOf(e);return!!(t&&t.constructor.name==="AbortSignal")}class Request{constructor(e){let t=arguments.length>1&&arguments[1]!==undefined?arguments[1]:{};let r;if(!isRequest(e)){if(e&&e.href){r=v(e.href)}else{r=v(`${e}`)}e={}}else{r=v(e.url)}let s=t.method||e.method||"GET";s=s.toUpperCase();if((t.body!=null||isRequest(e)&&e.body!==null)&&(s==="GET"||s==="HEAD")){throw new TypeError("Request with GET/HEAD method cannot have body")}let n=t.body!=null?t.body:isRequest(e)&&e.body!==null?clone(e):null;Body.call(this,n,{timeout:t.timeout||e.timeout||0,size:t.size||e.size||0});const o=new Headers(t.headers||e.headers||{});if(n!=null&&!o.has("Content-Type")){const e=extractContentType(n);if(e){o.append("Content-Type",e)}}let i=isRequest(e)?e.signal:null;if("signal"in t)i=t.signal;if(i!=null&&!isAbortSignal(i)){throw new TypeError("Expected signal to be an instanceof AbortSignal")}this[_]={method:s,redirect:t.redirect||e.redirect||"follow",headers:o,parsedURL:r,signal:i};this.follow=t.follow!==undefined?t.follow:e.follow!==undefined?e.follow:20;this.compress=t.compress!==undefined?t.compress:e.compress!==undefined?e.compress:true;this.counter=t.counter||e.counter||0;this.agent=t.agent||e.agent}get method(){return this[_].method}get url(){return E(this[_].parsedURL)}get headers(){return this[_].headers}get redirect(){return this[_].redirect}get signal(){return this[_].signal}clone(){return new Request(this)}}Body.mixIn(Request.prototype);Object.defineProperty(Request.prototype,Symbol.toStringTag,{value:"Request",writable:false,enumerable:false,configurable:true});Object.defineProperties(Request.prototype,{method:{enumerable:true},url:{enumerable:true},headers:{enumerable:true},redirect:{enumerable:true},clone:{enumerable:true},signal:{enumerable:true}});function getNodeRequestOptions(e){const t=e[_].parsedURL;const r=new Headers(e[_].headers);if(!r.has("Accept")){r.set("Accept","*/*")}if(!t.protocol||!t.hostname){throw new TypeError("Only absolute URLs are supported")}if(!/^https?:$/.test(t.protocol)){throw new TypeError("Only HTTP(S) protocols are supported")}if(e.signal&&e.body instanceof s.Readable&&!O){throw new Error("Cancellation of streamed requests with AbortSignal is not supported in node < 8")}let n=null;if(e.body==null&&/^(POST|PUT)$/i.test(e.method)){n="0"}if(e.body!=null){const t=getTotalBytes(e);if(typeof t==="number"){n=String(t)}}if(n){r.set("Content-Length",n)}if(!r.has("User-Agent")){r.set("User-Agent","node-fetch/1.0 (+https://github.com/bitinn/node-fetch)")}if(e.compress&&!r.has("Accept-Encoding")){r.set("Accept-Encoding","gzip,deflate")}let o=e.agent;if(typeof o==="function"){o=o(t)}if(!r.has("Connection")&&!o){r.set("Connection","close")}return Object.assign({},t,{method:e.method,headers:exportNodeCompatibleHeaders(r),agent:o})}function AbortError(e){Error.call(this,e);this.type="aborted";this.message=e;Error.captureStackTrace(this,this.constructor)}AbortError.prototype=Object.create(Error.prototype);AbortError.prototype.constructor=AbortError;AbortError.prototype.name="AbortError";const C=s.PassThrough;const P=o.resolve;function fetch(e,t){if(!fetch.Promise){throw new Error("native promise missing, set fetch.Promise to your favorite alternative")}Body.Promise=fetch.Promise;return new fetch.Promise(function(r,o){const c=new Request(e,t);const u=getNodeRequestOptions(c);const l=(u.protocol==="https:"?i:n).request;const p=c.signal;let d=null;const f=function abort(){let e=new AbortError("The user aborted a request.");o(e);if(c.body&&c.body instanceof s.Readable){c.body.destroy(e)}if(!d||!d.body)return;d.body.emit("error",e)};if(p&&p.aborted){f();return}const h=function abortAndFinalize(){f();finalize()};const m=l(u);let g;if(p){p.addEventListener("abort",h)}function finalize(){m.abort();if(p)p.removeEventListener("abort",h);clearTimeout(g)}if(c.timeout){m.once("socket",function(e){g=setTimeout(function(){o(new FetchError(`network timeout at: ${c.url}`,"request-timeout"));finalize()},c.timeout)})}m.on("error",function(e){o(new FetchError(`request to ${c.url} failed, reason: ${e.message}`,"system",e));finalize()});m.on("response",function(e){clearTimeout(g);const t=createHeadersLenient(e.headers);if(fetch.isRedirect(e.statusCode)){const s=t.get("Location");const n=s===null?null:P(c.url,s);switch(c.redirect){case"error":o(new FetchError(`uri requested responds with a redirect, redirect mode is set to error: ${c.url}`,"no-redirect"));finalize();return;case"manual":if(n!==null){try{t.set("Location",n)}catch(e){o(e)}}break;case"follow":if(n===null){break}if(c.counter>=c.follow){o(new FetchError(`maximum redirect reached at: ${c.url}`,"max-redirect"));finalize();return}const s={headers:new Headers(c.headers),follow:c.follow,counter:c.counter+1,agent:c.agent,compress:c.compress,method:c.method,body:c.body,signal:c.signal,timeout:c.timeout,size:c.size};if(e.statusCode!==303&&c.body&&getTotalBytes(c)===null){o(new FetchError("Cannot follow redirect with body being a readable stream","unsupported-redirect"));finalize();return}if(e.statusCode===303||(e.statusCode===301||e.statusCode===302)&&c.method==="POST"){s.method="GET";s.body=undefined;s.headers.delete("content-length")}r(fetch(new Request(n,s)));finalize();return}}e.once("end",function(){if(p)p.removeEventListener("abort",h)});let s=e.pipe(new C);const n={url:c.url,status:e.statusCode,statusText:e.statusMessage,headers:t,size:c.size,timeout:c.timeout,counter:c.counter};const i=t.get("Content-Encoding");if(!c.compress||c.method==="HEAD"||i===null||e.statusCode===204||e.statusCode===304){d=new Response(s,n);r(d);return}const u={flush:a.Z_SYNC_FLUSH,finishFlush:a.Z_SYNC_FLUSH};if(i=="gzip"||i=="x-gzip"){s=s.pipe(a.createGunzip(u));d=new Response(s,n);r(d);return}if(i=="deflate"||i=="x-deflate"){const t=e.pipe(new C);t.once("data",function(e){if((e[0]&15)===8){s=s.pipe(a.createInflate())}else{s=s.pipe(a.createInflateRaw())}d=new Response(s,n);r(d)});return}if(i=="br"&&typeof a.createBrotliDecompress==="function"){s=s.pipe(a.createBrotliDecompress());d=new Response(s,n);r(d);return}d=new Response(s,n);r(d)});writeToStream(m,c)})}fetch.isRedirect=function(e){return e===301||e===302||e===303||e===307||e===308};fetch.Promise=global.Promise;e.exports=t=fetch;Object.defineProperty(t,"__esModule",{value:true});t.default=t;t.Headers=Headers;t.Request=Request;t.Response=Response;t.FetchError=FetchError},6385:(e,t,r)=>{var s=r(3075);e.exports=s(once);e.exports.strict=s(onceStrict);once.proto=once(function(){Object.defineProperty(Function.prototype,"once",{value:function(){return once(this)},configurable:true});Object.defineProperty(Function.prototype,"onceStrict",{value:function(){return onceStrict(this)},configurable:true})});function once(e){var t=function(){if(t.called)return t.value;t.called=true;return t.value=e.apply(this,arguments)};t.called=false;return t}function onceStrict(e){var t=function(){if(t.called)throw new Error(t.onceError);t.called=true;return t.value=e.apply(this,arguments)};var r=e.name||"Function wrapped with `once`";t.onceError=r+" shouldn't be called more than once";t.called=false;return t}},1937:(e,t,r)=>{e.exports=r(6417).randomBytes},6440:(e,t,r)=>{"use strict";var s=r(1937);var n=16;var o=generateUID();var i=new RegExp('(\\\\)?"@__(F|R|D|M|S|U|I|B)-'+o+'-(\\d+)__@"',"g");var a=/\{\s*\[native code\]\s*\}/g;var c=/function.*?\(/;var u=/.*?=>.*?/;var l=/[<>\/\u2028\u2029]/g;var p=["*","async"];var d={"<":"\\u003C",">":"\\u003E","/":"\\u002F","\u2028":"\\u2028","\u2029":"\\u2029"};function escapeUnsafeChars(e){return d[e]}function generateUID(){var e=s(n);var t="";for(var r=0;r<n;++r){t+=e[r].toString(16)}return t}function deleteFunctions(e){var t=[];for(var r in e){if(typeof e[r]==="function"){t.push(r)}}for(var s=0;s<t.length;s++){delete e[t[s]]}}e.exports=function serialize(e,t){t||(t={});if(typeof t==="number"||typeof t==="string"){t={space:t}}var r=[];var s=[];var n=[];var d=[];var f=[];var h=[];var m=[];var g=[];function replacer(e,i){if(t.ignoreFunction){deleteFunctions(i)}if(!i&&i!==undefined){return i}var a=this[e];var c=typeof a;if(c==="object"){if(a instanceof RegExp){return"@__R-"+o+"-"+(s.push(a)-1)+"__@"}if(a instanceof Date){return"@__D-"+o+"-"+(n.push(a)-1)+"__@"}if(a instanceof Map){return"@__M-"+o+"-"+(d.push(a)-1)+"__@"}if(a instanceof Set){return"@__S-"+o+"-"+(f.push(a)-1)+"__@"}}if(c==="function"){return"@__F-"+o+"-"+(r.push(a)-1)+"__@"}if(c==="undefined"){return"@__U-"+o+"-"+(h.push(a)-1)+"__@"}if(c==="number"&&!isNaN(a)&&!isFinite(a)){return"@__I-"+o+"-"+(m.push(a)-1)+"__@"}if(c==="bigint"){return"@__B-"+o+"-"+(g.push(a)-1)+"__@"}return i}function serializeFunc(e){var t=e.toString();if(a.test(t)){throw new TypeError("Serializing native function: "+e.name)}if(c.test(t)){return t}if(u.test(t)){return t}var r=t.indexOf("(");var s=t.substr(0,r).trim().split(" ").filter(function(e){return e.length>0});var n=s.filter(function(e){return p.indexOf(e)===-1});if(n.length>0){return(s.indexOf("async")>-1?"async ":"")+"function"+(s.join("").indexOf("*")>-1?"*":"")+t.substr(r)}return t}if(t.ignoreFunction&&typeof e==="function"){e=undefined}if(e===undefined){return String(e)}var b;if(t.isJSON&&!t.space){b=JSON.stringify(e)}else{b=JSON.stringify(e,t.isJSON?null:replacer,t.space)}if(typeof b!=="string"){return String(b)}if(t.unsafe!==true){b=b.replace(l,escapeUnsafeChars)}if(r.length===0&&s.length===0&&n.length===0&&d.length===0&&f.length===0&&h.length===0&&m.length===0&&g.length===0){return b}return b.replace(i,function(e,o,i,a){if(o){return e}if(i==="D"){return'new Date("'+n[a].toISOString()+'")'}if(i==="R"){return"new RegExp("+serialize(s[a].source)+', "'+s[a].flags+'")'}if(i==="M"){return"new Map("+serialize(Array.from(d[a].entries()),t)+")"}if(i==="S"){return"new Set("+serialize(Array.from(f[a].values()),t)+")"}if(i==="U"){return"undefined"}if(i==="I"){return m[a]}if(i==="B"){return'BigInt("'+g[a]+'")'}var c=r[a];return serializeFunc(c)})}},5211:(e,t,r)=>{e.exports=r(1667)},1667:(e,t,r)=>{"use strict";var s=r(1631);var n=r(4016);var o=r(8605);var i=r(7211);var a=r(8614);var c=r(2357);var u=r(1669);t.httpOverHttp=httpOverHttp;t.httpsOverHttp=httpsOverHttp;t.httpOverHttps=httpOverHttps;t.httpsOverHttps=httpsOverHttps;function httpOverHttp(e){var t=new TunnelingAgent(e);t.request=o.request;return t}function httpsOverHttp(e){var t=new TunnelingAgent(e);t.request=o.request;t.createSocket=createSecureSocket;t.defaultPort=443;return t}function httpOverHttps(e){var t=new TunnelingAgent(e);t.request=i.request;return t}function httpsOverHttps(e){var t=new TunnelingAgent(e);t.request=i.request;t.createSocket=createSecureSocket;t.defaultPort=443;return t}function TunnelingAgent(e){var t=this;t.options=e||{};t.proxyOptions=t.options.proxy||{};t.maxSockets=t.options.maxSockets||o.Agent.defaultMaxSockets;t.requests=[];t.sockets=[];t.on("free",function onFree(e,r,s,n){var o=toOptions(r,s,n);for(var i=0,a=t.requests.length;i<a;++i){var c=t.requests[i];if(c.host===o.host&&c.port===o.port){t.requests.splice(i,1);c.request.onSocket(e);return}}e.destroy();t.removeSocket(e)})}u.inherits(TunnelingAgent,a.EventEmitter);TunnelingAgent.prototype.addRequest=function addRequest(e,t,r,s){var n=this;var o=mergeOptions({request:e},n.options,toOptions(t,r,s));if(n.sockets.length>=this.maxSockets){n.requests.push(o);return}n.createSocket(o,function(t){t.on("free",onFree);t.on("close",onCloseOrRemove);t.on("agentRemove",onCloseOrRemove);e.onSocket(t);function onFree(){n.emit("free",t,o)}function onCloseOrRemove(e){n.removeSocket(t);t.removeListener("free",onFree);t.removeListener("close",onCloseOrRemove);t.removeListener("agentRemove",onCloseOrRemove)}})};TunnelingAgent.prototype.createSocket=function createSocket(e,t){var r=this;var s={};r.sockets.push(s);var n=mergeOptions({},r.proxyOptions,{method:"CONNECT",path:e.host+":"+e.port,agent:false,headers:{host:e.host+":"+e.port}});if(e.localAddress){n.localAddress=e.localAddress}if(n.proxyAuth){n.headers=n.headers||{};n.headers["Proxy-Authorization"]="Basic "+new Buffer(n.proxyAuth).toString("base64")}l("making CONNECT request");var o=r.request(n);o.useChunkedEncodingByDefault=false;o.once("response",onResponse);o.once("upgrade",onUpgrade);o.once("connect",onConnect);o.once("error",onError);o.end();function onResponse(e){e.upgrade=true}function onUpgrade(e,t,r){process.nextTick(function(){onConnect(e,t,r)})}function onConnect(n,i,a){o.removeAllListeners();i.removeAllListeners();if(n.statusCode!==200){l("tunneling socket could not be established, statusCode=%d",n.statusCode);i.destroy();var c=new Error("tunneling socket could not be established, "+"statusCode="+n.statusCode);c.code="ECONNRESET";e.request.emit("error",c);r.removeSocket(s);return}if(a.length>0){l("got illegal response body from proxy");i.destroy();var c=new Error("got illegal response body from proxy");c.code="ECONNRESET";e.request.emit("error",c);r.removeSocket(s);return}l("tunneling connection has established");r.sockets[r.sockets.indexOf(s)]=i;return t(i)}function onError(t){o.removeAllListeners();l("tunneling socket could not be established, cause=%s\n",t.message,t.stack);var n=new Error("tunneling socket could not be established, "+"cause="+t.message);n.code="ECONNRESET";e.request.emit("error",n);r.removeSocket(s)}};TunnelingAgent.prototype.removeSocket=function removeSocket(e){var t=this.sockets.indexOf(e);if(t===-1){return}this.sockets.splice(t,1);var r=this.requests.shift();if(r){this.createSocket(r,function(e){r.request.onSocket(e)})}};function createSecureSocket(e,t){var r=this;TunnelingAgent.prototype.createSocket.call(r,e,function(s){var o=e.request.getHeader("host");var i=mergeOptions({},r.options,{socket:s,servername:o?o.replace(/:.*$/,""):e.host});var a=n.connect(0,i);r.sockets[r.sockets.indexOf(s)]=a;t(a)})}function toOptions(e,t,r){if(typeof e==="string"){return{host:e,port:t,localAddress:r}}return e}function mergeOptions(e){for(var t=1,r=arguments.length;t<r;++t){var s=arguments[t];if(typeof s==="object"){var n=Object.keys(s);for(var o=0,i=n.length;o<i;++o){var a=n[o];if(s[a]!==undefined){e[a]=s[a]}}}}return e}var l;if(process.env.NODE_DEBUG&&/\btunnel\b/.test(process.env.NODE_DEBUG)){l=function(){var e=Array.prototype.slice.call(arguments);if(typeof e[0]==="string"){e[0]="TUNNEL: "+e[0]}else{e.unshift("TUNNEL:")}console.error.apply(console,e)}}else{l=function(){}}t.debug=l},3567:(e,t)=>{"use strict";Object.defineProperty(t,"__esModule",{value:true});function getUserAgent(){if(typeof navigator==="object"&&"userAgent"in navigator){return navigator.userAgent}if(typeof process==="object"&&"version"in process){return`Node.js/${process.version.substr(1)} (${process.platform}; ${process.arch})`}return"<environment undetectable>"}t.getUserAgent=getUserAgent},3075:e=>{e.exports=wrappy;function wrappy(e,t){if(e&&t)return wrappy(e)(t);if(typeof e!=="function")throw new TypeError("need wrapper function");Object.keys(e).forEach(function(t){wrapper[t]=e[t]});return wrapper;function wrapper(){var t=new Array(arguments.length);for(var r=0;r<t.length;r++){t[r]=arguments[r]}var s=e.apply(this,t);var n=t[t.length-1];if(typeof s==="function"&&s!==n){Object.keys(n).forEach(function(e){s[e]=n[e]})}return s}}},4228:module=>{module.exports=eval("require")("encoding")},5100:module=>{module.exports=eval("require")("hogan.js")},8577:e=>{var t='<p>If you are an affiliated collaborator of this repository, you may check if this pull request leaks sensitive security secrets or abuses them for purposes other than their intended scopes.</p> <p>Please take your time to validate how action secrets are propagated and used. They can be identified in the workflow and action configs. Special notice has to be taken for the environment variable <code>GITHUB_TOKEN</code> and context variable <code>github.token</code>.</p> <p>If you are certain this pull request is safe to check, confirm your approval via the button. Otherwise, request changes from the author in a review. If you think it is clear that the author intentionally tries to circumvent security practices in order to gain access to the token or manipulate repository data, please follow the <a href="https://docs.github.com/en/free-pro-team@latest/github/building-a-strong-community/reporting-abuse-or-spam">guidelines</a> to report the user.</p> ';e.exports=t},962:e=>{var t="<p>Thank you for this pull request, @{{user}}.</p> <p>For security reasons, pull requests from non-affiliated contributors need approval for all checks to run.</p> <details> <summary>How to approve the pull request checks as a collaborator</summary> <p><br> If you are an affiliated collaborator of this repository, you may check if this pull request leaks sensitive security secrets or abuses them for purposes other than their intended scopes. </p><p>Please take your time to validate how action secrets are propagated and used. They can be identified in the workflow and action configs. Special notice has to be taken for the environment variable <code>GITHUB_TOKEN</code> and context variable <code>github.token</code>.</p> <p>Use the check action button to approve the check of the last commit and press <code>Approve Check</code>. To approve a specific commit, create a comment that contains <code>{{cmd}}</code>.</p> <p></p> </details> ";e.exports=t},8212:(e,t,r)=>{var s=r(8577);var n=r(5100);e.exports=function(){var e=n.compile(s,{});return e.render.apply(e,arguments)}},177:(e,t,r)=>{var s=r(962);var n=r(5100);e.exports=function(){var e=n.compile(s,{});return e.render.apply(e,arguments)}},2357:e=>{"use strict";e.exports=require("assert")},6417:e=>{"use strict";e.exports=require("crypto")},8614:e=>{"use strict";e.exports=require("events")},5747:e=>{"use strict";e.exports=require("fs")},8605:e=>{"use strict";e.exports=require("http")},7211:e=>{"use strict";e.exports=require("https")},1631:e=>{"use strict";e.exports=require("net")},2087:e=>{"use strict";e.exports=require("os")},5622:e=>{"use strict";e.exports=require("path")},2413:e=>{"use strict";e.exports=require("stream")},4016:e=>{"use strict";e.exports=require("tls")},8835:e=>{"use strict";e.exports=require("url")},1669:e=>{"use strict";e.exports=require("util")},8761:e=>{"use strict";e.exports=require("zlib")}};var __webpack_module_cache__={};function __webpack_require__(e){if(__webpack_module_cache__[e]){return __webpack_module_cache__[e].exports}var t=__webpack_module_cache__[e]={exports:{}};var r=true;try{__webpack_modules__[e].call(t.exports,t,t.exports,__webpack_require__);r=false}finally{if(r)delete __webpack_module_cache__[e]}return t.exports}__webpack_require__.ab=__dirname+"/";return __webpack_require__(4558)})();
+module.exports =
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ 605:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// EXTERNAL MODULE: ./node_modules/.pnpm/@actions/core@1.2.5/node_modules/@actions/core/lib/core.js
+var core = __webpack_require__(7398);
+
+// EXTERNAL MODULE: ./node_modules/.pnpm/@actions/github@4.0.0/node_modules/@actions/github/lib/github.js
+var github = __webpack_require__(4170);
+
+// EXTERNAL MODULE: ./node_modules/.pnpm/lazy-get-decorator@2.2.0/node_modules/lazy-get-decorator/LazyGetter.js
+var LazyGetter = __webpack_require__(2443);
+
+// CONCATENATED MODULE: ./lib/inputs.js
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+class Inputs {
+    static get token() {
+        return core.getInput('token');
+    }
+    static get actionsToken() {
+        return core.getInput('actionsToken');
+    }
+    static get prefix() {
+        return core.getInput('prefix');
+    }
+    static get commandFilter() {
+        return core.getInput('commandFilter')
+            .split("\n")
+            .filter(x => x !== "")
+            .map(cmd => RegExp(cmd).compile());
+    }
+    static get outsiderCommands() {
+        return core.getInput('outsiderCommands').toLowerCase() == 'true';
+    }
+    static get body() {
+        const bodyOpt = core.getInput('body');
+        if (bodyOpt == '') {
+            return undefined;
+        }
+        return bodyOpt;
+    }
+    static get number() {
+        const numberOpt = Number(core.getInput('number'));
+        if (numberOpt <= 0) {
+            return undefined;
+        }
+        return numberOpt;
+    }
+    static get event() {
+        return core.getInput('event');
+    }
+    static get pullMode() {
+        return core.getInput('pullMode').toLowerCase() == 'true';
+    }
+    static get forwardChecks() {
+        return core.getInput('forwardChecks').toLowerCase() == 'true';
+    }
+    static get appendCommand() {
+        return core.getInput('appendCommand').toLowerCase() == 'true';
+    }
+    static get interval() {
+        return Number(core.getInput('interval'));
+    }
+    static get perPage() {
+        return Number(core.getInput('perPage'));
+    }
+    static get affiliation() {
+        const value = core.getInput('affiliation');
+        return value;
+    }
+}
+__decorate([
+    (0,LazyGetter/* LazyGetter */.a)(true, true)
+], Inputs, "token", null);
+__decorate([
+    (0,LazyGetter/* LazyGetter */.a)(true, true)
+], Inputs, "actionsToken", null);
+__decorate([
+    (0,LazyGetter/* LazyGetter */.a)(true, true)
+], Inputs, "prefix", null);
+__decorate([
+    (0,LazyGetter/* LazyGetter */.a)(true, true)
+], Inputs, "commandFilter", null);
+__decorate([
+    (0,LazyGetter/* LazyGetter */.a)(true, true)
+], Inputs, "outsiderCommands", null);
+__decorate([
+    (0,LazyGetter/* LazyGetter */.a)(true, true)
+], Inputs, "body", null);
+__decorate([
+    (0,LazyGetter/* LazyGetter */.a)(true, true)
+], Inputs, "number", null);
+__decorate([
+    (0,LazyGetter/* LazyGetter */.a)(true, true)
+], Inputs, "event", null);
+__decorate([
+    (0,LazyGetter/* LazyGetter */.a)(true, true)
+], Inputs, "pullMode", null);
+__decorate([
+    (0,LazyGetter/* LazyGetter */.a)(true, true)
+], Inputs, "forwardChecks", null);
+__decorate([
+    (0,LazyGetter/* LazyGetter */.a)(true, true)
+], Inputs, "appendCommand", null);
+__decorate([
+    (0,LazyGetter/* LazyGetter */.a)(true, true, value => value >= 200)
+], Inputs, "interval", null);
+__decorate([
+    (0,LazyGetter/* LazyGetter */.a)(true, true, value => value >= 10 && value <= 100)
+], Inputs, "perPage", null);
+__decorate([
+    (0,LazyGetter/* LazyGetter */.a)(true, true, value => ['direct', 'outside', 'all'].includes(value))
+], Inputs, "affiliation", null);
+
+// EXTERNAL MODULE: ./node_modules/.pnpm/@octokit/graphql@4.5.6/node_modules/@octokit/graphql/dist-node/index.js
+var dist_node = __webpack_require__(227);
+
+// CONCATENATED MODULE: ./lib/api.js
+
+
+class Api {
+    constructor({ token, actionsToken, perPage }) {
+        this.octokit = github.getOctokit(token);
+        this.actionsKit = github.getOctokit(actionsToken);
+        this.repo = {
+            repo: github.context.repo.repo,
+            owner: github.context.repo.owner
+        };
+        this.repoList = {
+            ...this.repo,
+            per_page: perPage ?? 30
+        };
+        this.graphql = dist_node.graphql.defaults({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            headers: {
+                authorization: `token ${actionsToken}`,
+            }
+        });
+    }
+    async pullByNumber(number) {
+        const { data: data } = await this.octokit.pulls.get({
+            ...this.repo,
+            pull_number: number
+        });
+        return data;
+    }
+    async dispatchEvent({ eventName, payload }) {
+        return this.octokit.repos.createDispatchEvent({
+            ...this.repo,
+            event_type: eventName,
+            client_payload: payload
+        });
+    }
+    async collaborators(affiliation = 'all') {
+        const { data: data } = await this.octokit.repos.listCollaborators({
+            ...this.repoList,
+            affiliation: affiliation
+        });
+        return data;
+    }
+    async commentList({ issueNumber }) {
+        const { data: data } = await this.actionsKit.issues.listComments({
+            ...this.repoList,
+            issue_number: issueNumber
+        });
+        return data;
+    }
+    async respond({ issueNumber, body }) {
+        return this.actionsKit.issues.createComment({
+            ...this.repo,
+            issue_number: issueNumber,
+            body: body
+        });
+    }
+    async commentById({ commentId }) {
+        const { data: data } = await this.actionsKit.issues.getComment({
+            ...this.repo,
+            comment_id: commentId
+        });
+        return data;
+    }
+    async reactToComment({ commentId, reaction }) {
+        return this.actionsKit.reactions.createForIssueComment({
+            ...this.repo,
+            comment_id: commentId,
+            content: reaction
+        });
+    }
+    async reactToIssue({ reaction, issueNumber }) {
+        return this.actionsKit.reactions.createForIssue({
+            ...this.repo,
+            issue_number: issueNumber,
+            content: reaction,
+        });
+    }
+    async listRuns({ eventName, status }) {
+        const { data: data } = await this.octokit.actions.listWorkflowRunsForRepo({
+            ...this.repoList,
+            event: eventName,
+            status: status
+        });
+        return data;
+    }
+    async workflowById({ workflowId }) {
+        const { data: data } = await this.octokit.actions.getWorkflow({
+            ...this.repo,
+            workflow_id: workflowId
+        });
+        return data;
+    }
+    async jobsForWorkflow({ runId, filter }) {
+        const { data: data } = await this.octokit.actions.listJobsForWorkflowRun({
+            ...this.repoList,
+            run_id: runId,
+            filter: filter
+        });
+        return data;
+    }
+    async getCheck({ name, ref, filter }) {
+        const { data: data } = await this.actionsKit.checks.listForRef({
+            ...this.repoList,
+            ref: ref,
+            check_name: name,
+            filter: filter
+        });
+        return data;
+    }
+    async createCheck(params) {
+        const { data: data } = await this.actionsKit.checks.create({
+            ...this.repo,
+            name: params.name,
+            head_sha: params.sha,
+            status: params.status,
+            conclusion: params.conclusion,
+            actions: params.actions,
+            details_url: params.detailsUrl,
+            external_id: params.externalId,
+            started_at: params.startedAt,
+            completed_at: params.completedAt,
+            output: params.output
+        });
+        return data;
+    }
+    async updateCheck(params) {
+        const { data: data } = await this.actionsKit.checks.update({
+            ...this.repo,
+            check_run_id: params.checkId,
+            name: params.name,
+            head_sha: params.sha,
+            status: params.status,
+            conclusion: params.conclusion,
+            actions: params.actions,
+            details_url: params.detailsUrl,
+            external_id: params.externalId,
+            started_at: params.startedAt,
+            completed_at: params.completedAt,
+            output: params.output
+        });
+        return data;
+    }
+    async minimizeComment({ nodeId, reason }) {
+        await this.graphql({
+            query: `                
+            mutation MinimizeComment($comment: ID!, $reason: ReportedContentClassifiers!) {
+              minimizeComment(input:{subjectId:$comment, classifier:$reason}) {
+                minimizedComment {
+                  isMinimized
+                }
+              }
+            }
+        `,
+            comment: nodeId,
+            reason: reason
+        });
+    }
+}
+
+// EXTERNAL MODULE: ./node_modules/.pnpm/memoize-cache-decorator@1.3.2/node_modules/memoize-cache-decorator/dist/memoize.js
+var memoize = __webpack_require__(3633);
+
+// CONCATENATED MODULE: ./lib/event.js
+var event_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+
+
+class Event {
+    constructor() {
+        this.runs = new Map();
+        this.checks = new Map();
+        this.api = new Api({
+            token: Inputs.token,
+            actionsToken: Inputs.actionsToken,
+            perPage: Inputs.perPage
+        });
+    }
+    get sourceEvent() {
+        return github.context.eventName;
+    }
+    async triggerEvent() {
+        return Inputs.event;
+    }
+    async triggered() {
+        return true;
+    }
+    async repository() {
+        return `${github.context.repo.owner}/${github.context.repo.repo}`;
+    }
+    async sha() {
+        return github.context.sha;
+    }
+    async short() {
+        const sha = await this.sha();
+        return sha.substr(0, 7);
+    }
+    async ref() {
+        return github.context.ref;
+    }
+    async branchMatch(branch) {
+        return branch == await this.ref();
+    }
+    async payload() {
+        return {
+            event: this.sourceEvent,
+            repository: await this.repository(),
+            ref: await this.ref(),
+            sha: await this.sha()
+        };
+    }
+    async sleep() {
+        return new Promise(resolve => setTimeout(resolve, Inputs.interval));
+    }
+    async dispatch() {
+        if (!await this.triggered()) {
+            core.info("Skipping event dispatch because trigger condition is not true.");
+            return;
+        }
+        await this.api.dispatchEvent({
+            eventName: await this.triggerEvent(),
+            payload: await this.payload()
+        });
+        if (!Inputs.forwardChecks) {
+            core.info("Skipping workflow check tracing because `inputs.forwardChecks` is disabled.");
+            return;
+        }
+        await this.sleep();
+        return this.checkWorkflows();
+    }
+    async checkWorkflows() {
+        await this.sleep();
+        for (const [runId, { wf }] of this.runs) {
+            const jobs = await this.api.jobsForWorkflow({
+                runId,
+                filter: 'latest'
+            });
+            this.runs.set(runId, { jobs: jobs.jobs, wf });
+            await this.updateChecks(jobs.jobs, wf);
+        }
+        await this.sleep();
+        const runWindow = await this.api.listRuns({
+            eventName: 'repository_dispatch'
+        });
+        for (const wfRun of runWindow.workflow_runs) {
+            if (wfRun.head_sha == await this.sha()
+                && wfRun.head_repository.full_name == await this.repository()
+                && await this.branchMatch(wfRun.head_branch)) {
+                const jobs = await this.api.jobsForWorkflow({
+                    runId: wfRun.id,
+                    filter: 'latest'
+                });
+                const run = this.runs.get(wfRun.id);
+                let wf = run?.wf;
+                if (!wf) {
+                    wf = await this.api.workflowById({
+                        workflowId: wfRun.workflow_id
+                    });
+                }
+                this.runs.set(wfRun.id, {
+                    jobs: jobs.jobs,
+                    wf
+                });
+                await this.updateChecks(jobs.jobs, wf);
+            }
+        }
+        if (Array.from(this.runs.values()).every((run) => run.jobs.every((job) => job.status == 'completed'))) {
+            core.info("All triggered workflow runs are completed.");
+            return;
+        }
+        return this.checkWorkflows();
+    }
+    async updateChecks(jobs, wf) {
+        const eventName = await this.triggerEvent();
+        for (const job of jobs) {
+            const name = `${wf.name} / ${job.name} (${eventName})`;
+            const jobData = {
+                sha: await this.sha(),
+                name,
+                conclusion: job.conclusion ? job.conclusion : undefined,
+                status: job.status,
+                completedAt: job.completed_at,
+                startedAt: job.started_at,
+                externalId: String(job.id),
+                detailsUrl: job.html_url
+            };
+            const existing = this.checks.get(job.id);
+            if (existing) {
+                const updated = await this.api.updateCheck({
+                    checkId: existing.id,
+                    ...jobData
+                });
+                this.checks.set(job.id, updated);
+            }
+            else {
+                const existing = await this.api.getCheck({
+                    ref: await this.ref(),
+                    filter: 'latest',
+                    name: name
+                });
+                if (existing.total_count == 1) {
+                    const updated = await this.api.updateCheck({
+                        checkId: existing.check_runs[0].id,
+                        ...jobData
+                    });
+                    this.checks.set(job.id, updated);
+                }
+                else {
+                    const created = await this.api.createCheck(jobData);
+                    this.checks.set(job.id, created);
+                }
+            }
+        }
+    }
+}
+event_decorate([
+    (0,memoize/* memoize */.HP)()
+], Event.prototype, "triggerEvent", null);
+event_decorate([
+    (0,memoize/* memoize */.HP)()
+], Event.prototype, "triggered", null);
+event_decorate([
+    (0,memoize/* memoize */.HP)()
+], Event.prototype, "repository", null);
+event_decorate([
+    (0,memoize/* memoize */.HP)()
+], Event.prototype, "sha", null);
+event_decorate([
+    (0,memoize/* memoize */.HP)()
+], Event.prototype, "short", null);
+event_decorate([
+    (0,memoize/* memoize */.HP)()
+], Event.prototype, "ref", null);
+event_decorate([
+    (0,memoize/* memoize */.HP)()
+], Event.prototype, "payload", null);
+
+// CONCATENATED MODULE: ./lib/pull.js
+var pull_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+
+
+
+
+
+const NOTICE_HEADER = '<!-- pull request condition notice -->';
+const NOTICE = __webpack_require__(177);
+const CHECK_MSG = __webpack_require__(8212);
+const ACCEPTED_ASSOCIATIONS = ['OWNER', 'MEMBER', 'COLLABORATOR'];
+const CHECK_NAME = 'Pending Check';
+class PullRequestEvent extends Event {
+    get number() {
+        return Inputs.number ?? github.context.payload.pull_request.number;
+    }
+    get pullEvent() {
+        const payload = github.context.payload;
+        if (payload.pull_request.title != undefined && payload.pull_request.title != '') {
+            return payload.pull_request;
+        }
+    }
+    async triggered() {
+        return await super.triggered() && await this.checkAffiliation();
+    }
+    async pullData() {
+        if (!this.number) {
+            core.warning('The issue number could not be determined. No pull request data will be passed in the event.');
+            return undefined;
+        }
+        return this.pullEvent ?? await this.api.pullByNumber(this.number);
+    }
+    async repository() {
+        const data = await this.pullData();
+        return data?.head.repo.full_name ?? await super.repository();
+    }
+    async sha() {
+        const data = await this.pullData();
+        return data?.head.sha ?? await super.sha();
+    }
+    async ref() {
+        const data = await this.pullData();
+        const pullRef = data?.merged ? 'head' : 'merge';
+        return this.number ? `refs/pull/${this.number}/${pullRef}` : data?.head.ref ?? await super.ref();
+    }
+    async branchMatch(branch) {
+        const data = await this.pullData();
+        return [
+            `refs/pull/${this.number}/head`,
+            `refs/pull/${this.number}/merge`,
+            `pull/${this.number}/head`,
+            `pull/${this.number}/merge`,
+            data?.head.ref
+        ].includes(branch);
+    }
+    async payload() {
+        const inner = await super.payload();
+        inner.pull_request = await this.pullData() ?? inner.pull_request;
+        inner.number = this.number ?? inner.number;
+        return inner;
+    }
+    async checkAffiliation() {
+        if (!Inputs.pullMode) {
+            core.info("Event condition check passed because `inputs.pullMode` is disabled.");
+            return true;
+        }
+        if (!this.number) {
+            core.error('Event condition check failed because the issue number could not be determined.');
+            return false;
+        }
+        const pullRequest = await this.pullData();
+        if (!pullRequest) {
+            core.info("Event condition check failed because the pull request could not be determined.");
+            return false;
+        }
+        if (ACCEPTED_ASSOCIATIONS.includes(pullRequest.author_association)) {
+            core.info("Event condition check passed because the pull request author has the required association level.");
+            return true;
+        }
+        const comments = await this.api.commentList({ issueNumber: this.number });
+        const notice = comments.find(value => value.body.includes(NOTICE_HEADER));
+        if (!notice) {
+            core.info("Notifying pull request author since the notice comment doesn't exist yet.");
+            await this.api.reactToIssue({
+                issueNumber: this.number,
+                reaction: "+1"
+            });
+            await this.api.respond({
+                issueNumber: this.number,
+                body: NOTICE({
+                    user: pullRequest.user.id,
+                    cmd: Inputs.prefix != '' ? `${Inputs.prefix} check <sha>` : 'check <sha>'
+                }) + NOTICE_HEADER
+            });
+        }
+        const sha = await this.sha();
+        const short = await this.short();
+        const approveAction = await this.api.getCheck({
+            ref: await this.ref(),
+            filter: 'latest',
+            name: CHECK_NAME
+        });
+        const checkData = {
+            name: CHECK_NAME,
+            sha: sha,
+            status: "completed",
+            conclusion: "action_required",
+            output: {
+                title: `Pending check of ${short}`,
+                summary: `This pull request is waiting for an approval to run all of its checks`,
+                text: CHECK_MSG
+            },
+            actions: [
+                {
+                    label: "Approve Check",
+                    description: `Confirm that commit ${short} is safe to check`,
+                    identifier: String(this.number)
+                }
+            ]
+        };
+        if (approveAction.total_count == 1) {
+            const matchedAction = approveAction.check_runs[0];
+            if (matchedAction.head_sha != sha) {
+                await this.api.updateCheck({
+                    checkId: matchedAction.id,
+                    ...checkData
+                });
+            }
+        }
+        else {
+            await this.api.createCheck(checkData);
+        }
+        return false;
+    }
+}
+pull_decorate([
+    (0,LazyGetter/* LazyGetter */.a)()
+], PullRequestEvent.prototype, "number", null);
+pull_decorate([
+    (0,LazyGetter/* LazyGetter */.a)()
+], PullRequestEvent.prototype, "pullEvent", null);
+pull_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestEvent.prototype, "triggered", null);
+pull_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestEvent.prototype, "pullData", null);
+pull_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestEvent.prototype, "repository", null);
+pull_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestEvent.prototype, "sha", null);
+pull_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestEvent.prototype, "ref", null);
+pull_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestEvent.prototype, "payload", null);
+pull_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestEvent.prototype, "checkAffiliation", null);
+
+// CONCATENATED MODULE: ./lib/approval.js
+var approval_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+
+
+
+class PullRequestActionEvent extends PullRequestEvent {
+    get number() {
+        return super.number ?? github.context.payload.requested_action.identifier;
+    }
+    get checkEvent() {
+        const payload = github.context.payload;
+        if (payload.check_run.name != undefined && payload.check_run.name != '') {
+            return payload;
+        }
+    }
+    async sha() {
+        return this.checkEvent?.check_run.head_sha ?? await super.sha();
+    }
+    async triggered() {
+        return await super.triggered() && await this.checkAction();
+    }
+    async fromCollaborator() {
+        const collaborators = await this.api.collaborators(Inputs.affiliation);
+        return !!collaborators.find(col => col.id == this.checkEvent?.sender.id);
+    }
+    async checkAction() {
+        if (this.checkEvent?.check_run.name != CHECK_NAME) {
+            core.info('The requested action does not match the expected action.');
+            return false;
+        }
+        if (github.context.payload.requested_action.identifier == undefined) {
+            core.info('The check run does not seem to be of type `requested_action`.');
+            return false;
+        }
+        if (await this.sha() == '') {
+            core.warning('No sha was provided from the action request.');
+            return false;
+        }
+        if (!(await this.fromCollaborator())) {
+            core.warning('Can not accept an action request from a non-affiliated user.');
+            return false;
+        }
+        return true;
+    }
+}
+approval_decorate([
+    (0,LazyGetter/* LazyGetter */.a)()
+], PullRequestActionEvent.prototype, "number", null);
+approval_decorate([
+    (0,LazyGetter/* LazyGetter */.a)()
+], PullRequestActionEvent.prototype, "checkEvent", null);
+approval_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestActionEvent.prototype, "sha", null);
+approval_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestActionEvent.prototype, "triggered", null);
+approval_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestActionEvent.prototype, "fromCollaborator", null);
+
+// CONCATENATED MODULE: ./lib/comment.js
+var comment_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+
+
+
+
+
+class PullRequestCommentEvent extends PullRequestEvent {
+    get number() {
+        return super.number ?? github.context.issue.number;
+    }
+    get commentEvent() {
+        const payload = github.context.payload;
+        if (payload.comment.id != undefined && payload.comment.id != 0) {
+            return payload;
+        }
+    }
+    async triggerEvent() {
+        const prefix = await super.triggerEvent();
+        if (!Inputs.appendCommand) {
+            return prefix;
+        }
+        const command = await this.command();
+        if (command == '') {
+            return prefix;
+        }
+        return `${prefix}_${command}`;
+    }
+    async commentData() {
+        const commentId = github.context.payload.comment.id;
+        return this.commentEvent?.comment ?? await this.api.commentById({ commentId: commentId });
+    }
+    async body() {
+        const comment = await this.commentData();
+        return Inputs.body ?? comment.body;
+    }
+    async command() {
+        if (Inputs.prefix == '') {
+            return '';
+        }
+        const { command: command } = await this.matchedPrefix();
+        return command ?? '';
+    }
+    async feedback(reaction) {
+        const commentId = github.context.payload.comment.id;
+        if (commentId) {
+            await this.api.reactToComment({
+                reaction: reaction,
+                commentId: commentId
+            });
+        }
+    }
+    async matchedCheck(command) {
+        const checkExp = new RegExp(`^check\\s+([0-9a-f]+)$`);
+        const checkMatch = checkExp.exec(command);
+        if (checkMatch && checkMatch.length >= 2 && checkMatch[0] != '') {
+            if (await this.fromCollaborator()) {
+                await this.feedback("rocket");
+                return { triggered: true, command: 'check', sha: checkMatch[1] };
+            }
+            return { triggered: false };
+        }
+        return { triggered: false };
+    }
+    async fromCollaborator() {
+        const collaborators = await this.api.collaborators(Inputs.affiliation);
+        const comment = await this.commentData();
+        return !!collaborators.find(col => col.id == comment.user.id);
+    }
+    async matchedPrefix() {
+        const body = await this.body();
+        const regex = new RegExp(`${Inputs.prefix}\\s*(.*)\\s*$`);
+        const matches = regex.exec(body);
+        if (!matches || matches.length < 2 || matches[0] == '') {
+            core.info(`The issue comment does not match the given prefix.`);
+            return { triggered: false };
+        }
+        const command = matches[matches.length];
+        if (Inputs.pullMode) {
+            const checkMatch = await this.matchedCheck(command);
+            if (checkMatch.triggered) {
+                return checkMatch;
+            }
+        }
+        if (!Inputs.outsiderCommands && !(await this.fromCollaborator())) {
+            await this.feedback("-1");
+            core.warning('Can not accept a command from a non-affiliated user.');
+            return { triggered: false, command: command };
+        }
+        if (Inputs.commandFilter.length == 0) {
+            await this.feedback("+1");
+            core.info('The issue comment matches the given prefix.');
+            return { triggered: true, command: command };
+        }
+        const cmdMatch = Inputs.commandFilter.find(cmd => cmd.exec(command));
+        if (cmdMatch) {
+            await this.feedback("+1");
+            core.warning(`The issue command '${command}' was accepted.`);
+            return { triggered: true, command: command };
+        }
+        await this.feedback("confused");
+        core.warning(`The issue command '${command}' was not accepted.`);
+        return { triggered: false, command: command };
+    }
+    async triggered() {
+        const { triggered: triggered } = await this.matchedPrefix();
+        return await super.triggered() && triggered;
+    }
+    async sha() {
+        const { sha: sha } = await this.matchedPrefix();
+        return sha ?? await super.sha();
+    }
+    async payload() {
+        const inner = await super.payload();
+        inner.body = await this.body();
+        inner.command = await this.command();
+        inner.comment = await this.commentData();
+        return inner;
+    }
+    async dispatch() {
+        await super.dispatch();
+        const { node_id: nodeId } = await this.commentData();
+        await this.api.minimizeComment({
+            nodeId: nodeId,
+            reason: "RESOLVED"
+        });
+    }
+}
+comment_decorate([
+    (0,LazyGetter/* LazyGetter */.a)()
+], PullRequestCommentEvent.prototype, "number", null);
+comment_decorate([
+    (0,LazyGetter/* LazyGetter */.a)()
+], PullRequestCommentEvent.prototype, "commentEvent", null);
+comment_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestCommentEvent.prototype, "triggerEvent", null);
+comment_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestCommentEvent.prototype, "commentData", null);
+comment_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestCommentEvent.prototype, "body", null);
+comment_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestCommentEvent.prototype, "command", null);
+comment_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestCommentEvent.prototype, "fromCollaborator", null);
+comment_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestCommentEvent.prototype, "matchedPrefix", null);
+comment_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestCommentEvent.prototype, "triggered", null);
+comment_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestCommentEvent.prototype, "sha", null);
+comment_decorate([
+    (0,memoize/* memoize */.HP)()
+], PullRequestCommentEvent.prototype, "payload", null);
+
+// CONCATENATED MODULE: ./lib/action.js
+
+
+
+
+
+
+async function run() {
+    let event;
+    switch (github.context.eventName) {
+        case 'check_run': {
+            event = new PullRequestActionEvent();
+            break;
+        }
+        case 'issue_comment': {
+            event = new PullRequestCommentEvent();
+            core.setOutput('command', await event.command());
+            break;
+        }
+        case 'pull_request' || 0 || 0: {
+            event = new PullRequestEvent();
+            break;
+        }
+        default: {
+            event = new Event();
+            break;
+        }
+    }
+    core.setOutput('triggered', await event.triggered());
+    await event.dispatch();
+}
+run().catch(core.setFailed);
+
+
+/***/ }),
+
+/***/ 8866:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const os = __importStar(__webpack_require__(2087));
+/**
+ * Commands
+ *
+ * Command Format:
+ *   ::name key=value,key=value::message
+ *
+ * Examples:
+ *   ::warning::This is the message
+ *   ::set-env name=MY_VAR::some value
+ */
+function issueCommand(command, properties, message) {
+    const cmd = new Command(command, properties, message);
+    process.stdout.write(cmd.toString() + os.EOL);
+}
+exports.issueCommand = issueCommand;
+function issue(name, message = '') {
+    issueCommand(name, {}, message);
+}
+exports.issue = issue;
+const CMD_STRING = '::';
+class Command {
+    constructor(command, properties, message) {
+        if (!command) {
+            command = 'missing.command';
+        }
+        this.command = command;
+        this.properties = properties;
+        this.message = message;
+    }
+    toString() {
+        let cmdStr = CMD_STRING + this.command;
+        if (this.properties && Object.keys(this.properties).length > 0) {
+            cmdStr += ' ';
+            let first = true;
+            for (const key in this.properties) {
+                if (this.properties.hasOwnProperty(key)) {
+                    const val = this.properties[key];
+                    if (val) {
+                        if (first) {
+                            first = false;
+                        }
+                        else {
+                            cmdStr += ',';
+                        }
+                        cmdStr += `${key}=${escapeProperty(val)}`;
+                    }
+                }
+            }
+        }
+        cmdStr += `${CMD_STRING}${escapeData(this.message)}`;
+        return cmdStr;
+    }
+}
+/**
+ * Sanitizes an input into a string so it can be passed into issueCommand safely
+ * @param input input to sanitize into a string
+ */
+function toCommandValue(input) {
+    if (input === null || input === undefined) {
+        return '';
+    }
+    else if (typeof input === 'string' || input instanceof String) {
+        return input;
+    }
+    return JSON.stringify(input);
+}
+exports.toCommandValue = toCommandValue;
+function escapeData(s) {
+    return toCommandValue(s)
+        .replace(/%/g, '%25')
+        .replace(/\r/g, '%0D')
+        .replace(/\n/g, '%0A');
+}
+function escapeProperty(s) {
+    return toCommandValue(s)
+        .replace(/%/g, '%25')
+        .replace(/\r/g, '%0D')
+        .replace(/\n/g, '%0A')
+        .replace(/:/g, '%3A')
+        .replace(/,/g, '%2C');
+}
+//# sourceMappingURL=command.js.map
+
+/***/ }),
+
+/***/ 7398:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const command_1 = __webpack_require__(8866);
+const os = __importStar(__webpack_require__(2087));
+const path = __importStar(__webpack_require__(5622));
+/**
+ * The code to exit an action
+ */
+var ExitCode;
+(function (ExitCode) {
+    /**
+     * A code indicating that the action was successful
+     */
+    ExitCode[ExitCode["Success"] = 0] = "Success";
+    /**
+     * A code indicating that the action was a failure
+     */
+    ExitCode[ExitCode["Failure"] = 1] = "Failure";
+})(ExitCode = exports.ExitCode || (exports.ExitCode = {}));
+//-----------------------------------------------------------------------
+// Variables
+//-----------------------------------------------------------------------
+/**
+ * Sets env variable for this action and future actions in the job
+ * @param name the name of the variable to set
+ * @param val the value of the variable. Non-string values will be converted to a string via JSON.stringify
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function exportVariable(name, val) {
+    const convertedVal = command_1.toCommandValue(val);
+    process.env[name] = convertedVal;
+    command_1.issueCommand('set-env', { name }, convertedVal);
+}
+exports.exportVariable = exportVariable;
+/**
+ * Registers a secret which will get masked from logs
+ * @param secret value of the secret
+ */
+function setSecret(secret) {
+    command_1.issueCommand('add-mask', {}, secret);
+}
+exports.setSecret = setSecret;
+/**
+ * Prepends inputPath to the PATH (for this action and future actions)
+ * @param inputPath
+ */
+function addPath(inputPath) {
+    command_1.issueCommand('add-path', {}, inputPath);
+    process.env['PATH'] = `${inputPath}${path.delimiter}${process.env['PATH']}`;
+}
+exports.addPath = addPath;
+/**
+ * Gets the value of an input.  The value is also trimmed.
+ *
+ * @param     name     name of the input to get
+ * @param     options  optional. See InputOptions.
+ * @returns   string
+ */
+function getInput(name, options) {
+    const val = process.env[`INPUT_${name.replace(/ /g, '_').toUpperCase()}`] || '';
+    if (options && options.required && !val) {
+        throw new Error(`Input required and not supplied: ${name}`);
+    }
+    return val.trim();
+}
+exports.getInput = getInput;
+/**
+ * Sets the value of an output.
+ *
+ * @param     name     name of the output to set
+ * @param     value    value to store. Non-string values will be converted to a string via JSON.stringify
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function setOutput(name, value) {
+    command_1.issueCommand('set-output', { name }, value);
+}
+exports.setOutput = setOutput;
+/**
+ * Enables or disables the echoing of commands into stdout for the rest of the step.
+ * Echoing is disabled by default if ACTIONS_STEP_DEBUG is not set.
+ *
+ */
+function setCommandEcho(enabled) {
+    command_1.issue('echo', enabled ? 'on' : 'off');
+}
+exports.setCommandEcho = setCommandEcho;
+//-----------------------------------------------------------------------
+// Results
+//-----------------------------------------------------------------------
+/**
+ * Sets the action status to failed.
+ * When the action exits it will be with an exit code of 1
+ * @param message add error issue message
+ */
+function setFailed(message) {
+    process.exitCode = ExitCode.Failure;
+    error(message);
+}
+exports.setFailed = setFailed;
+//-----------------------------------------------------------------------
+// Logging Commands
+//-----------------------------------------------------------------------
+/**
+ * Gets whether Actions Step Debug is on or not
+ */
+function isDebug() {
+    return process.env['RUNNER_DEBUG'] === '1';
+}
+exports.isDebug = isDebug;
+/**
+ * Writes debug message to user log
+ * @param message debug message
+ */
+function debug(message) {
+    command_1.issueCommand('debug', {}, message);
+}
+exports.debug = debug;
+/**
+ * Adds an error issue
+ * @param message error issue message. Errors will be converted to string via toString()
+ */
+function error(message) {
+    command_1.issue('error', message instanceof Error ? message.toString() : message);
+}
+exports.error = error;
+/**
+ * Adds an warning issue
+ * @param message warning issue message. Errors will be converted to string via toString()
+ */
+function warning(message) {
+    command_1.issue('warning', message instanceof Error ? message.toString() : message);
+}
+exports.warning = warning;
+/**
+ * Writes info to log with console.log.
+ * @param message info message
+ */
+function info(message) {
+    process.stdout.write(message + os.EOL);
+}
+exports.info = info;
+/**
+ * Begin an output group.
+ *
+ * Output until the next `groupEnd` will be foldable in this group
+ *
+ * @param name The name of the output group
+ */
+function startGroup(name) {
+    command_1.issue('group', name);
+}
+exports.startGroup = startGroup;
+/**
+ * End an output group.
+ */
+function endGroup() {
+    command_1.issue('endgroup');
+}
+exports.endGroup = endGroup;
+/**
+ * Wrap an asynchronous function call in a group.
+ *
+ * Returns the same type as the function itself.
+ *
+ * @param name The name of the group
+ * @param fn The function to wrap in the group
+ */
+function group(name, fn) {
+    return __awaiter(this, void 0, void 0, function* () {
+        startGroup(name);
+        let result;
+        try {
+            result = yield fn();
+        }
+        finally {
+            endGroup();
+        }
+        return result;
+    });
+}
+exports.group = group;
+//-----------------------------------------------------------------------
+// Wrapper action state
+//-----------------------------------------------------------------------
+/**
+ * Saves state for current action, the state can only be retrieved by this action's post job execution.
+ *
+ * @param     name     name of the state to store
+ * @param     value    value to store. Non-string values will be converted to a string via JSON.stringify
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function saveState(name, value) {
+    command_1.issueCommand('save-state', { name }, value);
+}
+exports.saveState = saveState;
+/**
+ * Gets the value of an state set by this action's main execution.
+ *
+ * @param     name     name of the state to get
+ * @returns   string
+ */
+function getState(name) {
+    return process.env[`STATE_${name}`] || '';
+}
+exports.getState = getState;
+//# sourceMappingURL=core.js.map
+
+/***/ }),
+
+/***/ 7972:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Context = void 0;
+const fs_1 = __webpack_require__(5747);
+const os_1 = __webpack_require__(2087);
+class Context {
+    /**
+     * Hydrate the context from the environment
+     */
+    constructor() {
+        this.payload = {};
+        if (process.env.GITHUB_EVENT_PATH) {
+            if (fs_1.existsSync(process.env.GITHUB_EVENT_PATH)) {
+                this.payload = JSON.parse(fs_1.readFileSync(process.env.GITHUB_EVENT_PATH, { encoding: 'utf8' }));
+            }
+            else {
+                const path = process.env.GITHUB_EVENT_PATH;
+                process.stdout.write(`GITHUB_EVENT_PATH ${path} does not exist${os_1.EOL}`);
+            }
+        }
+        this.eventName = process.env.GITHUB_EVENT_NAME;
+        this.sha = process.env.GITHUB_SHA;
+        this.ref = process.env.GITHUB_REF;
+        this.workflow = process.env.GITHUB_WORKFLOW;
+        this.action = process.env.GITHUB_ACTION;
+        this.actor = process.env.GITHUB_ACTOR;
+        this.job = process.env.GITHUB_JOB;
+        this.runNumber = parseInt(process.env.GITHUB_RUN_NUMBER, 10);
+        this.runId = parseInt(process.env.GITHUB_RUN_ID, 10);
+    }
+    get issue() {
+        const payload = this.payload;
+        return Object.assign(Object.assign({}, this.repo), { number: (payload.issue || payload.pull_request || payload).number });
+    }
+    get repo() {
+        if (process.env.GITHUB_REPOSITORY) {
+            const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+            return { owner, repo };
+        }
+        if (this.payload.repository) {
+            return {
+                owner: this.payload.repository.owner.login,
+                repo: this.payload.repository.name
+            };
+        }
+        throw new Error("context.repo requires a GITHUB_REPOSITORY environment variable like 'owner/repo'");
+    }
+}
+exports.Context = Context;
+//# sourceMappingURL=context.js.map
+
+/***/ }),
+
+/***/ 4170:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getOctokit = exports.context = void 0;
+const Context = __importStar(__webpack_require__(7972));
+const utils_1 = __webpack_require__(8488);
+exports.context = new Context.Context();
+/**
+ * Returns a hydrated octokit ready to use for GitHub Actions
+ *
+ * @param     token    the repo PAT or GITHUB_TOKEN
+ * @param     options  other options to set
+ */
+function getOctokit(token, options) {
+    return new utils_1.GitHub(utils_1.getOctokitOptions(token, options));
+}
+exports.getOctokit = getOctokit;
+//# sourceMappingURL=github.js.map
+
+/***/ }),
+
+/***/ 8594:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getApiBaseUrl = exports.getProxyAgent = exports.getAuthString = void 0;
+const httpClient = __importStar(__webpack_require__(186));
+function getAuthString(token, options) {
+    if (!token && !options.auth) {
+        throw new Error('Parameter token or opts.auth is required');
+    }
+    else if (token && options.auth) {
+        throw new Error('Parameters token and opts.auth may not both be specified');
+    }
+    return typeof options.auth === 'string' ? options.auth : `token ${token}`;
+}
+exports.getAuthString = getAuthString;
+function getProxyAgent(destinationUrl) {
+    const hc = new httpClient.HttpClient();
+    return hc.getAgent(destinationUrl);
+}
+exports.getProxyAgent = getProxyAgent;
+function getApiBaseUrl() {
+    return process.env['GITHUB_API_URL'] || 'https://api.github.com';
+}
+exports.getApiBaseUrl = getApiBaseUrl;
+//# sourceMappingURL=utils.js.map
+
+/***/ }),
+
+/***/ 8488:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getOctokitOptions = exports.GitHub = exports.context = void 0;
+const Context = __importStar(__webpack_require__(7972));
+const Utils = __importStar(__webpack_require__(8594));
+// octokit + plugins
+const core_1 = __webpack_require__(1355);
+const plugin_rest_endpoint_methods_1 = __webpack_require__(66);
+const plugin_paginate_rest_1 = __webpack_require__(1762);
+exports.context = new Context.Context();
+const baseUrl = Utils.getApiBaseUrl();
+const defaults = {
+    baseUrl,
+    request: {
+        agent: Utils.getProxyAgent(baseUrl)
+    }
+};
+exports.GitHub = core_1.Octokit.plugin(plugin_rest_endpoint_methods_1.restEndpointMethods, plugin_paginate_rest_1.paginateRest).defaults(defaults);
+/**
+ * Convience function to correctly format Octokit Options to pass into the constructor.
+ *
+ * @param     token    the repo PAT or GITHUB_TOKEN
+ * @param     options  other options to set
+ */
+function getOctokitOptions(token, options) {
+    const opts = Object.assign({}, options || {}); // Shallow clone - don't mutate the object provided by the caller
+    // Auth
+    const auth = Utils.getAuthString(token, opts);
+    if (auth) {
+        opts.auth = auth;
+    }
+    return opts;
+}
+exports.getOctokitOptions = getOctokitOptions;
+//# sourceMappingURL=utils.js.map
+
+/***/ }),
+
+/***/ 186:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const url = __webpack_require__(8835);
+const http = __webpack_require__(8605);
+const https = __webpack_require__(7211);
+const pm = __webpack_require__(7999);
+let tunnel;
+var HttpCodes;
+(function (HttpCodes) {
+    HttpCodes[HttpCodes["OK"] = 200] = "OK";
+    HttpCodes[HttpCodes["MultipleChoices"] = 300] = "MultipleChoices";
+    HttpCodes[HttpCodes["MovedPermanently"] = 301] = "MovedPermanently";
+    HttpCodes[HttpCodes["ResourceMoved"] = 302] = "ResourceMoved";
+    HttpCodes[HttpCodes["SeeOther"] = 303] = "SeeOther";
+    HttpCodes[HttpCodes["NotModified"] = 304] = "NotModified";
+    HttpCodes[HttpCodes["UseProxy"] = 305] = "UseProxy";
+    HttpCodes[HttpCodes["SwitchProxy"] = 306] = "SwitchProxy";
+    HttpCodes[HttpCodes["TemporaryRedirect"] = 307] = "TemporaryRedirect";
+    HttpCodes[HttpCodes["PermanentRedirect"] = 308] = "PermanentRedirect";
+    HttpCodes[HttpCodes["BadRequest"] = 400] = "BadRequest";
+    HttpCodes[HttpCodes["Unauthorized"] = 401] = "Unauthorized";
+    HttpCodes[HttpCodes["PaymentRequired"] = 402] = "PaymentRequired";
+    HttpCodes[HttpCodes["Forbidden"] = 403] = "Forbidden";
+    HttpCodes[HttpCodes["NotFound"] = 404] = "NotFound";
+    HttpCodes[HttpCodes["MethodNotAllowed"] = 405] = "MethodNotAllowed";
+    HttpCodes[HttpCodes["NotAcceptable"] = 406] = "NotAcceptable";
+    HttpCodes[HttpCodes["ProxyAuthenticationRequired"] = 407] = "ProxyAuthenticationRequired";
+    HttpCodes[HttpCodes["RequestTimeout"] = 408] = "RequestTimeout";
+    HttpCodes[HttpCodes["Conflict"] = 409] = "Conflict";
+    HttpCodes[HttpCodes["Gone"] = 410] = "Gone";
+    HttpCodes[HttpCodes["TooManyRequests"] = 429] = "TooManyRequests";
+    HttpCodes[HttpCodes["InternalServerError"] = 500] = "InternalServerError";
+    HttpCodes[HttpCodes["NotImplemented"] = 501] = "NotImplemented";
+    HttpCodes[HttpCodes["BadGateway"] = 502] = "BadGateway";
+    HttpCodes[HttpCodes["ServiceUnavailable"] = 503] = "ServiceUnavailable";
+    HttpCodes[HttpCodes["GatewayTimeout"] = 504] = "GatewayTimeout";
+})(HttpCodes = exports.HttpCodes || (exports.HttpCodes = {}));
+var Headers;
+(function (Headers) {
+    Headers["Accept"] = "accept";
+    Headers["ContentType"] = "content-type";
+})(Headers = exports.Headers || (exports.Headers = {}));
+var MediaTypes;
+(function (MediaTypes) {
+    MediaTypes["ApplicationJson"] = "application/json";
+})(MediaTypes = exports.MediaTypes || (exports.MediaTypes = {}));
+/**
+ * Returns the proxy URL, depending upon the supplied url and proxy environment variables.
+ * @param serverUrl  The server URL where the request will be sent. For example, https://api.github.com
+ */
+function getProxyUrl(serverUrl) {
+    let proxyUrl = pm.getProxyUrl(url.parse(serverUrl));
+    return proxyUrl ? proxyUrl.href : '';
+}
+exports.getProxyUrl = getProxyUrl;
+const HttpRedirectCodes = [
+    HttpCodes.MovedPermanently,
+    HttpCodes.ResourceMoved,
+    HttpCodes.SeeOther,
+    HttpCodes.TemporaryRedirect,
+    HttpCodes.PermanentRedirect
+];
+const HttpResponseRetryCodes = [
+    HttpCodes.BadGateway,
+    HttpCodes.ServiceUnavailable,
+    HttpCodes.GatewayTimeout
+];
+const RetryableHttpVerbs = ['OPTIONS', 'GET', 'DELETE', 'HEAD'];
+const ExponentialBackoffCeiling = 10;
+const ExponentialBackoffTimeSlice = 5;
+class HttpClientResponse {
+    constructor(message) {
+        this.message = message;
+    }
+    readBody() {
+        return new Promise(async (resolve, reject) => {
+            let output = Buffer.alloc(0);
+            this.message.on('data', (chunk) => {
+                output = Buffer.concat([output, chunk]);
+            });
+            this.message.on('end', () => {
+                resolve(output.toString());
+            });
+        });
+    }
+}
+exports.HttpClientResponse = HttpClientResponse;
+function isHttps(requestUrl) {
+    let parsedUrl = url.parse(requestUrl);
+    return parsedUrl.protocol === 'https:';
+}
+exports.isHttps = isHttps;
+class HttpClient {
+    constructor(userAgent, handlers, requestOptions) {
+        this._ignoreSslError = false;
+        this._allowRedirects = true;
+        this._allowRedirectDowngrade = false;
+        this._maxRedirects = 50;
+        this._allowRetries = false;
+        this._maxRetries = 1;
+        this._keepAlive = false;
+        this._disposed = false;
+        this.userAgent = userAgent;
+        this.handlers = handlers || [];
+        this.requestOptions = requestOptions;
+        if (requestOptions) {
+            if (requestOptions.ignoreSslError != null) {
+                this._ignoreSslError = requestOptions.ignoreSslError;
+            }
+            this._socketTimeout = requestOptions.socketTimeout;
+            if (requestOptions.allowRedirects != null) {
+                this._allowRedirects = requestOptions.allowRedirects;
+            }
+            if (requestOptions.allowRedirectDowngrade != null) {
+                this._allowRedirectDowngrade = requestOptions.allowRedirectDowngrade;
+            }
+            if (requestOptions.maxRedirects != null) {
+                this._maxRedirects = Math.max(requestOptions.maxRedirects, 0);
+            }
+            if (requestOptions.keepAlive != null) {
+                this._keepAlive = requestOptions.keepAlive;
+            }
+            if (requestOptions.allowRetries != null) {
+                this._allowRetries = requestOptions.allowRetries;
+            }
+            if (requestOptions.maxRetries != null) {
+                this._maxRetries = requestOptions.maxRetries;
+            }
+        }
+    }
+    options(requestUrl, additionalHeaders) {
+        return this.request('OPTIONS', requestUrl, null, additionalHeaders || {});
+    }
+    get(requestUrl, additionalHeaders) {
+        return this.request('GET', requestUrl, null, additionalHeaders || {});
+    }
+    del(requestUrl, additionalHeaders) {
+        return this.request('DELETE', requestUrl, null, additionalHeaders || {});
+    }
+    post(requestUrl, data, additionalHeaders) {
+        return this.request('POST', requestUrl, data, additionalHeaders || {});
+    }
+    patch(requestUrl, data, additionalHeaders) {
+        return this.request('PATCH', requestUrl, data, additionalHeaders || {});
+    }
+    put(requestUrl, data, additionalHeaders) {
+        return this.request('PUT', requestUrl, data, additionalHeaders || {});
+    }
+    head(requestUrl, additionalHeaders) {
+        return this.request('HEAD', requestUrl, null, additionalHeaders || {});
+    }
+    sendStream(verb, requestUrl, stream, additionalHeaders) {
+        return this.request(verb, requestUrl, stream, additionalHeaders);
+    }
+    /**
+     * Gets a typed object from an endpoint
+     * Be aware that not found returns a null.  Other errors (4xx, 5xx) reject the promise
+     */
+    async getJson(requestUrl, additionalHeaders = {}) {
+        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+        let res = await this.get(requestUrl, additionalHeaders);
+        return this._processResponse(res, this.requestOptions);
+    }
+    async postJson(requestUrl, obj, additionalHeaders = {}) {
+        let data = JSON.stringify(obj, null, 2);
+        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+        let res = await this.post(requestUrl, data, additionalHeaders);
+        return this._processResponse(res, this.requestOptions);
+    }
+    async putJson(requestUrl, obj, additionalHeaders = {}) {
+        let data = JSON.stringify(obj, null, 2);
+        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+        let res = await this.put(requestUrl, data, additionalHeaders);
+        return this._processResponse(res, this.requestOptions);
+    }
+    async patchJson(requestUrl, obj, additionalHeaders = {}) {
+        let data = JSON.stringify(obj, null, 2);
+        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+        let res = await this.patch(requestUrl, data, additionalHeaders);
+        return this._processResponse(res, this.requestOptions);
+    }
+    /**
+     * Makes a raw http request.
+     * All other methods such as get, post, patch, and request ultimately call this.
+     * Prefer get, del, post and patch
+     */
+    async request(verb, requestUrl, data, headers) {
+        if (this._disposed) {
+            throw new Error('Client has already been disposed.');
+        }
+        let parsedUrl = url.parse(requestUrl);
+        let info = this._prepareRequest(verb, parsedUrl, headers);
+        // Only perform retries on reads since writes may not be idempotent.
+        let maxTries = this._allowRetries && RetryableHttpVerbs.indexOf(verb) != -1
+            ? this._maxRetries + 1
+            : 1;
+        let numTries = 0;
+        let response;
+        while (numTries < maxTries) {
+            response = await this.requestRaw(info, data);
+            // Check if it's an authentication challenge
+            if (response &&
+                response.message &&
+                response.message.statusCode === HttpCodes.Unauthorized) {
+                let authenticationHandler;
+                for (let i = 0; i < this.handlers.length; i++) {
+                    if (this.handlers[i].canHandleAuthentication(response)) {
+                        authenticationHandler = this.handlers[i];
+                        break;
+                    }
+                }
+                if (authenticationHandler) {
+                    return authenticationHandler.handleAuthentication(this, info, data);
+                }
+                else {
+                    // We have received an unauthorized response but have no handlers to handle it.
+                    // Let the response return to the caller.
+                    return response;
+                }
+            }
+            let redirectsRemaining = this._maxRedirects;
+            while (HttpRedirectCodes.indexOf(response.message.statusCode) != -1 &&
+                this._allowRedirects &&
+                redirectsRemaining > 0) {
+                const redirectUrl = response.message.headers['location'];
+                if (!redirectUrl) {
+                    // if there's no location to redirect to, we won't
+                    break;
+                }
+                let parsedRedirectUrl = url.parse(redirectUrl);
+                if (parsedUrl.protocol == 'https:' &&
+                    parsedUrl.protocol != parsedRedirectUrl.protocol &&
+                    !this._allowRedirectDowngrade) {
+                    throw new Error('Redirect from HTTPS to HTTP protocol. This downgrade is not allowed for security reasons. If you want to allow this behavior, set the allowRedirectDowngrade option to true.');
+                }
+                // we need to finish reading the response before reassigning response
+                // which will leak the open socket.
+                await response.readBody();
+                // strip authorization header if redirected to a different hostname
+                if (parsedRedirectUrl.hostname !== parsedUrl.hostname) {
+                    for (let header in headers) {
+                        // header names are case insensitive
+                        if (header.toLowerCase() === 'authorization') {
+                            delete headers[header];
+                        }
+                    }
+                }
+                // let's make the request with the new redirectUrl
+                info = this._prepareRequest(verb, parsedRedirectUrl, headers);
+                response = await this.requestRaw(info, data);
+                redirectsRemaining--;
+            }
+            if (HttpResponseRetryCodes.indexOf(response.message.statusCode) == -1) {
+                // If not a retry code, return immediately instead of retrying
+                return response;
+            }
+            numTries += 1;
+            if (numTries < maxTries) {
+                await response.readBody();
+                await this._performExponentialBackoff(numTries);
+            }
+        }
+        return response;
+    }
+    /**
+     * Needs to be called if keepAlive is set to true in request options.
+     */
+    dispose() {
+        if (this._agent) {
+            this._agent.destroy();
+        }
+        this._disposed = true;
+    }
+    /**
+     * Raw request.
+     * @param info
+     * @param data
+     */
+    requestRaw(info, data) {
+        return new Promise((resolve, reject) => {
+            let callbackForResult = function (err, res) {
+                if (err) {
+                    reject(err);
+                }
+                resolve(res);
+            };
+            this.requestRawWithCallback(info, data, callbackForResult);
+        });
+    }
+    /**
+     * Raw request with callback.
+     * @param info
+     * @param data
+     * @param onResult
+     */
+    requestRawWithCallback(info, data, onResult) {
+        let socket;
+        if (typeof data === 'string') {
+            info.options.headers['Content-Length'] = Buffer.byteLength(data, 'utf8');
+        }
+        let callbackCalled = false;
+        let handleResult = (err, res) => {
+            if (!callbackCalled) {
+                callbackCalled = true;
+                onResult(err, res);
+            }
+        };
+        let req = info.httpModule.request(info.options, (msg) => {
+            let res = new HttpClientResponse(msg);
+            handleResult(null, res);
+        });
+        req.on('socket', sock => {
+            socket = sock;
+        });
+        // If we ever get disconnected, we want the socket to timeout eventually
+        req.setTimeout(this._socketTimeout || 3 * 60000, () => {
+            if (socket) {
+                socket.end();
+            }
+            handleResult(new Error('Request timeout: ' + info.options.path), null);
+        });
+        req.on('error', function (err) {
+            // err has statusCode property
+            // res should have headers
+            handleResult(err, null);
+        });
+        if (data && typeof data === 'string') {
+            req.write(data, 'utf8');
+        }
+        if (data && typeof data !== 'string') {
+            data.on('close', function () {
+                req.end();
+            });
+            data.pipe(req);
+        }
+        else {
+            req.end();
+        }
+    }
+    /**
+     * Gets an http agent. This function is useful when you need an http agent that handles
+     * routing through a proxy server - depending upon the url and proxy environment variables.
+     * @param serverUrl  The server URL where the request will be sent. For example, https://api.github.com
+     */
+    getAgent(serverUrl) {
+        let parsedUrl = url.parse(serverUrl);
+        return this._getAgent(parsedUrl);
+    }
+    _prepareRequest(method, requestUrl, headers) {
+        const info = {};
+        info.parsedUrl = requestUrl;
+        const usingSsl = info.parsedUrl.protocol === 'https:';
+        info.httpModule = usingSsl ? https : http;
+        const defaultPort = usingSsl ? 443 : 80;
+        info.options = {};
+        info.options.host = info.parsedUrl.hostname;
+        info.options.port = info.parsedUrl.port
+            ? parseInt(info.parsedUrl.port)
+            : defaultPort;
+        info.options.path =
+            (info.parsedUrl.pathname || '') + (info.parsedUrl.search || '');
+        info.options.method = method;
+        info.options.headers = this._mergeHeaders(headers);
+        if (this.userAgent != null) {
+            info.options.headers['user-agent'] = this.userAgent;
+        }
+        info.options.agent = this._getAgent(info.parsedUrl);
+        // gives handlers an opportunity to participate
+        if (this.handlers) {
+            this.handlers.forEach(handler => {
+                handler.prepareRequest(info.options);
+            });
+        }
+        return info;
+    }
+    _mergeHeaders(headers) {
+        const lowercaseKeys = obj => Object.keys(obj).reduce((c, k) => ((c[k.toLowerCase()] = obj[k]), c), {});
+        if (this.requestOptions && this.requestOptions.headers) {
+            return Object.assign({}, lowercaseKeys(this.requestOptions.headers), lowercaseKeys(headers));
+        }
+        return lowercaseKeys(headers || {});
+    }
+    _getExistingOrDefaultHeader(additionalHeaders, header, _default) {
+        const lowercaseKeys = obj => Object.keys(obj).reduce((c, k) => ((c[k.toLowerCase()] = obj[k]), c), {});
+        let clientHeader;
+        if (this.requestOptions && this.requestOptions.headers) {
+            clientHeader = lowercaseKeys(this.requestOptions.headers)[header];
+        }
+        return additionalHeaders[header] || clientHeader || _default;
+    }
+    _getAgent(parsedUrl) {
+        let agent;
+        let proxyUrl = pm.getProxyUrl(parsedUrl);
+        let useProxy = proxyUrl && proxyUrl.hostname;
+        if (this._keepAlive && useProxy) {
+            agent = this._proxyAgent;
+        }
+        if (this._keepAlive && !useProxy) {
+            agent = this._agent;
+        }
+        // if agent is already assigned use that agent.
+        if (!!agent) {
+            return agent;
+        }
+        const usingSsl = parsedUrl.protocol === 'https:';
+        let maxSockets = 100;
+        if (!!this.requestOptions) {
+            maxSockets = this.requestOptions.maxSockets || http.globalAgent.maxSockets;
+        }
+        if (useProxy) {
+            // If using proxy, need tunnel
+            if (!tunnel) {
+                tunnel = __webpack_require__(5211);
+            }
+            const agentOptions = {
+                maxSockets: maxSockets,
+                keepAlive: this._keepAlive,
+                proxy: {
+                    proxyAuth: proxyUrl.auth,
+                    host: proxyUrl.hostname,
+                    port: proxyUrl.port
+                }
+            };
+            let tunnelAgent;
+            const overHttps = proxyUrl.protocol === 'https:';
+            if (usingSsl) {
+                tunnelAgent = overHttps ? tunnel.httpsOverHttps : tunnel.httpsOverHttp;
+            }
+            else {
+                tunnelAgent = overHttps ? tunnel.httpOverHttps : tunnel.httpOverHttp;
+            }
+            agent = tunnelAgent(agentOptions);
+            this._proxyAgent = agent;
+        }
+        // if reusing agent across request and tunneling agent isn't assigned create a new agent
+        if (this._keepAlive && !agent) {
+            const options = { keepAlive: this._keepAlive, maxSockets: maxSockets };
+            agent = usingSsl ? new https.Agent(options) : new http.Agent(options);
+            this._agent = agent;
+        }
+        // if not using private agent and tunnel agent isn't setup then use global agent
+        if (!agent) {
+            agent = usingSsl ? https.globalAgent : http.globalAgent;
+        }
+        if (usingSsl && this._ignoreSslError) {
+            // we don't want to set NODE_TLS_REJECT_UNAUTHORIZED=0 since that will affect request for entire process
+            // http.RequestOptions doesn't expose a way to modify RequestOptions.agent.options
+            // we have to cast it to any and change it directly
+            agent.options = Object.assign(agent.options || {}, {
+                rejectUnauthorized: false
+            });
+        }
+        return agent;
+    }
+    _performExponentialBackoff(retryNumber) {
+        retryNumber = Math.min(ExponentialBackoffCeiling, retryNumber);
+        const ms = ExponentialBackoffTimeSlice * Math.pow(2, retryNumber);
+        return new Promise(resolve => setTimeout(() => resolve(), ms));
+    }
+    static dateTimeDeserializer(key, value) {
+        if (typeof value === 'string') {
+            let a = new Date(value);
+            if (!isNaN(a.valueOf())) {
+                return a;
+            }
+        }
+        return value;
+    }
+    async _processResponse(res, options) {
+        return new Promise(async (resolve, reject) => {
+            const statusCode = res.message.statusCode;
+            const response = {
+                statusCode: statusCode,
+                result: null,
+                headers: {}
+            };
+            // not found leads to null obj returned
+            if (statusCode == HttpCodes.NotFound) {
+                resolve(response);
+            }
+            let obj;
+            let contents;
+            // get the result from the body
+            try {
+                contents = await res.readBody();
+                if (contents && contents.length > 0) {
+                    if (options && options.deserializeDates) {
+                        obj = JSON.parse(contents, HttpClient.dateTimeDeserializer);
+                    }
+                    else {
+                        obj = JSON.parse(contents);
+                    }
+                    response.result = obj;
+                }
+                response.headers = res.message.headers;
+            }
+            catch (err) {
+                // Invalid resource (contents not json);  leaving result obj null
+            }
+            // note that 3xx redirects are handled by the http layer.
+            if (statusCode > 299) {
+                let msg;
+                // if exception/error in body, attempt to get better error
+                if (obj && obj.message) {
+                    msg = obj.message;
+                }
+                else if (contents && contents.length > 0) {
+                    // it may be the case that the exception is in the body message as string
+                    msg = contents;
+                }
+                else {
+                    msg = 'Failed request: (' + statusCode + ')';
+                }
+                let err = new Error(msg);
+                // attach statusCode and body obj (if available) to the error object
+                err['statusCode'] = statusCode;
+                if (response.result) {
+                    err['result'] = response.result;
+                }
+                reject(err);
+            }
+            else {
+                resolve(response);
+            }
+        });
+    }
+}
+exports.HttpClient = HttpClient;
+
+
+/***/ }),
+
+/***/ 7999:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const url = __webpack_require__(8835);
+function getProxyUrl(reqUrl) {
+    let usingSsl = reqUrl.protocol === 'https:';
+    let proxyUrl;
+    if (checkBypass(reqUrl)) {
+        return proxyUrl;
+    }
+    let proxyVar;
+    if (usingSsl) {
+        proxyVar = process.env['https_proxy'] || process.env['HTTPS_PROXY'];
+    }
+    else {
+        proxyVar = process.env['http_proxy'] || process.env['HTTP_PROXY'];
+    }
+    if (proxyVar) {
+        proxyUrl = url.parse(proxyVar);
+    }
+    return proxyUrl;
+}
+exports.getProxyUrl = getProxyUrl;
+function checkBypass(reqUrl) {
+    if (!reqUrl.hostname) {
+        return false;
+    }
+    let noProxy = process.env['no_proxy'] || process.env['NO_PROXY'] || '';
+    if (!noProxy) {
+        return false;
+    }
+    // Determine the request port
+    let reqPort;
+    if (reqUrl.port) {
+        reqPort = Number(reqUrl.port);
+    }
+    else if (reqUrl.protocol === 'http:') {
+        reqPort = 80;
+    }
+    else if (reqUrl.protocol === 'https:') {
+        reqPort = 443;
+    }
+    // Format the request hostname and hostname with port
+    let upperReqHosts = [reqUrl.hostname.toUpperCase()];
+    if (typeof reqPort === 'number') {
+        upperReqHosts.push(`${upperReqHosts[0]}:${reqPort}`);
+    }
+    // Compare request host against noproxy
+    for (let upperNoProxyItem of noProxy
+        .split(',')
+        .map(x => x.trim().toUpperCase())
+        .filter(x => x)) {
+        if (upperReqHosts.some(x => x === upperNoProxyItem)) {
+            return true;
+        }
+    }
+    return false;
+}
+exports.checkBypass = checkBypass;
+
+
+/***/ }),
+
+/***/ 7622:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+async function auth(token) {
+  const tokenType = token.split(/\./).length === 3 ? "app" : /^v\d+\./.test(token) ? "installation" : "oauth";
+  return {
+    type: "token",
+    token: token,
+    tokenType
+  };
+}
+
+/**
+ * Prefix token for usage in the Authorization header
+ *
+ * @param token OAuth token or JSON Web Token
+ */
+function withAuthorizationPrefix(token) {
+  if (token.split(/\./).length === 3) {
+    return `bearer ${token}`;
+  }
+
+  return `token ${token}`;
+}
+
+async function hook(token, request, route, parameters) {
+  const endpoint = request.endpoint.merge(route, parameters);
+  endpoint.headers.authorization = withAuthorizationPrefix(token);
+  return request(endpoint);
+}
+
+const createTokenAuth = function createTokenAuth(token) {
+  if (!token) {
+    throw new Error("[@octokit/auth-token] No token passed to createTokenAuth");
+  }
+
+  if (typeof token !== "string") {
+    throw new Error("[@octokit/auth-token] Token passed to createTokenAuth is not a string");
+  }
+
+  token = token.replace(/^(token|bearer) +/i, "");
+  return Object.assign(auth.bind(null, token), {
+    hook: hook.bind(null, token)
+  });
+};
+
+exports.createTokenAuth = createTokenAuth;
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ 1355:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+var universalUserAgent = __webpack_require__(3567);
+var beforeAfterHook = __webpack_require__(9617);
+var request = __webpack_require__(6956);
+var graphql = __webpack_require__(227);
+var authToken = __webpack_require__(7622);
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+const VERSION = "3.1.2";
+
+class Octokit {
+  constructor(options = {}) {
+    const hook = new beforeAfterHook.Collection();
+    const requestDefaults = {
+      baseUrl: request.request.endpoint.DEFAULTS.baseUrl,
+      headers: {},
+      request: Object.assign({}, options.request, {
+        hook: hook.bind(null, "request")
+      }),
+      mediaType: {
+        previews: [],
+        format: ""
+      }
+    }; // prepend default user agent with `options.userAgent` if set
+
+    requestDefaults.headers["user-agent"] = [options.userAgent, `octokit-core.js/${VERSION} ${universalUserAgent.getUserAgent()}`].filter(Boolean).join(" ");
+
+    if (options.baseUrl) {
+      requestDefaults.baseUrl = options.baseUrl;
+    }
+
+    if (options.previews) {
+      requestDefaults.mediaType.previews = options.previews;
+    }
+
+    if (options.timeZone) {
+      requestDefaults.headers["time-zone"] = options.timeZone;
+    }
+
+    this.request = request.request.defaults(requestDefaults);
+    this.graphql = graphql.withCustomRequest(this.request).defaults(_objectSpread2(_objectSpread2({}, requestDefaults), {}, {
+      baseUrl: requestDefaults.baseUrl.replace(/\/api\/v3$/, "/api")
+    }));
+    this.log = Object.assign({
+      debug: () => {},
+      info: () => {},
+      warn: console.warn.bind(console),
+      error: console.error.bind(console)
+    }, options.log);
+    this.hook = hook; // (1) If neither `options.authStrategy` nor `options.auth` are set, the `octokit` instance
+    //     is unauthenticated. The `this.auth()` method is a no-op and no request hook is registred.
+    // (2) If only `options.auth` is set, use the default token authentication strategy.
+    // (3) If `options.authStrategy` is set then use it and pass in `options.auth`. Always pass own request as many strategies accept a custom request instance.
+    // TODO: type `options.auth` based on `options.authStrategy`.
+
+    if (!options.authStrategy) {
+      if (!options.auth) {
+        // (1)
+        this.auth = async () => ({
+          type: "unauthenticated"
+        });
+      } else {
+        // (2)
+        const auth = authToken.createTokenAuth(options.auth); // @ts-ignore  ¯\_(ツ)_/¯
+
+        hook.wrap("request", auth.hook);
+        this.auth = auth;
+      }
+    } else {
+      const auth = options.authStrategy(Object.assign({
+        request: this.request
+      }, options.auth)); // @ts-ignore  ¯\_(ツ)_/¯
+
+      hook.wrap("request", auth.hook);
+      this.auth = auth;
+    } // apply plugins
+    // https://stackoverflow.com/a/16345172
+
+
+    const classConstructor = this.constructor;
+    classConstructor.plugins.forEach(plugin => {
+      Object.assign(this, plugin(this, options));
+    });
+  }
+
+  static defaults(defaults) {
+    const OctokitWithDefaults = class extends this {
+      constructor(...args) {
+        const options = args[0] || {};
+
+        if (typeof defaults === "function") {
+          super(defaults(options));
+          return;
+        }
+
+        super(Object.assign({}, defaults, options, options.userAgent && defaults.userAgent ? {
+          userAgent: `${options.userAgent} ${defaults.userAgent}`
+        } : null));
+      }
+
+    };
+    return OctokitWithDefaults;
+  }
+  /**
+   * Attach a plugin (or many) to your Octokit instance.
+   *
+   * @example
+   * const API = Octokit.plugin(plugin1, plugin2, plugin3, ...)
+   */
+
+
+  static plugin(...newPlugins) {
+    var _a;
+
+    const currentPlugins = this.plugins;
+    const NewOctokit = (_a = class extends this {}, _a.plugins = currentPlugins.concat(newPlugins.filter(plugin => !currentPlugins.includes(plugin))), _a);
+    return NewOctokit;
+  }
+
+}
+Octokit.VERSION = VERSION;
+Octokit.plugins = [];
+
+exports.Octokit = Octokit;
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ 8069:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+var isPlainObject = __webpack_require__(2829);
+var universalUserAgent = __webpack_require__(3567);
+
+function lowercaseKeys(object) {
+  if (!object) {
+    return {};
+  }
+
+  return Object.keys(object).reduce((newObj, key) => {
+    newObj[key.toLowerCase()] = object[key];
+    return newObj;
+  }, {});
+}
+
+function mergeDeep(defaults, options) {
+  const result = Object.assign({}, defaults);
+  Object.keys(options).forEach(key => {
+    if (isPlainObject.isPlainObject(options[key])) {
+      if (!(key in defaults)) Object.assign(result, {
+        [key]: options[key]
+      });else result[key] = mergeDeep(defaults[key], options[key]);
+    } else {
+      Object.assign(result, {
+        [key]: options[key]
+      });
+    }
+  });
+  return result;
+}
+
+function merge(defaults, route, options) {
+  if (typeof route === "string") {
+    let [method, url] = route.split(" ");
+    options = Object.assign(url ? {
+      method,
+      url
+    } : {
+      url: method
+    }, options);
+  } else {
+    options = Object.assign({}, route);
+  } // lowercase header names before merging with defaults to avoid duplicates
+
+
+  options.headers = lowercaseKeys(options.headers);
+  const mergedOptions = mergeDeep(defaults || {}, options); // mediaType.previews arrays are merged, instead of overwritten
+
+  if (defaults && defaults.mediaType.previews.length) {
+    mergedOptions.mediaType.previews = defaults.mediaType.previews.filter(preview => !mergedOptions.mediaType.previews.includes(preview)).concat(mergedOptions.mediaType.previews);
+  }
+
+  mergedOptions.mediaType.previews = mergedOptions.mediaType.previews.map(preview => preview.replace(/-preview/, ""));
+  return mergedOptions;
+}
+
+function addQueryParameters(url, parameters) {
+  const separator = /\?/.test(url) ? "&" : "?";
+  const names = Object.keys(parameters);
+
+  if (names.length === 0) {
+    return url;
+  }
+
+  return url + separator + names.map(name => {
+    if (name === "q") {
+      return "q=" + parameters.q.split("+").map(encodeURIComponent).join("+");
+    }
+
+    return `${name}=${encodeURIComponent(parameters[name])}`;
+  }).join("&");
+}
+
+const urlVariableRegex = /\{[^}]+\}/g;
+
+function removeNonChars(variableName) {
+  return variableName.replace(/^\W+|\W+$/g, "").split(/,/);
+}
+
+function extractUrlVariableNames(url) {
+  const matches = url.match(urlVariableRegex);
+
+  if (!matches) {
+    return [];
+  }
+
+  return matches.map(removeNonChars).reduce((a, b) => a.concat(b), []);
+}
+
+function omit(object, keysToOmit) {
+  return Object.keys(object).filter(option => !keysToOmit.includes(option)).reduce((obj, key) => {
+    obj[key] = object[key];
+    return obj;
+  }, {});
+}
+
+// Based on https://github.com/bramstein/url-template, licensed under BSD
+// TODO: create separate package.
+//
+// Copyright (c) 2012-2014, Bram Stein
+// All rights reserved.
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+//  1. Redistributions of source code must retain the above copyright
+//     notice, this list of conditions and the following disclaimer.
+//  2. Redistributions in binary form must reproduce the above copyright
+//     notice, this list of conditions and the following disclaimer in the
+//     documentation and/or other materials provided with the distribution.
+//  3. The name of the author may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+// THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
+// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+// EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+// INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+// OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+// EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+/* istanbul ignore file */
+function encodeReserved(str) {
+  return str.split(/(%[0-9A-Fa-f]{2})/g).map(function (part) {
+    if (!/%[0-9A-Fa-f]/.test(part)) {
+      part = encodeURI(part).replace(/%5B/g, "[").replace(/%5D/g, "]");
+    }
+
+    return part;
+  }).join("");
+}
+
+function encodeUnreserved(str) {
+  return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
+    return "%" + c.charCodeAt(0).toString(16).toUpperCase();
+  });
+}
+
+function encodeValue(operator, value, key) {
+  value = operator === "+" || operator === "#" ? encodeReserved(value) : encodeUnreserved(value);
+
+  if (key) {
+    return encodeUnreserved(key) + "=" + value;
+  } else {
+    return value;
+  }
+}
+
+function isDefined(value) {
+  return value !== undefined && value !== null;
+}
+
+function isKeyOperator(operator) {
+  return operator === ";" || operator === "&" || operator === "?";
+}
+
+function getValues(context, operator, key, modifier) {
+  var value = context[key],
+      result = [];
+
+  if (isDefined(value) && value !== "") {
+    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+      value = value.toString();
+
+      if (modifier && modifier !== "*") {
+        value = value.substring(0, parseInt(modifier, 10));
+      }
+
+      result.push(encodeValue(operator, value, isKeyOperator(operator) ? key : ""));
+    } else {
+      if (modifier === "*") {
+        if (Array.isArray(value)) {
+          value.filter(isDefined).forEach(function (value) {
+            result.push(encodeValue(operator, value, isKeyOperator(operator) ? key : ""));
+          });
+        } else {
+          Object.keys(value).forEach(function (k) {
+            if (isDefined(value[k])) {
+              result.push(encodeValue(operator, value[k], k));
+            }
+          });
+        }
+      } else {
+        const tmp = [];
+
+        if (Array.isArray(value)) {
+          value.filter(isDefined).forEach(function (value) {
+            tmp.push(encodeValue(operator, value));
+          });
+        } else {
+          Object.keys(value).forEach(function (k) {
+            if (isDefined(value[k])) {
+              tmp.push(encodeUnreserved(k));
+              tmp.push(encodeValue(operator, value[k].toString()));
+            }
+          });
+        }
+
+        if (isKeyOperator(operator)) {
+          result.push(encodeUnreserved(key) + "=" + tmp.join(","));
+        } else if (tmp.length !== 0) {
+          result.push(tmp.join(","));
+        }
+      }
+    }
+  } else {
+    if (operator === ";") {
+      if (isDefined(value)) {
+        result.push(encodeUnreserved(key));
+      }
+    } else if (value === "" && (operator === "&" || operator === "?")) {
+      result.push(encodeUnreserved(key) + "=");
+    } else if (value === "") {
+      result.push("");
+    }
+  }
+
+  return result;
+}
+
+function parseUrl(template) {
+  return {
+    expand: expand.bind(null, template)
+  };
+}
+
+function expand(template, context) {
+  var operators = ["+", "#", ".", "/", ";", "?", "&"];
+  return template.replace(/\{([^\{\}]+)\}|([^\{\}]+)/g, function (_, expression, literal) {
+    if (expression) {
+      let operator = "";
+      const values = [];
+
+      if (operators.indexOf(expression.charAt(0)) !== -1) {
+        operator = expression.charAt(0);
+        expression = expression.substr(1);
+      }
+
+      expression.split(/,/g).forEach(function (variable) {
+        var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
+        values.push(getValues(context, operator, tmp[1], tmp[2] || tmp[3]));
+      });
+
+      if (operator && operator !== "+") {
+        var separator = ",";
+
+        if (operator === "?") {
+          separator = "&";
+        } else if (operator !== "#") {
+          separator = operator;
+        }
+
+        return (values.length !== 0 ? operator : "") + values.join(separator);
+      } else {
+        return values.join(",");
+      }
+    } else {
+      return encodeReserved(literal);
+    }
+  });
+}
+
+function parse(options) {
+  // https://fetch.spec.whatwg.org/#methods
+  let method = options.method.toUpperCase(); // replace :varname with {varname} to make it RFC 6570 compatible
+
+  let url = (options.url || "/").replace(/:([a-z]\w+)/g, "{+$1}");
+  let headers = Object.assign({}, options.headers);
+  let body;
+  let parameters = omit(options, ["method", "baseUrl", "url", "headers", "request", "mediaType"]); // extract variable names from URL to calculate remaining variables later
+
+  const urlVariableNames = extractUrlVariableNames(url);
+  url = parseUrl(url).expand(parameters);
+
+  if (!/^http/.test(url)) {
+    url = options.baseUrl + url;
+  }
+
+  const omittedParameters = Object.keys(options).filter(option => urlVariableNames.includes(option)).concat("baseUrl");
+  const remainingParameters = omit(parameters, omittedParameters);
+  const isBinaryRequest = /application\/octet-stream/i.test(headers.accept);
+
+  if (!isBinaryRequest) {
+    if (options.mediaType.format) {
+      // e.g. application/vnd.github.v3+json => application/vnd.github.v3.raw
+      headers.accept = headers.accept.split(/,/).map(preview => preview.replace(/application\/vnd(\.\w+)(\.v3)?(\.\w+)?(\+json)?$/, `application/vnd$1$2.${options.mediaType.format}`)).join(",");
+    }
+
+    if (options.mediaType.previews.length) {
+      const previewsFromAcceptHeader = headers.accept.match(/[\w-]+(?=-preview)/g) || [];
+      headers.accept = previewsFromAcceptHeader.concat(options.mediaType.previews).map(preview => {
+        const format = options.mediaType.format ? `.${options.mediaType.format}` : "+json";
+        return `application/vnd.github.${preview}-preview${format}`;
+      }).join(",");
+    }
+  } // for GET/HEAD requests, set URL query parameters from remaining parameters
+  // for PATCH/POST/PUT/DELETE requests, set request body from remaining parameters
+
+
+  if (["GET", "HEAD"].includes(method)) {
+    url = addQueryParameters(url, remainingParameters);
+  } else {
+    if ("data" in remainingParameters) {
+      body = remainingParameters.data;
+    } else {
+      if (Object.keys(remainingParameters).length) {
+        body = remainingParameters;
+      } else {
+        headers["content-length"] = 0;
+      }
+    }
+  } // default content-type for JSON if body is set
+
+
+  if (!headers["content-type"] && typeof body !== "undefined") {
+    headers["content-type"] = "application/json; charset=utf-8";
+  } // GitHub expects 'content-length: 0' header for PUT/PATCH requests without body.
+  // fetch does not allow to set `content-length` header, but we can set body to an empty string
+
+
+  if (["PATCH", "PUT"].includes(method) && typeof body === "undefined") {
+    body = "";
+  } // Only return body/request keys if present
+
+
+  return Object.assign({
+    method,
+    url,
+    headers
+  }, typeof body !== "undefined" ? {
+    body
+  } : null, options.request ? {
+    request: options.request
+  } : null);
+}
+
+function endpointWithDefaults(defaults, route, options) {
+  return parse(merge(defaults, route, options));
+}
+
+function withDefaults(oldDefaults, newDefaults) {
+  const DEFAULTS = merge(oldDefaults, newDefaults);
+  const endpoint = endpointWithDefaults.bind(null, DEFAULTS);
+  return Object.assign(endpoint, {
+    DEFAULTS,
+    defaults: withDefaults.bind(null, DEFAULTS),
+    merge: merge.bind(null, DEFAULTS),
+    parse
+  });
+}
+
+const VERSION = "6.0.6";
+
+const userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`; // DEFAULTS has all properties set that EndpointOptions has, except url.
+// So we use RequestParameters and add method as additional required property.
+
+const DEFAULTS = {
+  method: "GET",
+  baseUrl: "https://api.github.com",
+  headers: {
+    accept: "application/vnd.github.v3+json",
+    "user-agent": userAgent
+  },
+  mediaType: {
+    format: "",
+    previews: []
+  }
+};
+
+const endpoint = withDefaults(null, DEFAULTS);
+
+exports.endpoint = endpoint;
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ 227:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+var request = __webpack_require__(6956);
+var universalUserAgent = __webpack_require__(3567);
+
+const VERSION = "4.5.6";
+
+class GraphqlError extends Error {
+  constructor(request, response) {
+    const message = response.data.errors[0].message;
+    super(message);
+    Object.assign(this, response.data);
+    Object.assign(this, {
+      headers: response.headers
+    });
+    this.name = "GraphqlError";
+    this.request = request; // Maintains proper stack trace (only available on V8)
+
+    /* istanbul ignore next */
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor);
+    }
+  }
+
+}
+
+const NON_VARIABLE_OPTIONS = ["method", "baseUrl", "url", "headers", "request", "query", "mediaType"];
+const GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
+function graphql(request, query, options) {
+  if (typeof query === "string" && options && "query" in options) {
+    return Promise.reject(new Error(`[@octokit/graphql] "query" cannot be used as variable name`));
+  }
+
+  const parsedOptions = typeof query === "string" ? Object.assign({
+    query
+  }, options) : query;
+  const requestOptions = Object.keys(parsedOptions).reduce((result, key) => {
+    if (NON_VARIABLE_OPTIONS.includes(key)) {
+      result[key] = parsedOptions[key];
+      return result;
+    }
+
+    if (!result.variables) {
+      result.variables = {};
+    }
+
+    result.variables[key] = parsedOptions[key];
+    return result;
+  }, {}); // workaround for GitHub Enterprise baseUrl set with /api/v3 suffix
+  // https://github.com/octokit/auth-app.js/issues/111#issuecomment-657610451
+
+  const baseUrl = parsedOptions.baseUrl || request.endpoint.DEFAULTS.baseUrl;
+
+  if (GHES_V3_SUFFIX_REGEX.test(baseUrl)) {
+    requestOptions.url = baseUrl.replace(GHES_V3_SUFFIX_REGEX, "/api/graphql");
+  }
+
+  return request(requestOptions).then(response => {
+    if (response.data.errors) {
+      const headers = {};
+
+      for (const key of Object.keys(response.headers)) {
+        headers[key] = response.headers[key];
+      }
+
+      throw new GraphqlError(requestOptions, {
+        headers,
+        data: response.data
+      });
+    }
+
+    return response.data.data;
+  });
+}
+
+function withDefaults(request$1, newDefaults) {
+  const newRequest = request$1.defaults(newDefaults);
+
+  const newApi = (query, options) => {
+    return graphql(newRequest, query, options);
+  };
+
+  return Object.assign(newApi, {
+    defaults: withDefaults.bind(null, newRequest),
+    endpoint: request.request.endpoint
+  });
+}
+
+const graphql$1 = withDefaults(request.request, {
+  headers: {
+    "user-agent": `octokit-graphql.js/${VERSION} ${universalUserAgent.getUserAgent()}`
+  },
+  method: "POST",
+  url: "/graphql"
+});
+function withCustomRequest(customRequest) {
+  return withDefaults(customRequest, {
+    method: "POST",
+    url: "/graphql"
+  });
+}
+
+exports.graphql = graphql$1;
+exports.withCustomRequest = withCustomRequest;
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ 1762:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+const VERSION = "2.4.0";
+
+/**
+ * Some “list” response that can be paginated have a different response structure
+ *
+ * They have a `total_count` key in the response (search also has `incomplete_results`,
+ * /installation/repositories also has `repository_selection`), as well as a key with
+ * the list of the items which name varies from endpoint to endpoint.
+ *
+ * Octokit normalizes these responses so that paginated results are always returned following
+ * the same structure. One challenge is that if the list response has only one page, no Link
+ * header is provided, so this header alone is not sufficient to check wether a response is
+ * paginated or not.
+ *
+ * We check if a "total_count" key is present in the response data, but also make sure that
+ * a "url" property is not, as the "Get the combined status for a specific ref" endpoint would
+ * otherwise match: https://developer.github.com/v3/repos/statuses/#get-the-combined-status-for-a-specific-ref
+ */
+function normalizePaginatedListResponse(response) {
+  const responseNeedsNormalization = "total_count" in response.data && !("url" in response.data);
+  if (!responseNeedsNormalization) return response; // keep the additional properties intact as there is currently no other way
+  // to retrieve the same information.
+
+  const incompleteResults = response.data.incomplete_results;
+  const repositorySelection = response.data.repository_selection;
+  const totalCount = response.data.total_count;
+  delete response.data.incomplete_results;
+  delete response.data.repository_selection;
+  delete response.data.total_count;
+  const namespaceKey = Object.keys(response.data)[0];
+  const data = response.data[namespaceKey];
+  response.data = data;
+
+  if (typeof incompleteResults !== "undefined") {
+    response.data.incomplete_results = incompleteResults;
+  }
+
+  if (typeof repositorySelection !== "undefined") {
+    response.data.repository_selection = repositorySelection;
+  }
+
+  response.data.total_count = totalCount;
+  return response;
+}
+
+function iterator(octokit, route, parameters) {
+  const options = typeof route === "function" ? route.endpoint(parameters) : octokit.request.endpoint(route, parameters);
+  const requestMethod = typeof route === "function" ? route : octokit.request;
+  const method = options.method;
+  const headers = options.headers;
+  let url = options.url;
+  return {
+    [Symbol.asyncIterator]: () => ({
+      next() {
+        if (!url) {
+          return Promise.resolve({
+            done: true
+          });
+        }
+
+        return requestMethod({
+          method,
+          url,
+          headers
+        }).then(normalizePaginatedListResponse).then(response => {
+          // `response.headers.link` format:
+          // '<https://api.github.com/users/aseemk/followers?page=2>; rel="next", <https://api.github.com/users/aseemk/followers?page=2>; rel="last"'
+          // sets `url` to undefined if "next" URL is not present or `link` header is not set
+          url = ((response.headers.link || "").match(/<([^>]+)>;\s*rel="next"/) || [])[1];
+          return {
+            value: response
+          };
+        });
+      }
+
+    })
+  };
+}
+
+function paginate(octokit, route, parameters, mapFn) {
+  if (typeof parameters === "function") {
+    mapFn = parameters;
+    parameters = undefined;
+  }
+
+  return gather(octokit, [], iterator(octokit, route, parameters)[Symbol.asyncIterator](), mapFn);
+}
+
+function gather(octokit, results, iterator, mapFn) {
+  return iterator.next().then(result => {
+    if (result.done) {
+      return results;
+    }
+
+    let earlyExit = false;
+
+    function done() {
+      earlyExit = true;
+    }
+
+    results = results.concat(mapFn ? mapFn(result.value, done) : result.value.data);
+
+    if (earlyExit) {
+      return results;
+    }
+
+    return gather(octokit, results, iterator, mapFn);
+  });
+}
+
+/**
+ * @param octokit Octokit instance
+ * @param options Options passed to Octokit constructor
+ */
+
+function paginateRest(octokit) {
+  return {
+    paginate: Object.assign(paginate.bind(null, octokit), {
+      iterator: iterator.bind(null, octokit)
+    })
+  };
+}
+paginateRest.VERSION = VERSION;
+
+exports.paginateRest = paginateRest;
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ 66:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+const Endpoints = {
+  actions: {
+    addSelectedRepoToOrgSecret: ["PUT /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"],
+    cancelWorkflowRun: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/cancel"],
+    createOrUpdateOrgSecret: ["PUT /orgs/{org}/actions/secrets/{secret_name}"],
+    createOrUpdateRepoSecret: ["PUT /repos/{owner}/{repo}/actions/secrets/{secret_name}"],
+    createRegistrationTokenForOrg: ["POST /orgs/{org}/actions/runners/registration-token"],
+    createRegistrationTokenForRepo: ["POST /repos/{owner}/{repo}/actions/runners/registration-token"],
+    createRemoveTokenForOrg: ["POST /orgs/{org}/actions/runners/remove-token"],
+    createRemoveTokenForRepo: ["POST /repos/{owner}/{repo}/actions/runners/remove-token"],
+    createWorkflowDispatch: ["POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches"],
+    deleteArtifact: ["DELETE /repos/{owner}/{repo}/actions/artifacts/{artifact_id}"],
+    deleteOrgSecret: ["DELETE /orgs/{org}/actions/secrets/{secret_name}"],
+    deleteRepoSecret: ["DELETE /repos/{owner}/{repo}/actions/secrets/{secret_name}"],
+    deleteSelfHostedRunnerFromOrg: ["DELETE /orgs/{org}/actions/runners/{runner_id}"],
+    deleteSelfHostedRunnerFromRepo: ["DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}"],
+    deleteWorkflowRun: ["DELETE /repos/{owner}/{repo}/actions/runs/{run_id}"],
+    deleteWorkflowRunLogs: ["DELETE /repos/{owner}/{repo}/actions/runs/{run_id}/logs"],
+    downloadArtifact: ["GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}"],
+    downloadJobLogsForWorkflowRun: ["GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs"],
+    downloadWorkflowRunLogs: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/logs"],
+    getArtifact: ["GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}"],
+    getJobForWorkflowRun: ["GET /repos/{owner}/{repo}/actions/jobs/{job_id}"],
+    getOrgPublicKey: ["GET /orgs/{org}/actions/secrets/public-key"],
+    getOrgSecret: ["GET /orgs/{org}/actions/secrets/{secret_name}"],
+    getRepoPublicKey: ["GET /repos/{owner}/{repo}/actions/secrets/public-key"],
+    getRepoSecret: ["GET /repos/{owner}/{repo}/actions/secrets/{secret_name}"],
+    getSelfHostedRunnerForOrg: ["GET /orgs/{org}/actions/runners/{runner_id}"],
+    getSelfHostedRunnerForRepo: ["GET /repos/{owner}/{repo}/actions/runners/{runner_id}"],
+    getWorkflow: ["GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}"],
+    getWorkflowRun: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}"],
+    getWorkflowRunUsage: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/timing"],
+    getWorkflowUsage: ["GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing"],
+    listArtifactsForRepo: ["GET /repos/{owner}/{repo}/actions/artifacts"],
+    listJobsForWorkflowRun: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs"],
+    listOrgSecrets: ["GET /orgs/{org}/actions/secrets"],
+    listRepoSecrets: ["GET /repos/{owner}/{repo}/actions/secrets"],
+    listRepoWorkflows: ["GET /repos/{owner}/{repo}/actions/workflows"],
+    listRunnerApplicationsForOrg: ["GET /orgs/{org}/actions/runners/downloads"],
+    listRunnerApplicationsForRepo: ["GET /repos/{owner}/{repo}/actions/runners/downloads"],
+    listSelectedReposForOrgSecret: ["GET /orgs/{org}/actions/secrets/{secret_name}/repositories"],
+    listSelfHostedRunnersForOrg: ["GET /orgs/{org}/actions/runners"],
+    listSelfHostedRunnersForRepo: ["GET /repos/{owner}/{repo}/actions/runners"],
+    listWorkflowRunArtifacts: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts"],
+    listWorkflowRuns: ["GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs"],
+    listWorkflowRunsForRepo: ["GET /repos/{owner}/{repo}/actions/runs"],
+    reRunWorkflow: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun"],
+    removeSelectedRepoFromOrgSecret: ["DELETE /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"],
+    setSelectedReposForOrgSecret: ["PUT /orgs/{org}/actions/secrets/{secret_name}/repositories"]
+  },
+  activity: {
+    checkRepoIsStarredByAuthenticatedUser: ["GET /user/starred/{owner}/{repo}"],
+    deleteRepoSubscription: ["DELETE /repos/{owner}/{repo}/subscription"],
+    deleteThreadSubscription: ["DELETE /notifications/threads/{thread_id}/subscription"],
+    getFeeds: ["GET /feeds"],
+    getRepoSubscription: ["GET /repos/{owner}/{repo}/subscription"],
+    getThread: ["GET /notifications/threads/{thread_id}"],
+    getThreadSubscriptionForAuthenticatedUser: ["GET /notifications/threads/{thread_id}/subscription"],
+    listEventsForAuthenticatedUser: ["GET /users/{username}/events"],
+    listNotificationsForAuthenticatedUser: ["GET /notifications"],
+    listOrgEventsForAuthenticatedUser: ["GET /users/{username}/events/orgs/{org}"],
+    listPublicEvents: ["GET /events"],
+    listPublicEventsForRepoNetwork: ["GET /networks/{owner}/{repo}/events"],
+    listPublicEventsForUser: ["GET /users/{username}/events/public"],
+    listPublicOrgEvents: ["GET /orgs/{org}/events"],
+    listReceivedEventsForUser: ["GET /users/{username}/received_events"],
+    listReceivedPublicEventsForUser: ["GET /users/{username}/received_events/public"],
+    listRepoEvents: ["GET /repos/{owner}/{repo}/events"],
+    listRepoNotificationsForAuthenticatedUser: ["GET /repos/{owner}/{repo}/notifications"],
+    listReposStarredByAuthenticatedUser: ["GET /user/starred"],
+    listReposStarredByUser: ["GET /users/{username}/starred"],
+    listReposWatchedByUser: ["GET /users/{username}/subscriptions"],
+    listStargazersForRepo: ["GET /repos/{owner}/{repo}/stargazers"],
+    listWatchedReposForAuthenticatedUser: ["GET /user/subscriptions"],
+    listWatchersForRepo: ["GET /repos/{owner}/{repo}/subscribers"],
+    markNotificationsAsRead: ["PUT /notifications"],
+    markRepoNotificationsAsRead: ["PUT /repos/{owner}/{repo}/notifications"],
+    markThreadAsRead: ["PATCH /notifications/threads/{thread_id}"],
+    setRepoSubscription: ["PUT /repos/{owner}/{repo}/subscription"],
+    setThreadSubscription: ["PUT /notifications/threads/{thread_id}/subscription"],
+    starRepoForAuthenticatedUser: ["PUT /user/starred/{owner}/{repo}"],
+    unstarRepoForAuthenticatedUser: ["DELETE /user/starred/{owner}/{repo}"]
+  },
+  apps: {
+    addRepoToInstallation: ["PUT /user/installations/{installation_id}/repositories/{repository_id}"],
+    checkToken: ["POST /applications/{client_id}/token"],
+    createContentAttachment: ["POST /content_references/{content_reference_id}/attachments", {
+      mediaType: {
+        previews: ["corsair"]
+      }
+    }],
+    createFromManifest: ["POST /app-manifests/{code}/conversions"],
+    createInstallationAccessToken: ["POST /app/installations/{installation_id}/access_tokens"],
+    deleteAuthorization: ["DELETE /applications/{client_id}/grant"],
+    deleteInstallation: ["DELETE /app/installations/{installation_id}"],
+    deleteToken: ["DELETE /applications/{client_id}/token"],
+    getAuthenticated: ["GET /app"],
+    getBySlug: ["GET /apps/{app_slug}"],
+    getInstallation: ["GET /app/installations/{installation_id}"],
+    getOrgInstallation: ["GET /orgs/{org}/installation"],
+    getRepoInstallation: ["GET /repos/{owner}/{repo}/installation"],
+    getSubscriptionPlanForAccount: ["GET /marketplace_listing/accounts/{account_id}"],
+    getSubscriptionPlanForAccountStubbed: ["GET /marketplace_listing/stubbed/accounts/{account_id}"],
+    getUserInstallation: ["GET /users/{username}/installation"],
+    listAccountsForPlan: ["GET /marketplace_listing/plans/{plan_id}/accounts"],
+    listAccountsForPlanStubbed: ["GET /marketplace_listing/stubbed/plans/{plan_id}/accounts"],
+    listInstallationReposForAuthenticatedUser: ["GET /user/installations/{installation_id}/repositories"],
+    listInstallations: ["GET /app/installations"],
+    listInstallationsForAuthenticatedUser: ["GET /user/installations"],
+    listPlans: ["GET /marketplace_listing/plans"],
+    listPlansStubbed: ["GET /marketplace_listing/stubbed/plans"],
+    listReposAccessibleToInstallation: ["GET /installation/repositories"],
+    listSubscriptionsForAuthenticatedUser: ["GET /user/marketplace_purchases"],
+    listSubscriptionsForAuthenticatedUserStubbed: ["GET /user/marketplace_purchases/stubbed"],
+    removeRepoFromInstallation: ["DELETE /user/installations/{installation_id}/repositories/{repository_id}"],
+    resetToken: ["PATCH /applications/{client_id}/token"],
+    revokeInstallationAccessToken: ["DELETE /installation/token"],
+    suspendInstallation: ["PUT /app/installations/{installation_id}/suspended"],
+    unsuspendInstallation: ["DELETE /app/installations/{installation_id}/suspended"]
+  },
+  billing: {
+    getGithubActionsBillingOrg: ["GET /orgs/{org}/settings/billing/actions"],
+    getGithubActionsBillingUser: ["GET /users/{username}/settings/billing/actions"],
+    getGithubPackagesBillingOrg: ["GET /orgs/{org}/settings/billing/packages"],
+    getGithubPackagesBillingUser: ["GET /users/{username}/settings/billing/packages"],
+    getSharedStorageBillingOrg: ["GET /orgs/{org}/settings/billing/shared-storage"],
+    getSharedStorageBillingUser: ["GET /users/{username}/settings/billing/shared-storage"]
+  },
+  checks: {
+    create: ["POST /repos/{owner}/{repo}/check-runs", {
+      mediaType: {
+        previews: ["antiope"]
+      }
+    }],
+    createSuite: ["POST /repos/{owner}/{repo}/check-suites", {
+      mediaType: {
+        previews: ["antiope"]
+      }
+    }],
+    get: ["GET /repos/{owner}/{repo}/check-runs/{check_run_id}", {
+      mediaType: {
+        previews: ["antiope"]
+      }
+    }],
+    getSuite: ["GET /repos/{owner}/{repo}/check-suites/{check_suite_id}", {
+      mediaType: {
+        previews: ["antiope"]
+      }
+    }],
+    listAnnotations: ["GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations", {
+      mediaType: {
+        previews: ["antiope"]
+      }
+    }],
+    listForRef: ["GET /repos/{owner}/{repo}/commits/{ref}/check-runs", {
+      mediaType: {
+        previews: ["antiope"]
+      }
+    }],
+    listForSuite: ["GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs", {
+      mediaType: {
+        previews: ["antiope"]
+      }
+    }],
+    listSuitesForRef: ["GET /repos/{owner}/{repo}/commits/{ref}/check-suites", {
+      mediaType: {
+        previews: ["antiope"]
+      }
+    }],
+    rerequestSuite: ["POST /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest", {
+      mediaType: {
+        previews: ["antiope"]
+      }
+    }],
+    setSuitesPreferences: ["PATCH /repos/{owner}/{repo}/check-suites/preferences", {
+      mediaType: {
+        previews: ["antiope"]
+      }
+    }],
+    update: ["PATCH /repos/{owner}/{repo}/check-runs/{check_run_id}", {
+      mediaType: {
+        previews: ["antiope"]
+      }
+    }]
+  },
+  codeScanning: {
+    getAlert: ["GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}", {}, {
+      renamedParameters: {
+        alert_id: "alert_number"
+      }
+    }],
+    listAlertsForRepo: ["GET /repos/{owner}/{repo}/code-scanning/alerts"],
+    listRecentAnalyses: ["GET /repos/{owner}/{repo}/code-scanning/analyses"],
+    updateAlert: ["PATCH /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}"],
+    uploadSarif: ["POST /repos/{owner}/{repo}/code-scanning/sarifs"]
+  },
+  codesOfConduct: {
+    getAllCodesOfConduct: ["GET /codes_of_conduct", {
+      mediaType: {
+        previews: ["scarlet-witch"]
+      }
+    }],
+    getConductCode: ["GET /codes_of_conduct/{key}", {
+      mediaType: {
+        previews: ["scarlet-witch"]
+      }
+    }],
+    getForRepo: ["GET /repos/{owner}/{repo}/community/code_of_conduct", {
+      mediaType: {
+        previews: ["scarlet-witch"]
+      }
+    }]
+  },
+  emojis: {
+    get: ["GET /emojis"]
+  },
+  gists: {
+    checkIsStarred: ["GET /gists/{gist_id}/star"],
+    create: ["POST /gists"],
+    createComment: ["POST /gists/{gist_id}/comments"],
+    delete: ["DELETE /gists/{gist_id}"],
+    deleteComment: ["DELETE /gists/{gist_id}/comments/{comment_id}"],
+    fork: ["POST /gists/{gist_id}/forks"],
+    get: ["GET /gists/{gist_id}"],
+    getComment: ["GET /gists/{gist_id}/comments/{comment_id}"],
+    getRevision: ["GET /gists/{gist_id}/{sha}"],
+    list: ["GET /gists"],
+    listComments: ["GET /gists/{gist_id}/comments"],
+    listCommits: ["GET /gists/{gist_id}/commits"],
+    listForUser: ["GET /users/{username}/gists"],
+    listForks: ["GET /gists/{gist_id}/forks"],
+    listPublic: ["GET /gists/public"],
+    listStarred: ["GET /gists/starred"],
+    star: ["PUT /gists/{gist_id}/star"],
+    unstar: ["DELETE /gists/{gist_id}/star"],
+    update: ["PATCH /gists/{gist_id}"],
+    updateComment: ["PATCH /gists/{gist_id}/comments/{comment_id}"]
+  },
+  git: {
+    createBlob: ["POST /repos/{owner}/{repo}/git/blobs"],
+    createCommit: ["POST /repos/{owner}/{repo}/git/commits"],
+    createRef: ["POST /repos/{owner}/{repo}/git/refs"],
+    createTag: ["POST /repos/{owner}/{repo}/git/tags"],
+    createTree: ["POST /repos/{owner}/{repo}/git/trees"],
+    deleteRef: ["DELETE /repos/{owner}/{repo}/git/refs/{ref}"],
+    getBlob: ["GET /repos/{owner}/{repo}/git/blobs/{file_sha}"],
+    getCommit: ["GET /repos/{owner}/{repo}/git/commits/{commit_sha}"],
+    getRef: ["GET /repos/{owner}/{repo}/git/ref/{ref}"],
+    getTag: ["GET /repos/{owner}/{repo}/git/tags/{tag_sha}"],
+    getTree: ["GET /repos/{owner}/{repo}/git/trees/{tree_sha}"],
+    listMatchingRefs: ["GET /repos/{owner}/{repo}/git/matching-refs/{ref}"],
+    updateRef: ["PATCH /repos/{owner}/{repo}/git/refs/{ref}"]
+  },
+  gitignore: {
+    getAllTemplates: ["GET /gitignore/templates"],
+    getTemplate: ["GET /gitignore/templates/{name}"]
+  },
+  interactions: {
+    getRestrictionsForOrg: ["GET /orgs/{org}/interaction-limits", {
+      mediaType: {
+        previews: ["sombra"]
+      }
+    }],
+    getRestrictionsForRepo: ["GET /repos/{owner}/{repo}/interaction-limits", {
+      mediaType: {
+        previews: ["sombra"]
+      }
+    }],
+    removeRestrictionsForOrg: ["DELETE /orgs/{org}/interaction-limits", {
+      mediaType: {
+        previews: ["sombra"]
+      }
+    }],
+    removeRestrictionsForRepo: ["DELETE /repos/{owner}/{repo}/interaction-limits", {
+      mediaType: {
+        previews: ["sombra"]
+      }
+    }],
+    setRestrictionsForOrg: ["PUT /orgs/{org}/interaction-limits", {
+      mediaType: {
+        previews: ["sombra"]
+      }
+    }],
+    setRestrictionsForRepo: ["PUT /repos/{owner}/{repo}/interaction-limits", {
+      mediaType: {
+        previews: ["sombra"]
+      }
+    }]
+  },
+  issues: {
+    addAssignees: ["POST /repos/{owner}/{repo}/issues/{issue_number}/assignees"],
+    addLabels: ["POST /repos/{owner}/{repo}/issues/{issue_number}/labels"],
+    checkUserCanBeAssigned: ["GET /repos/{owner}/{repo}/assignees/{assignee}"],
+    create: ["POST /repos/{owner}/{repo}/issues"],
+    createComment: ["POST /repos/{owner}/{repo}/issues/{issue_number}/comments"],
+    createLabel: ["POST /repos/{owner}/{repo}/labels"],
+    createMilestone: ["POST /repos/{owner}/{repo}/milestones"],
+    deleteComment: ["DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}"],
+    deleteLabel: ["DELETE /repos/{owner}/{repo}/labels/{name}"],
+    deleteMilestone: ["DELETE /repos/{owner}/{repo}/milestones/{milestone_number}"],
+    get: ["GET /repos/{owner}/{repo}/issues/{issue_number}"],
+    getComment: ["GET /repos/{owner}/{repo}/issues/comments/{comment_id}"],
+    getEvent: ["GET /repos/{owner}/{repo}/issues/events/{event_id}"],
+    getLabel: ["GET /repos/{owner}/{repo}/labels/{name}"],
+    getMilestone: ["GET /repos/{owner}/{repo}/milestones/{milestone_number}"],
+    list: ["GET /issues"],
+    listAssignees: ["GET /repos/{owner}/{repo}/assignees"],
+    listComments: ["GET /repos/{owner}/{repo}/issues/{issue_number}/comments"],
+    listCommentsForRepo: ["GET /repos/{owner}/{repo}/issues/comments"],
+    listEvents: ["GET /repos/{owner}/{repo}/issues/{issue_number}/events"],
+    listEventsForRepo: ["GET /repos/{owner}/{repo}/issues/events"],
+    listEventsForTimeline: ["GET /repos/{owner}/{repo}/issues/{issue_number}/timeline", {
+      mediaType: {
+        previews: ["mockingbird"]
+      }
+    }],
+    listForAuthenticatedUser: ["GET /user/issues"],
+    listForOrg: ["GET /orgs/{org}/issues"],
+    listForRepo: ["GET /repos/{owner}/{repo}/issues"],
+    listLabelsForMilestone: ["GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels"],
+    listLabelsForRepo: ["GET /repos/{owner}/{repo}/labels"],
+    listLabelsOnIssue: ["GET /repos/{owner}/{repo}/issues/{issue_number}/labels"],
+    listMilestones: ["GET /repos/{owner}/{repo}/milestones"],
+    lock: ["PUT /repos/{owner}/{repo}/issues/{issue_number}/lock"],
+    removeAllLabels: ["DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels"],
+    removeAssignees: ["DELETE /repos/{owner}/{repo}/issues/{issue_number}/assignees"],
+    removeLabel: ["DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}"],
+    setLabels: ["PUT /repos/{owner}/{repo}/issues/{issue_number}/labels"],
+    unlock: ["DELETE /repos/{owner}/{repo}/issues/{issue_number}/lock"],
+    update: ["PATCH /repos/{owner}/{repo}/issues/{issue_number}"],
+    updateComment: ["PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}"],
+    updateLabel: ["PATCH /repos/{owner}/{repo}/labels/{name}"],
+    updateMilestone: ["PATCH /repos/{owner}/{repo}/milestones/{milestone_number}"]
+  },
+  licenses: {
+    get: ["GET /licenses/{license}"],
+    getAllCommonlyUsed: ["GET /licenses"],
+    getForRepo: ["GET /repos/{owner}/{repo}/license"]
+  },
+  markdown: {
+    render: ["POST /markdown"],
+    renderRaw: ["POST /markdown/raw", {
+      headers: {
+        "content-type": "text/plain; charset=utf-8"
+      }
+    }]
+  },
+  meta: {
+    get: ["GET /meta"]
+  },
+  migrations: {
+    cancelImport: ["DELETE /repos/{owner}/{repo}/import"],
+    deleteArchiveForAuthenticatedUser: ["DELETE /user/migrations/{migration_id}/archive", {
+      mediaType: {
+        previews: ["wyandotte"]
+      }
+    }],
+    deleteArchiveForOrg: ["DELETE /orgs/{org}/migrations/{migration_id}/archive", {
+      mediaType: {
+        previews: ["wyandotte"]
+      }
+    }],
+    downloadArchiveForOrg: ["GET /orgs/{org}/migrations/{migration_id}/archive", {
+      mediaType: {
+        previews: ["wyandotte"]
+      }
+    }],
+    getArchiveForAuthenticatedUser: ["GET /user/migrations/{migration_id}/archive", {
+      mediaType: {
+        previews: ["wyandotte"]
+      }
+    }],
+    getCommitAuthors: ["GET /repos/{owner}/{repo}/import/authors"],
+    getImportStatus: ["GET /repos/{owner}/{repo}/import"],
+    getLargeFiles: ["GET /repos/{owner}/{repo}/import/large_files"],
+    getStatusForAuthenticatedUser: ["GET /user/migrations/{migration_id}", {
+      mediaType: {
+        previews: ["wyandotte"]
+      }
+    }],
+    getStatusForOrg: ["GET /orgs/{org}/migrations/{migration_id}", {
+      mediaType: {
+        previews: ["wyandotte"]
+      }
+    }],
+    listForAuthenticatedUser: ["GET /user/migrations", {
+      mediaType: {
+        previews: ["wyandotte"]
+      }
+    }],
+    listForOrg: ["GET /orgs/{org}/migrations", {
+      mediaType: {
+        previews: ["wyandotte"]
+      }
+    }],
+    listReposForOrg: ["GET /orgs/{org}/migrations/{migration_id}/repositories", {
+      mediaType: {
+        previews: ["wyandotte"]
+      }
+    }],
+    listReposForUser: ["GET /user/migrations/{migration_id}/repositories", {
+      mediaType: {
+        previews: ["wyandotte"]
+      }
+    }],
+    mapCommitAuthor: ["PATCH /repos/{owner}/{repo}/import/authors/{author_id}"],
+    setLfsPreference: ["PATCH /repos/{owner}/{repo}/import/lfs"],
+    startForAuthenticatedUser: ["POST /user/migrations"],
+    startForOrg: ["POST /orgs/{org}/migrations"],
+    startImport: ["PUT /repos/{owner}/{repo}/import"],
+    unlockRepoForAuthenticatedUser: ["DELETE /user/migrations/{migration_id}/repos/{repo_name}/lock", {
+      mediaType: {
+        previews: ["wyandotte"]
+      }
+    }],
+    unlockRepoForOrg: ["DELETE /orgs/{org}/migrations/{migration_id}/repos/{repo_name}/lock", {
+      mediaType: {
+        previews: ["wyandotte"]
+      }
+    }],
+    updateImport: ["PATCH /repos/{owner}/{repo}/import"]
+  },
+  orgs: {
+    blockUser: ["PUT /orgs/{org}/blocks/{username}"],
+    checkBlockedUser: ["GET /orgs/{org}/blocks/{username}"],
+    checkMembershipForUser: ["GET /orgs/{org}/members/{username}"],
+    checkPublicMembershipForUser: ["GET /orgs/{org}/public_members/{username}"],
+    convertMemberToOutsideCollaborator: ["PUT /orgs/{org}/outside_collaborators/{username}"],
+    createInvitation: ["POST /orgs/{org}/invitations"],
+    createWebhook: ["POST /orgs/{org}/hooks"],
+    deleteWebhook: ["DELETE /orgs/{org}/hooks/{hook_id}"],
+    get: ["GET /orgs/{org}"],
+    getMembershipForAuthenticatedUser: ["GET /user/memberships/orgs/{org}"],
+    getMembershipForUser: ["GET /orgs/{org}/memberships/{username}"],
+    getWebhook: ["GET /orgs/{org}/hooks/{hook_id}"],
+    list: ["GET /organizations"],
+    listAppInstallations: ["GET /orgs/{org}/installations"],
+    listBlockedUsers: ["GET /orgs/{org}/blocks"],
+    listForAuthenticatedUser: ["GET /user/orgs"],
+    listForUser: ["GET /users/{username}/orgs"],
+    listInvitationTeams: ["GET /orgs/{org}/invitations/{invitation_id}/teams"],
+    listMembers: ["GET /orgs/{org}/members"],
+    listMembershipsForAuthenticatedUser: ["GET /user/memberships/orgs"],
+    listOutsideCollaborators: ["GET /orgs/{org}/outside_collaborators"],
+    listPendingInvitations: ["GET /orgs/{org}/invitations"],
+    listPublicMembers: ["GET /orgs/{org}/public_members"],
+    listWebhooks: ["GET /orgs/{org}/hooks"],
+    pingWebhook: ["POST /orgs/{org}/hooks/{hook_id}/pings"],
+    removeMember: ["DELETE /orgs/{org}/members/{username}"],
+    removeMembershipForUser: ["DELETE /orgs/{org}/memberships/{username}"],
+    removeOutsideCollaborator: ["DELETE /orgs/{org}/outside_collaborators/{username}"],
+    removePublicMembershipForAuthenticatedUser: ["DELETE /orgs/{org}/public_members/{username}"],
+    setMembershipForUser: ["PUT /orgs/{org}/memberships/{username}"],
+    setPublicMembershipForAuthenticatedUser: ["PUT /orgs/{org}/public_members/{username}"],
+    unblockUser: ["DELETE /orgs/{org}/blocks/{username}"],
+    update: ["PATCH /orgs/{org}"],
+    updateMembershipForAuthenticatedUser: ["PATCH /user/memberships/orgs/{org}"],
+    updateWebhook: ["PATCH /orgs/{org}/hooks/{hook_id}"]
+  },
+  projects: {
+    addCollaborator: ["PUT /projects/{project_id}/collaborators/{username}", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    createCard: ["POST /projects/columns/{column_id}/cards", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    createColumn: ["POST /projects/{project_id}/columns", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    createForAuthenticatedUser: ["POST /user/projects", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    createForOrg: ["POST /orgs/{org}/projects", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    createForRepo: ["POST /repos/{owner}/{repo}/projects", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    delete: ["DELETE /projects/{project_id}", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    deleteCard: ["DELETE /projects/columns/cards/{card_id}", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    deleteColumn: ["DELETE /projects/columns/{column_id}", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    get: ["GET /projects/{project_id}", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    getCard: ["GET /projects/columns/cards/{card_id}", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    getColumn: ["GET /projects/columns/{column_id}", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    getPermissionForUser: ["GET /projects/{project_id}/collaborators/{username}/permission", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    listCards: ["GET /projects/columns/{column_id}/cards", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    listCollaborators: ["GET /projects/{project_id}/collaborators", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    listColumns: ["GET /projects/{project_id}/columns", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    listForOrg: ["GET /orgs/{org}/projects", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    listForRepo: ["GET /repos/{owner}/{repo}/projects", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    listForUser: ["GET /users/{username}/projects", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    moveCard: ["POST /projects/columns/cards/{card_id}/moves", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    moveColumn: ["POST /projects/columns/{column_id}/moves", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    removeCollaborator: ["DELETE /projects/{project_id}/collaborators/{username}", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    update: ["PATCH /projects/{project_id}", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    updateCard: ["PATCH /projects/columns/cards/{card_id}", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    updateColumn: ["PATCH /projects/columns/{column_id}", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }]
+  },
+  pulls: {
+    checkIfMerged: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/merge"],
+    create: ["POST /repos/{owner}/{repo}/pulls"],
+    createReplyForReviewComment: ["POST /repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies"],
+    createReview: ["POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews"],
+    createReviewComment: ["POST /repos/{owner}/{repo}/pulls/{pull_number}/comments"],
+    deletePendingReview: ["DELETE /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"],
+    deleteReviewComment: ["DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}"],
+    dismissReview: ["PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/dismissals"],
+    get: ["GET /repos/{owner}/{repo}/pulls/{pull_number}"],
+    getReview: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"],
+    getReviewComment: ["GET /repos/{owner}/{repo}/pulls/comments/{comment_id}"],
+    list: ["GET /repos/{owner}/{repo}/pulls"],
+    listCommentsForReview: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments"],
+    listCommits: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/commits"],
+    listFiles: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/files"],
+    listRequestedReviewers: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"],
+    listReviewComments: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/comments"],
+    listReviewCommentsForRepo: ["GET /repos/{owner}/{repo}/pulls/comments"],
+    listReviews: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews"],
+    merge: ["PUT /repos/{owner}/{repo}/pulls/{pull_number}/merge"],
+    removeRequestedReviewers: ["DELETE /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"],
+    requestReviewers: ["POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"],
+    submitReview: ["POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/events"],
+    update: ["PATCH /repos/{owner}/{repo}/pulls/{pull_number}"],
+    updateBranch: ["PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch", {
+      mediaType: {
+        previews: ["lydian"]
+      }
+    }],
+    updateReview: ["PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"],
+    updateReviewComment: ["PATCH /repos/{owner}/{repo}/pulls/comments/{comment_id}"]
+  },
+  rateLimit: {
+    get: ["GET /rate_limit"]
+  },
+  reactions: {
+    createForCommitComment: ["POST /repos/{owner}/{repo}/comments/{comment_id}/reactions", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }],
+    createForIssue: ["POST /repos/{owner}/{repo}/issues/{issue_number}/reactions", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }],
+    createForIssueComment: ["POST /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }],
+    createForPullRequestReviewComment: ["POST /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }],
+    createForTeamDiscussionCommentInOrg: ["POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }],
+    createForTeamDiscussionInOrg: ["POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }],
+    deleteForCommitComment: ["DELETE /repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }],
+    deleteForIssue: ["DELETE /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }],
+    deleteForIssueComment: ["DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }],
+    deleteForPullRequestComment: ["DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }],
+    deleteForTeamDiscussion: ["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions/{reaction_id}", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }],
+    deleteForTeamDiscussionComment: ["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions/{reaction_id}", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }],
+    deleteLegacy: ["DELETE /reactions/{reaction_id}", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }, {
+      deprecated: "octokit.reactions.deleteLegacy() is deprecated, see https://developer.github.com/v3/reactions/#delete-a-reaction-legacy"
+    }],
+    listForCommitComment: ["GET /repos/{owner}/{repo}/comments/{comment_id}/reactions", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }],
+    listForIssue: ["GET /repos/{owner}/{repo}/issues/{issue_number}/reactions", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }],
+    listForIssueComment: ["GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }],
+    listForPullRequestReviewComment: ["GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }],
+    listForTeamDiscussionCommentInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }],
+    listForTeamDiscussionInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions", {
+      mediaType: {
+        previews: ["squirrel-girl"]
+      }
+    }]
+  },
+  repos: {
+    acceptInvitation: ["PATCH /user/repository_invitations/{invitation_id}"],
+    addAppAccessRestrictions: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps", {}, {
+      mapToData: "apps"
+    }],
+    addCollaborator: ["PUT /repos/{owner}/{repo}/collaborators/{username}"],
+    addStatusCheckContexts: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts", {}, {
+      mapToData: "contexts"
+    }],
+    addTeamAccessRestrictions: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams", {}, {
+      mapToData: "teams"
+    }],
+    addUserAccessRestrictions: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users", {}, {
+      mapToData: "users"
+    }],
+    checkCollaborator: ["GET /repos/{owner}/{repo}/collaborators/{username}"],
+    checkVulnerabilityAlerts: ["GET /repos/{owner}/{repo}/vulnerability-alerts", {
+      mediaType: {
+        previews: ["dorian"]
+      }
+    }],
+    compareCommits: ["GET /repos/{owner}/{repo}/compare/{base}...{head}"],
+    createCommitComment: ["POST /repos/{owner}/{repo}/commits/{commit_sha}/comments"],
+    createCommitSignatureProtection: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures", {
+      mediaType: {
+        previews: ["zzzax"]
+      }
+    }],
+    createCommitStatus: ["POST /repos/{owner}/{repo}/statuses/{sha}"],
+    createDeployKey: ["POST /repos/{owner}/{repo}/keys"],
+    createDeployment: ["POST /repos/{owner}/{repo}/deployments"],
+    createDeploymentStatus: ["POST /repos/{owner}/{repo}/deployments/{deployment_id}/statuses"],
+    createDispatchEvent: ["POST /repos/{owner}/{repo}/dispatches"],
+    createForAuthenticatedUser: ["POST /user/repos"],
+    createFork: ["POST /repos/{owner}/{repo}/forks"],
+    createInOrg: ["POST /orgs/{org}/repos"],
+    createOrUpdateFileContents: ["PUT /repos/{owner}/{repo}/contents/{path}"],
+    createPagesSite: ["POST /repos/{owner}/{repo}/pages", {
+      mediaType: {
+        previews: ["switcheroo"]
+      }
+    }],
+    createRelease: ["POST /repos/{owner}/{repo}/releases"],
+    createUsingTemplate: ["POST /repos/{template_owner}/{template_repo}/generate", {
+      mediaType: {
+        previews: ["baptiste"]
+      }
+    }],
+    createWebhook: ["POST /repos/{owner}/{repo}/hooks"],
+    declineInvitation: ["DELETE /user/repository_invitations/{invitation_id}"],
+    delete: ["DELETE /repos/{owner}/{repo}"],
+    deleteAccessRestrictions: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions"],
+    deleteAdminBranchProtection: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"],
+    deleteBranchProtection: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection"],
+    deleteCommitComment: ["DELETE /repos/{owner}/{repo}/comments/{comment_id}"],
+    deleteCommitSignatureProtection: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures", {
+      mediaType: {
+        previews: ["zzzax"]
+      }
+    }],
+    deleteDeployKey: ["DELETE /repos/{owner}/{repo}/keys/{key_id}"],
+    deleteDeployment: ["DELETE /repos/{owner}/{repo}/deployments/{deployment_id}"],
+    deleteFile: ["DELETE /repos/{owner}/{repo}/contents/{path}"],
+    deleteInvitation: ["DELETE /repos/{owner}/{repo}/invitations/{invitation_id}"],
+    deletePagesSite: ["DELETE /repos/{owner}/{repo}/pages", {
+      mediaType: {
+        previews: ["switcheroo"]
+      }
+    }],
+    deletePullRequestReviewProtection: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"],
+    deleteRelease: ["DELETE /repos/{owner}/{repo}/releases/{release_id}"],
+    deleteReleaseAsset: ["DELETE /repos/{owner}/{repo}/releases/assets/{asset_id}"],
+    deleteWebhook: ["DELETE /repos/{owner}/{repo}/hooks/{hook_id}"],
+    disableAutomatedSecurityFixes: ["DELETE /repos/{owner}/{repo}/automated-security-fixes", {
+      mediaType: {
+        previews: ["london"]
+      }
+    }],
+    disableVulnerabilityAlerts: ["DELETE /repos/{owner}/{repo}/vulnerability-alerts", {
+      mediaType: {
+        previews: ["dorian"]
+      }
+    }],
+    downloadArchive: ["GET /repos/{owner}/{repo}/{archive_format}/{ref}"],
+    enableAutomatedSecurityFixes: ["PUT /repos/{owner}/{repo}/automated-security-fixes", {
+      mediaType: {
+        previews: ["london"]
+      }
+    }],
+    enableVulnerabilityAlerts: ["PUT /repos/{owner}/{repo}/vulnerability-alerts", {
+      mediaType: {
+        previews: ["dorian"]
+      }
+    }],
+    get: ["GET /repos/{owner}/{repo}"],
+    getAccessRestrictions: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions"],
+    getAdminBranchProtection: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"],
+    getAllStatusCheckContexts: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"],
+    getAllTopics: ["GET /repos/{owner}/{repo}/topics", {
+      mediaType: {
+        previews: ["mercy"]
+      }
+    }],
+    getAppsWithAccessToProtectedBranch: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"],
+    getBranch: ["GET /repos/{owner}/{repo}/branches/{branch}"],
+    getBranchProtection: ["GET /repos/{owner}/{repo}/branches/{branch}/protection"],
+    getClones: ["GET /repos/{owner}/{repo}/traffic/clones"],
+    getCodeFrequencyStats: ["GET /repos/{owner}/{repo}/stats/code_frequency"],
+    getCollaboratorPermissionLevel: ["GET /repos/{owner}/{repo}/collaborators/{username}/permission"],
+    getCombinedStatusForRef: ["GET /repos/{owner}/{repo}/commits/{ref}/status"],
+    getCommit: ["GET /repos/{owner}/{repo}/commits/{ref}"],
+    getCommitActivityStats: ["GET /repos/{owner}/{repo}/stats/commit_activity"],
+    getCommitComment: ["GET /repos/{owner}/{repo}/comments/{comment_id}"],
+    getCommitSignatureProtection: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures", {
+      mediaType: {
+        previews: ["zzzax"]
+      }
+    }],
+    getCommunityProfileMetrics: ["GET /repos/{owner}/{repo}/community/profile", {
+      mediaType: {
+        previews: ["black-panther"]
+      }
+    }],
+    getContent: ["GET /repos/{owner}/{repo}/contents/{path}"],
+    getContributorsStats: ["GET /repos/{owner}/{repo}/stats/contributors"],
+    getDeployKey: ["GET /repos/{owner}/{repo}/keys/{key_id}"],
+    getDeployment: ["GET /repos/{owner}/{repo}/deployments/{deployment_id}"],
+    getDeploymentStatus: ["GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}"],
+    getLatestPagesBuild: ["GET /repos/{owner}/{repo}/pages/builds/latest"],
+    getLatestRelease: ["GET /repos/{owner}/{repo}/releases/latest"],
+    getPages: ["GET /repos/{owner}/{repo}/pages"],
+    getPagesBuild: ["GET /repos/{owner}/{repo}/pages/builds/{build_id}"],
+    getParticipationStats: ["GET /repos/{owner}/{repo}/stats/participation"],
+    getPullRequestReviewProtection: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"],
+    getPunchCardStats: ["GET /repos/{owner}/{repo}/stats/punch_card"],
+    getReadme: ["GET /repos/{owner}/{repo}/readme"],
+    getRelease: ["GET /repos/{owner}/{repo}/releases/{release_id}"],
+    getReleaseAsset: ["GET /repos/{owner}/{repo}/releases/assets/{asset_id}"],
+    getReleaseByTag: ["GET /repos/{owner}/{repo}/releases/tags/{tag}"],
+    getStatusChecksProtection: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"],
+    getTeamsWithAccessToProtectedBranch: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"],
+    getTopPaths: ["GET /repos/{owner}/{repo}/traffic/popular/paths"],
+    getTopReferrers: ["GET /repos/{owner}/{repo}/traffic/popular/referrers"],
+    getUsersWithAccessToProtectedBranch: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"],
+    getViews: ["GET /repos/{owner}/{repo}/traffic/views"],
+    getWebhook: ["GET /repos/{owner}/{repo}/hooks/{hook_id}"],
+    listBranches: ["GET /repos/{owner}/{repo}/branches"],
+    listBranchesForHeadCommit: ["GET /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head", {
+      mediaType: {
+        previews: ["groot"]
+      }
+    }],
+    listCollaborators: ["GET /repos/{owner}/{repo}/collaborators"],
+    listCommentsForCommit: ["GET /repos/{owner}/{repo}/commits/{commit_sha}/comments"],
+    listCommitCommentsForRepo: ["GET /repos/{owner}/{repo}/comments"],
+    listCommitStatusesForRef: ["GET /repos/{owner}/{repo}/commits/{ref}/statuses"],
+    listCommits: ["GET /repos/{owner}/{repo}/commits"],
+    listContributors: ["GET /repos/{owner}/{repo}/contributors"],
+    listDeployKeys: ["GET /repos/{owner}/{repo}/keys"],
+    listDeploymentStatuses: ["GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses"],
+    listDeployments: ["GET /repos/{owner}/{repo}/deployments"],
+    listForAuthenticatedUser: ["GET /user/repos"],
+    listForOrg: ["GET /orgs/{org}/repos"],
+    listForUser: ["GET /users/{username}/repos"],
+    listForks: ["GET /repos/{owner}/{repo}/forks"],
+    listInvitations: ["GET /repos/{owner}/{repo}/invitations"],
+    listInvitationsForAuthenticatedUser: ["GET /user/repository_invitations"],
+    listLanguages: ["GET /repos/{owner}/{repo}/languages"],
+    listPagesBuilds: ["GET /repos/{owner}/{repo}/pages/builds"],
+    listPublic: ["GET /repositories"],
+    listPullRequestsAssociatedWithCommit: ["GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls", {
+      mediaType: {
+        previews: ["groot"]
+      }
+    }],
+    listReleaseAssets: ["GET /repos/{owner}/{repo}/releases/{release_id}/assets"],
+    listReleases: ["GET /repos/{owner}/{repo}/releases"],
+    listTags: ["GET /repos/{owner}/{repo}/tags"],
+    listTeams: ["GET /repos/{owner}/{repo}/teams"],
+    listWebhooks: ["GET /repos/{owner}/{repo}/hooks"],
+    merge: ["POST /repos/{owner}/{repo}/merges"],
+    pingWebhook: ["POST /repos/{owner}/{repo}/hooks/{hook_id}/pings"],
+    removeAppAccessRestrictions: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps", {}, {
+      mapToData: "apps"
+    }],
+    removeCollaborator: ["DELETE /repos/{owner}/{repo}/collaborators/{username}"],
+    removeStatusCheckContexts: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts", {}, {
+      mapToData: "contexts"
+    }],
+    removeStatusCheckProtection: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"],
+    removeTeamAccessRestrictions: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams", {}, {
+      mapToData: "teams"
+    }],
+    removeUserAccessRestrictions: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users", {}, {
+      mapToData: "users"
+    }],
+    replaceAllTopics: ["PUT /repos/{owner}/{repo}/topics", {
+      mediaType: {
+        previews: ["mercy"]
+      }
+    }],
+    requestPagesBuild: ["POST /repos/{owner}/{repo}/pages/builds"],
+    setAdminBranchProtection: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"],
+    setAppAccessRestrictions: ["PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps", {}, {
+      mapToData: "apps"
+    }],
+    setStatusCheckContexts: ["PUT /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts", {}, {
+      mapToData: "contexts"
+    }],
+    setTeamAccessRestrictions: ["PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams", {}, {
+      mapToData: "teams"
+    }],
+    setUserAccessRestrictions: ["PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users", {}, {
+      mapToData: "users"
+    }],
+    testPushWebhook: ["POST /repos/{owner}/{repo}/hooks/{hook_id}/tests"],
+    transfer: ["POST /repos/{owner}/{repo}/transfer"],
+    update: ["PATCH /repos/{owner}/{repo}"],
+    updateBranchProtection: ["PUT /repos/{owner}/{repo}/branches/{branch}/protection"],
+    updateCommitComment: ["PATCH /repos/{owner}/{repo}/comments/{comment_id}"],
+    updateInformationAboutPagesSite: ["PUT /repos/{owner}/{repo}/pages"],
+    updateInvitation: ["PATCH /repos/{owner}/{repo}/invitations/{invitation_id}"],
+    updatePullRequestReviewProtection: ["PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"],
+    updateRelease: ["PATCH /repos/{owner}/{repo}/releases/{release_id}"],
+    updateReleaseAsset: ["PATCH /repos/{owner}/{repo}/releases/assets/{asset_id}"],
+    updateStatusCheckPotection: ["PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"],
+    updateWebhook: ["PATCH /repos/{owner}/{repo}/hooks/{hook_id}"],
+    uploadReleaseAsset: ["POST /repos/{owner}/{repo}/releases/{release_id}/assets{?name,label}", {
+      baseUrl: "https://uploads.github.com"
+    }]
+  },
+  search: {
+    code: ["GET /search/code"],
+    commits: ["GET /search/commits", {
+      mediaType: {
+        previews: ["cloak"]
+      }
+    }],
+    issuesAndPullRequests: ["GET /search/issues"],
+    labels: ["GET /search/labels"],
+    repos: ["GET /search/repositories"],
+    topics: ["GET /search/topics", {
+      mediaType: {
+        previews: ["mercy"]
+      }
+    }],
+    users: ["GET /search/users"]
+  },
+  teams: {
+    addOrUpdateMembershipForUserInOrg: ["PUT /orgs/{org}/teams/{team_slug}/memberships/{username}"],
+    addOrUpdateProjectPermissionsInOrg: ["PUT /orgs/{org}/teams/{team_slug}/projects/{project_id}", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    addOrUpdateRepoPermissionsInOrg: ["PUT /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}"],
+    checkPermissionsForProjectInOrg: ["GET /orgs/{org}/teams/{team_slug}/projects/{project_id}", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    checkPermissionsForRepoInOrg: ["GET /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}"],
+    create: ["POST /orgs/{org}/teams"],
+    createDiscussionCommentInOrg: ["POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments"],
+    createDiscussionInOrg: ["POST /orgs/{org}/teams/{team_slug}/discussions"],
+    deleteDiscussionCommentInOrg: ["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}"],
+    deleteDiscussionInOrg: ["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}"],
+    deleteInOrg: ["DELETE /orgs/{org}/teams/{team_slug}"],
+    getByName: ["GET /orgs/{org}/teams/{team_slug}"],
+    getDiscussionCommentInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}"],
+    getDiscussionInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}"],
+    getMembershipForUserInOrg: ["GET /orgs/{org}/teams/{team_slug}/memberships/{username}"],
+    list: ["GET /orgs/{org}/teams"],
+    listChildInOrg: ["GET /orgs/{org}/teams/{team_slug}/teams"],
+    listDiscussionCommentsInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments"],
+    listDiscussionsInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions"],
+    listForAuthenticatedUser: ["GET /user/teams"],
+    listMembersInOrg: ["GET /orgs/{org}/teams/{team_slug}/members"],
+    listPendingInvitationsInOrg: ["GET /orgs/{org}/teams/{team_slug}/invitations"],
+    listProjectsInOrg: ["GET /orgs/{org}/teams/{team_slug}/projects", {
+      mediaType: {
+        previews: ["inertia"]
+      }
+    }],
+    listReposInOrg: ["GET /orgs/{org}/teams/{team_slug}/repos"],
+    removeMembershipForUserInOrg: ["DELETE /orgs/{org}/teams/{team_slug}/memberships/{username}"],
+    removeProjectInOrg: ["DELETE /orgs/{org}/teams/{team_slug}/projects/{project_id}"],
+    removeRepoInOrg: ["DELETE /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}"],
+    updateDiscussionCommentInOrg: ["PATCH /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}"],
+    updateDiscussionInOrg: ["PATCH /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}"],
+    updateInOrg: ["PATCH /orgs/{org}/teams/{team_slug}"]
+  },
+  users: {
+    addEmailForAuthenticated: ["POST /user/emails"],
+    block: ["PUT /user/blocks/{username}"],
+    checkBlocked: ["GET /user/blocks/{username}"],
+    checkFollowingForUser: ["GET /users/{username}/following/{target_user}"],
+    checkPersonIsFollowedByAuthenticated: ["GET /user/following/{username}"],
+    createGpgKeyForAuthenticated: ["POST /user/gpg_keys"],
+    createPublicSshKeyForAuthenticated: ["POST /user/keys"],
+    deleteEmailForAuthenticated: ["DELETE /user/emails"],
+    deleteGpgKeyForAuthenticated: ["DELETE /user/gpg_keys/{gpg_key_id}"],
+    deletePublicSshKeyForAuthenticated: ["DELETE /user/keys/{key_id}"],
+    follow: ["PUT /user/following/{username}"],
+    getAuthenticated: ["GET /user"],
+    getByUsername: ["GET /users/{username}"],
+    getContextForUser: ["GET /users/{username}/hovercard"],
+    getGpgKeyForAuthenticated: ["GET /user/gpg_keys/{gpg_key_id}"],
+    getPublicSshKeyForAuthenticated: ["GET /user/keys/{key_id}"],
+    list: ["GET /users"],
+    listBlockedByAuthenticated: ["GET /user/blocks"],
+    listEmailsForAuthenticated: ["GET /user/emails"],
+    listFollowedByAuthenticated: ["GET /user/following"],
+    listFollowersForAuthenticatedUser: ["GET /user/followers"],
+    listFollowersForUser: ["GET /users/{username}/followers"],
+    listFollowingForUser: ["GET /users/{username}/following"],
+    listGpgKeysForAuthenticated: ["GET /user/gpg_keys"],
+    listGpgKeysForUser: ["GET /users/{username}/gpg_keys"],
+    listPublicEmailsForAuthenticated: ["GET /user/public_emails"],
+    listPublicKeysForUser: ["GET /users/{username}/keys"],
+    listPublicSshKeysForAuthenticated: ["GET /user/keys"],
+    setPrimaryEmailVisibilityForAuthenticated: ["PATCH /user/email/visibility"],
+    unblock: ["DELETE /user/blocks/{username}"],
+    unfollow: ["DELETE /user/following/{username}"],
+    updateAuthenticated: ["PATCH /user"]
+  }
+};
+
+const VERSION = "4.2.0";
+
+function endpointsToMethods(octokit, endpointsMap) {
+  const newMethods = {};
+
+  for (const [scope, endpoints] of Object.entries(endpointsMap)) {
+    for (const [methodName, endpoint] of Object.entries(endpoints)) {
+      const [route, defaults, decorations] = endpoint;
+      const [method, url] = route.split(/ /);
+      const endpointDefaults = Object.assign({
+        method,
+        url
+      }, defaults);
+
+      if (!newMethods[scope]) {
+        newMethods[scope] = {};
+      }
+
+      const scopeMethods = newMethods[scope];
+
+      if (decorations) {
+        scopeMethods[methodName] = decorate(octokit, scope, methodName, endpointDefaults, decorations);
+        continue;
+      }
+
+      scopeMethods[methodName] = octokit.request.defaults(endpointDefaults);
+    }
+  }
+
+  return newMethods;
+}
+
+function decorate(octokit, scope, methodName, defaults, decorations) {
+  const requestWithDefaults = octokit.request.defaults(defaults);
+  /* istanbul ignore next */
+
+  function withDecorations(...args) {
+    // @ts-ignore https://github.com/microsoft/TypeScript/issues/25488
+    let options = requestWithDefaults.endpoint.merge(...args); // There are currently no other decorations than `.mapToData`
+
+    if (decorations.mapToData) {
+      options = Object.assign({}, options, {
+        data: options[decorations.mapToData],
+        [decorations.mapToData]: undefined
+      });
+      return requestWithDefaults(options);
+    }
+
+    if (decorations.renamed) {
+      const [newScope, newMethodName] = decorations.renamed;
+      octokit.log.warn(`octokit.${scope}.${methodName}() has been renamed to octokit.${newScope}.${newMethodName}()`);
+    }
+
+    if (decorations.deprecated) {
+      octokit.log.warn(decorations.deprecated);
+    }
+
+    if (decorations.renamedParameters) {
+      // @ts-ignore https://github.com/microsoft/TypeScript/issues/25488
+      const options = requestWithDefaults.endpoint.merge(...args);
+
+      for (const [name, alias] of Object.entries(decorations.renamedParameters)) {
+        if (name in options) {
+          octokit.log.warn(`"${name}" parameter is deprecated for "octokit.${scope}.${methodName}()". Use "${alias}" instead`);
+
+          if (!(alias in options)) {
+            options[alias] = options[name];
+          }
+
+          delete options[name];
+        }
+      }
+
+      return requestWithDefaults(options);
+    } // @ts-ignore https://github.com/microsoft/TypeScript/issues/25488
+
+
+    return requestWithDefaults(...args);
+  }
+
+  return Object.assign(withDecorations, requestWithDefaults);
+}
+
+/**
+ * This plugin is a 1:1 copy of internal @octokit/rest plugins. The primary
+ * goal is to rebuild @octokit/rest on top of @octokit/core. Once that is
+ * done, we will remove the registerEndpoints methods and return the methods
+ * directly as with the other plugins. At that point we will also remove the
+ * legacy workarounds and deprecations.
+ *
+ * See the plan at
+ * https://github.com/octokit/plugin-rest-endpoint-methods.js/pull/1
+ */
+
+function restEndpointMethods(octokit) {
+  return endpointsToMethods(octokit, Endpoints);
+}
+restEndpointMethods.VERSION = VERSION;
+
+exports.restEndpointMethods = restEndpointMethods;
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ 2637:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var deprecation = __webpack_require__(8306);
+var once = _interopDefault(__webpack_require__(6385));
+
+const logOnce = once(deprecation => console.warn(deprecation));
+/**
+ * Error with extra properties to help with debugging
+ */
+
+class RequestError extends Error {
+  constructor(message, statusCode, options) {
+    super(message); // Maintains proper stack trace (only available on V8)
+
+    /* istanbul ignore next */
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor);
+    }
+
+    this.name = "HttpError";
+    this.status = statusCode;
+    Object.defineProperty(this, "code", {
+      get() {
+        logOnce(new deprecation.Deprecation("[@octokit/request-error] `error.code` is deprecated, use `error.status`."));
+        return statusCode;
+      }
+
+    });
+    this.headers = options.headers || {}; // redact request credentials without mutating original request options
+
+    const requestCopy = Object.assign({}, options.request);
+
+    if (options.request.headers.authorization) {
+      requestCopy.headers = Object.assign({}, options.request.headers, {
+        authorization: options.request.headers.authorization.replace(/ .*$/, " [REDACTED]")
+      });
+    }
+
+    requestCopy.url = requestCopy.url // client_id & client_secret can be passed as URL query parameters to increase rate limit
+    // see https://developer.github.com/v3/#increasing-the-unauthenticated-rate-limit-for-oauth-applications
+    .replace(/\bclient_secret=\w+/g, "client_secret=[REDACTED]") // OAuth tokens can be passed as URL query parameters, although it is not recommended
+    // see https://developer.github.com/v3/#oauth2-token-sent-in-a-header
+    .replace(/\baccess_token=\w+/g, "access_token=[REDACTED]");
+    this.request = requestCopy;
+  }
+
+}
+
+exports.RequestError = RequestError;
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ 6956:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var endpoint = __webpack_require__(8069);
+var universalUserAgent = __webpack_require__(3567);
+var isPlainObject = __webpack_require__(2829);
+var nodeFetch = _interopDefault(__webpack_require__(282));
+var requestError = __webpack_require__(2637);
+
+const VERSION = "5.4.9";
+
+function getBufferResponse(response) {
+  return response.arrayBuffer();
+}
+
+function fetchWrapper(requestOptions) {
+  if (isPlainObject.isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body)) {
+    requestOptions.body = JSON.stringify(requestOptions.body);
+  }
+
+  let headers = {};
+  let status;
+  let url;
+  const fetch = requestOptions.request && requestOptions.request.fetch || nodeFetch;
+  return fetch(requestOptions.url, Object.assign({
+    method: requestOptions.method,
+    body: requestOptions.body,
+    headers: requestOptions.headers,
+    redirect: requestOptions.redirect
+  }, requestOptions.request)).then(response => {
+    url = response.url;
+    status = response.status;
+
+    for (const keyAndValue of response.headers) {
+      headers[keyAndValue[0]] = keyAndValue[1];
+    }
+
+    if (status === 204 || status === 205) {
+      return;
+    } // GitHub API returns 200 for HEAD requests
+
+
+    if (requestOptions.method === "HEAD") {
+      if (status < 400) {
+        return;
+      }
+
+      throw new requestError.RequestError(response.statusText, status, {
+        headers,
+        request: requestOptions
+      });
+    }
+
+    if (status === 304) {
+      throw new requestError.RequestError("Not modified", status, {
+        headers,
+        request: requestOptions
+      });
+    }
+
+    if (status >= 400) {
+      return response.text().then(message => {
+        const error = new requestError.RequestError(message, status, {
+          headers,
+          request: requestOptions
+        });
+
+        try {
+          let responseBody = JSON.parse(error.message);
+          Object.assign(error, responseBody);
+          let errors = responseBody.errors; // Assumption `errors` would always be in Array format
+
+          error.message = error.message + ": " + errors.map(JSON.stringify).join(", ");
+        } catch (e) {// ignore, see octokit/rest.js#684
+        }
+
+        throw error;
+      });
+    }
+
+    const contentType = response.headers.get("content-type");
+
+    if (/application\/json/.test(contentType)) {
+      return response.json();
+    }
+
+    if (!contentType || /^text\/|charset=utf-8$/.test(contentType)) {
+      return response.text();
+    }
+
+    return getBufferResponse(response);
+  }).then(data => {
+    return {
+      status,
+      url,
+      headers,
+      data
+    };
+  }).catch(error => {
+    if (error instanceof requestError.RequestError) {
+      throw error;
+    }
+
+    throw new requestError.RequestError(error.message, 500, {
+      headers,
+      request: requestOptions
+    });
+  });
+}
+
+function withDefaults(oldEndpoint, newDefaults) {
+  const endpoint = oldEndpoint.defaults(newDefaults);
+
+  const newApi = function (route, parameters) {
+    const endpointOptions = endpoint.merge(route, parameters);
+
+    if (!endpointOptions.request || !endpointOptions.request.hook) {
+      return fetchWrapper(endpoint.parse(endpointOptions));
+    }
+
+    const request = (route, parameters) => {
+      return fetchWrapper(endpoint.parse(endpoint.merge(route, parameters)));
+    };
+
+    Object.assign(request, {
+      endpoint,
+      defaults: withDefaults.bind(null, endpoint)
+    });
+    return endpointOptions.request.hook(request, endpointOptions);
+  };
+
+  return Object.assign(newApi, {
+    endpoint,
+    defaults: withDefaults.bind(null, endpoint)
+  });
+}
+
+const request = withDefaults(endpoint.endpoint, {
+  headers: {
+    "user-agent": `octokit-request.js/${VERSION} ${universalUserAgent.getUserAgent()}`
+  }
+});
+
+exports.request = request;
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ 9617:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var register = __webpack_require__(1599)
+var addHook = __webpack_require__(6189)
+var removeHook = __webpack_require__(8945)
+
+// bind with array of arguments: https://stackoverflow.com/a/21792913
+var bind = Function.bind
+var bindable = bind.bind(bind)
+
+function bindApi (hook, state, name) {
+  var removeHookRef = bindable(removeHook, null).apply(null, name ? [state, name] : [state])
+  hook.api = { remove: removeHookRef }
+  hook.remove = removeHookRef
+
+  ;['before', 'error', 'after', 'wrap'].forEach(function (kind) {
+    var args = name ? [state, kind, name] : [state, kind]
+    hook[kind] = hook.api[kind] = bindable(addHook, null).apply(null, args)
+  })
+}
+
+function HookSingular () {
+  var singularHookName = 'h'
+  var singularHookState = {
+    registry: {}
+  }
+  var singularHook = register.bind(null, singularHookState, singularHookName)
+  bindApi(singularHook, singularHookState, singularHookName)
+  return singularHook
+}
+
+function HookCollection () {
+  var state = {
+    registry: {}
+  }
+
+  var hook = register.bind(null, state)
+  bindApi(hook, state)
+
+  return hook
+}
+
+var collectionHookDeprecationMessageDisplayed = false
+function Hook () {
+  if (!collectionHookDeprecationMessageDisplayed) {
+    console.warn('[before-after-hook]: "Hook()" repurposing warning, use "Hook.Collection()". Read more: https://git.io/upgrade-before-after-hook-to-1.4')
+    collectionHookDeprecationMessageDisplayed = true
+  }
+  return HookCollection()
+}
+
+Hook.Singular = HookSingular.bind()
+Hook.Collection = HookCollection.bind()
+
+module.exports = Hook
+// expose constructors as a named property for TypeScript
+module.exports.Hook = Hook
+module.exports.Singular = Hook.Singular
+module.exports.Collection = Hook.Collection
+
+
+/***/ }),
+
+/***/ 6189:
+/***/ ((module) => {
+
+module.exports = addHook
+
+function addHook (state, kind, name, hook) {
+  var orig = hook
+  if (!state.registry[name]) {
+    state.registry[name] = []
+  }
+
+  if (kind === 'before') {
+    hook = function (method, options) {
+      return Promise.resolve()
+        .then(orig.bind(null, options))
+        .then(method.bind(null, options))
+    }
+  }
+
+  if (kind === 'after') {
+    hook = function (method, options) {
+      var result
+      return Promise.resolve()
+        .then(method.bind(null, options))
+        .then(function (result_) {
+          result = result_
+          return orig(result, options)
+        })
+        .then(function () {
+          return result
+        })
+    }
+  }
+
+  if (kind === 'error') {
+    hook = function (method, options) {
+      return Promise.resolve()
+        .then(method.bind(null, options))
+        .catch(function (error) {
+          return orig(error, options)
+        })
+    }
+  }
+
+  state.registry[name].push({
+    hook: hook,
+    orig: orig
+  })
+}
+
+
+/***/ }),
+
+/***/ 1599:
+/***/ ((module) => {
+
+module.exports = register
+
+function register (state, name, method, options) {
+  if (typeof method !== 'function') {
+    throw new Error('method for before hook must be a function')
+  }
+
+  if (!options) {
+    options = {}
+  }
+
+  if (Array.isArray(name)) {
+    return name.reverse().reduce(function (callback, name) {
+      return register.bind(null, state, name, callback, options)
+    }, method)()
+  }
+
+  return Promise.resolve()
+    .then(function () {
+      if (!state.registry[name]) {
+        return method(options)
+      }
+
+      return (state.registry[name]).reduce(function (method, registered) {
+        return registered.hook.bind(null, method, options)
+      }, method)()
+    })
+}
+
+
+/***/ }),
+
+/***/ 8945:
+/***/ ((module) => {
+
+module.exports = removeHook
+
+function removeHook (state, name, method) {
+  if (!state.registry[name]) {
+    return
+  }
+
+  var index = state.registry[name]
+    .map(function (registered) { return registered.orig })
+    .indexOf(method)
+
+  if (index === -1) {
+    return
+  }
+
+  state.registry[name].splice(index, 1)
+}
+
+
+/***/ }),
+
+/***/ 8306:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+class Deprecation extends Error {
+  constructor(message) {
+    super(message); // Maintains proper stack trace (only available on V8)
+
+    /* istanbul ignore next */
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor);
+    }
+
+    this.name = 'Deprecation';
+  }
+
+}
+
+exports.Deprecation = Deprecation;
+
+
+/***/ }),
+
+/***/ 2829:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+/*!
+ * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
+ *
+ * Copyright (c) 2014-2017, Jon Schlinkert.
+ * Released under the MIT License.
+ */
+
+function isObject(o) {
+  return Object.prototype.toString.call(o) === '[object Object]';
+}
+
+function isPlainObject(o) {
+  var ctor,prot;
+
+  if (isObject(o) === false) return false;
+
+  // If has modified constructor
+  ctor = o.constructor;
+  if (ctor === undefined) return true;
+
+  // If has modified prototype
+  prot = ctor.prototype;
+  if (isObject(prot) === false) return false;
+
+  // If constructor does not have an Object-specific method
+  if (prot.hasOwnProperty('isPrototypeOf') === false) {
+    return false;
+  }
+
+  // Most likely a plain Object
+  return true;
+}
+
+exports.isPlainObject = isPlainObject;
+
+
+/***/ }),
+
+/***/ 2443:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+var __webpack_unused_export__;
+
+__webpack_unused_export__ = ({ value: true });
+var common_1 = __webpack_require__(9468);
+var legacy_1 = __webpack_require__(6993);
+var new_1 = __webpack_require__(7815);
+/**
+ * Evaluate the getter function and cache the result
+ * @param {boolean} [setProto=false] Set the value on the class prototype as well. Only applies to non-static getters.
+ * @param {boolean} [makeNonConfigurable=false] Set to true to make the resolved property non-configurable
+ * @param {ResultSelectorFn} [resultSelector] A filter function that must return true for the value to cached
+ * @return A decorator function
+ */
+function LazyGetter(setProto, makeNonConfigurable, resultSelector) {
+    if (resultSelector === void 0) { resultSelector = common_1.defaultFilter; }
+    var desc;
+    var prop;
+    var args = null;
+    var isLegacy;
+    function decorator(targetOrDesc, key, descriptor) {
+        args = arguments;
+        if (key === undefined) {
+            if (typeof desc === 'undefined') {
+                isLegacy = false;
+                prop = targetOrDesc.key;
+                desc = Object.assign({}, targetOrDesc.descriptor || /* istanbul ignore next */ targetOrDesc);
+            }
+            return new_1.decorateNew(targetOrDesc, setProto, makeNonConfigurable, resultSelector);
+        }
+        else {
+            if (typeof desc === 'undefined') {
+                isLegacy = true;
+                prop = key;
+                desc = Object.assign({}, descriptor || /* istanbul ignore next */ Object.getOwnPropertyDescriptor(targetOrDesc, key));
+            }
+            return legacy_1.decorateLegacy(targetOrDesc, key, descriptor, setProto, makeNonConfigurable, resultSelector);
+        }
+    }
+    decorator.reset = setProto ? thrower : function (on) {
+        if (!on) {
+            throw new Error('Unable to restore descriptor on an undefined target');
+        }
+        if (!desc) {
+            throw new Error('Unable to restore descriptor. Did you remember to apply your decorator to a method?');
+        }
+        // Restore descriptor to its original state
+        Object.defineProperty(on, prop, desc);
+        var ret = decorator.apply(null, args);
+        Object.defineProperty(on, prop, isLegacy ? ret : (ret.descriptor || ret));
+    };
+    return decorator;
+}
+exports.a = LazyGetter;
+function thrower() {
+    throw new Error('This decoration modifies the class prototype and cannot be reset.');
+}
+//# sourceMappingURL=LazyGetter.js.map
+
+/***/ }),
+
+/***/ 9468:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+/** @internal */
+function defaultFilter() {
+    return true;
+}
+exports.defaultFilter = defaultFilter;
+/** @internal */
+function validateAndExtractMethodFromDescriptor(desc) {
+    var originalMethod = desc.get;
+    if (!originalMethod) {
+        throw new Error('@LazyGetter can only decorate getters!');
+    }
+    else if (!desc.configurable) {
+        throw new Error('@LazyGetter target must be configurable');
+    }
+    return originalMethod;
+}
+exports.validateAndExtractMethodFromDescriptor = validateAndExtractMethodFromDescriptor;
+/** @internal */
+function getterCommon(target, //tslint:disable-line:parameters-max-number
+key, isStatic, enumerable, originalMethod, thisArg, args, setProto, makeNonConfigurable, resultSelector) {
+    var value = originalMethod.apply(thisArg, args);
+    if (resultSelector(value)) {
+        var newDescriptor = {
+            configurable: !makeNonConfigurable,
+            enumerable: enumerable,
+            value: value
+        };
+        if (isStatic || setProto) {
+            Object.defineProperty(target, key, newDescriptor);
+        }
+        if (!isStatic) {
+            Object.defineProperty(thisArg, key, newDescriptor);
+        }
+    }
+    return value;
+}
+exports.getterCommon = getterCommon;
+//# sourceMappingURL=common.js.map
+
+/***/ }),
+
+/***/ 6993:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+var common_1 = __webpack_require__(9468);
+/** @internal */
+function decorateLegacy(target, key, descriptor, setProto, makeNonConfigurable, resultSelector) {
+    /* istanbul ignore if */
+    if (!descriptor) {
+        descriptor = Object.getOwnPropertyDescriptor(target, key);
+        if (!descriptor) {
+            var e = new Error('@LazyGetter is unable to determine the property descriptor');
+            e.$target = target;
+            e.$key = key;
+            throw e;
+        }
+    }
+    var originalMethod = common_1.validateAndExtractMethodFromDescriptor(descriptor);
+    return Object.assign({}, descriptor, {
+        get: function () {
+            return common_1.getterCommon(target, key, Object.getPrototypeOf(target) === Function.prototype, !!descriptor.enumerable, originalMethod, this, arguments, setProto, makeNonConfigurable, resultSelector);
+        }
+    });
+}
+exports.decorateLegacy = decorateLegacy;
+//# sourceMappingURL=legacy.js.map
+
+/***/ }),
+
+/***/ 7815:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+var common_1 = __webpack_require__(9468);
+/** @internal */
+function decorateNew(inp, setProto, makeNonConfigurable, resultSelector) {
+    var out = Object.assign({}, inp);
+    if (out.descriptor) {
+        out.descriptor = Object.assign({}, out.descriptor);
+    }
+    var actualDesc = (out.descriptor || /* istanbul ignore next */ out);
+    var originalMethod = common_1.validateAndExtractMethodFromDescriptor(actualDesc);
+    var isStatic = inp.placement === 'static';
+    actualDesc.get = function () {
+        return common_1.getterCommon(isStatic ? this : Object.getPrototypeOf(this), out.key, isStatic, !!actualDesc.enumerable, originalMethod, this, arguments, setProto, makeNonConfigurable, resultSelector);
+    };
+    return out;
+}
+exports.decorateNew = decorateNew;
+//# sourceMappingURL=new.js.map
+
+/***/ }),
+
+/***/ 3633:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+var __webpack_unused_export__;
+
+/**!
+ @preserve memoize-decorator 1.3.2
+ @copyright 2020 Edwin Martin
+ @license MIT
+ */
+__webpack_unused_export__ = ({ value: true });
+var cacheMap = new Map();
+function memoize(config) {
+    if (config === void 0) { config = {}; }
+    return function (target, propertyName, propertyDesciptor) {
+        var timeout = Infinity;
+        var prop = propertyDesciptor.value ? "value" : "get";
+        var originalFunction = propertyDesciptor[prop];
+        var map = new Map();
+        propertyDesciptor[prop] = function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            var key = config.resolver
+                ? config.resolver.apply(this, args)
+                : JSON.stringify(args);
+            if (map.has(key) && (!config.ttl || timeout > Date.now())) {
+                return map.get(key);
+            }
+            else {
+                var result = originalFunction.apply(this, args);
+                map.set(key, result);
+                if (config.ttl) {
+                    timeout = Date.now() + config.ttl;
+                }
+                return result;
+            }
+        };
+        cacheMap.set(propertyDesciptor[prop], map);
+        return propertyDesciptor;
+    };
+}
+exports.HP = memoize;
+function clear(fn) {
+    var map = cacheMap.get(fn);
+    if (map) {
+        map.clear();
+    }
+}
+__webpack_unused_export__ = clear;
+//# sourceMappingURL=memoize.js.map
+
+/***/ }),
+
+/***/ 282:
+/***/ ((module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var Stream = _interopDefault(__webpack_require__(2413));
+var http = _interopDefault(__webpack_require__(8605));
+var Url = _interopDefault(__webpack_require__(8835));
+var https = _interopDefault(__webpack_require__(7211));
+var zlib = _interopDefault(__webpack_require__(8761));
+
+// Based on https://github.com/tmpvar/jsdom/blob/aa85b2abf07766ff7bf5c1f6daafb3726f2f2db5/lib/jsdom/living/blob.js
+
+// fix for "Readable" isn't a named export issue
+const Readable = Stream.Readable;
+
+const BUFFER = Symbol('buffer');
+const TYPE = Symbol('type');
+
+class Blob {
+	constructor() {
+		this[TYPE] = '';
+
+		const blobParts = arguments[0];
+		const options = arguments[1];
+
+		const buffers = [];
+		let size = 0;
+
+		if (blobParts) {
+			const a = blobParts;
+			const length = Number(a.length);
+			for (let i = 0; i < length; i++) {
+				const element = a[i];
+				let buffer;
+				if (element instanceof Buffer) {
+					buffer = element;
+				} else if (ArrayBuffer.isView(element)) {
+					buffer = Buffer.from(element.buffer, element.byteOffset, element.byteLength);
+				} else if (element instanceof ArrayBuffer) {
+					buffer = Buffer.from(element);
+				} else if (element instanceof Blob) {
+					buffer = element[BUFFER];
+				} else {
+					buffer = Buffer.from(typeof element === 'string' ? element : String(element));
+				}
+				size += buffer.length;
+				buffers.push(buffer);
+			}
+		}
+
+		this[BUFFER] = Buffer.concat(buffers);
+
+		let type = options && options.type !== undefined && String(options.type).toLowerCase();
+		if (type && !/[^\u0020-\u007E]/.test(type)) {
+			this[TYPE] = type;
+		}
+	}
+	get size() {
+		return this[BUFFER].length;
+	}
+	get type() {
+		return this[TYPE];
+	}
+	text() {
+		return Promise.resolve(this[BUFFER].toString());
+	}
+	arrayBuffer() {
+		const buf = this[BUFFER];
+		const ab = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
+		return Promise.resolve(ab);
+	}
+	stream() {
+		const readable = new Readable();
+		readable._read = function () {};
+		readable.push(this[BUFFER]);
+		readable.push(null);
+		return readable;
+	}
+	toString() {
+		return '[object Blob]';
+	}
+	slice() {
+		const size = this.size;
+
+		const start = arguments[0];
+		const end = arguments[1];
+		let relativeStart, relativeEnd;
+		if (start === undefined) {
+			relativeStart = 0;
+		} else if (start < 0) {
+			relativeStart = Math.max(size + start, 0);
+		} else {
+			relativeStart = Math.min(start, size);
+		}
+		if (end === undefined) {
+			relativeEnd = size;
+		} else if (end < 0) {
+			relativeEnd = Math.max(size + end, 0);
+		} else {
+			relativeEnd = Math.min(end, size);
+		}
+		const span = Math.max(relativeEnd - relativeStart, 0);
+
+		const buffer = this[BUFFER];
+		const slicedBuffer = buffer.slice(relativeStart, relativeStart + span);
+		const blob = new Blob([], { type: arguments[2] });
+		blob[BUFFER] = slicedBuffer;
+		return blob;
+	}
+}
+
+Object.defineProperties(Blob.prototype, {
+	size: { enumerable: true },
+	type: { enumerable: true },
+	slice: { enumerable: true }
+});
+
+Object.defineProperty(Blob.prototype, Symbol.toStringTag, {
+	value: 'Blob',
+	writable: false,
+	enumerable: false,
+	configurable: true
+});
+
+/**
+ * fetch-error.js
+ *
+ * FetchError interface for operational errors
+ */
+
+/**
+ * Create FetchError instance
+ *
+ * @param   String      message      Error message for human
+ * @param   String      type         Error type for machine
+ * @param   String      systemError  For Node.js system error
+ * @return  FetchError
+ */
+function FetchError(message, type, systemError) {
+  Error.call(this, message);
+
+  this.message = message;
+  this.type = type;
+
+  // when err.type is `system`, err.code contains system error code
+  if (systemError) {
+    this.code = this.errno = systemError.code;
+  }
+
+  // hide custom error implementation details from end-users
+  Error.captureStackTrace(this, this.constructor);
+}
+
+FetchError.prototype = Object.create(Error.prototype);
+FetchError.prototype.constructor = FetchError;
+FetchError.prototype.name = 'FetchError';
+
+let convert;
+try {
+	convert = __webpack_require__(4228).convert;
+} catch (e) {}
+
+const INTERNALS = Symbol('Body internals');
+
+// fix an issue where "PassThrough" isn't a named export for node <10
+const PassThrough = Stream.PassThrough;
+
+/**
+ * Body mixin
+ *
+ * Ref: https://fetch.spec.whatwg.org/#body
+ *
+ * @param   Stream  body  Readable stream
+ * @param   Object  opts  Response options
+ * @return  Void
+ */
+function Body(body) {
+	var _this = this;
+
+	var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+	    _ref$size = _ref.size;
+
+	let size = _ref$size === undefined ? 0 : _ref$size;
+	var _ref$timeout = _ref.timeout;
+	let timeout = _ref$timeout === undefined ? 0 : _ref$timeout;
+
+	if (body == null) {
+		// body is undefined or null
+		body = null;
+	} else if (isURLSearchParams(body)) {
+		// body is a URLSearchParams
+		body = Buffer.from(body.toString());
+	} else if (isBlob(body)) ; else if (Buffer.isBuffer(body)) ; else if (Object.prototype.toString.call(body) === '[object ArrayBuffer]') {
+		// body is ArrayBuffer
+		body = Buffer.from(body);
+	} else if (ArrayBuffer.isView(body)) {
+		// body is ArrayBufferView
+		body = Buffer.from(body.buffer, body.byteOffset, body.byteLength);
+	} else if (body instanceof Stream) ; else {
+		// none of the above
+		// coerce to string then buffer
+		body = Buffer.from(String(body));
+	}
+	this[INTERNALS] = {
+		body,
+		disturbed: false,
+		error: null
+	};
+	this.size = size;
+	this.timeout = timeout;
+
+	if (body instanceof Stream) {
+		body.on('error', function (err) {
+			const error = err.name === 'AbortError' ? err : new FetchError(`Invalid response body while trying to fetch ${_this.url}: ${err.message}`, 'system', err);
+			_this[INTERNALS].error = error;
+		});
+	}
+}
+
+Body.prototype = {
+	get body() {
+		return this[INTERNALS].body;
+	},
+
+	get bodyUsed() {
+		return this[INTERNALS].disturbed;
+	},
+
+	/**
+  * Decode response as ArrayBuffer
+  *
+  * @return  Promise
+  */
+	arrayBuffer() {
+		return consumeBody.call(this).then(function (buf) {
+			return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
+		});
+	},
+
+	/**
+  * Return raw response as Blob
+  *
+  * @return Promise
+  */
+	blob() {
+		let ct = this.headers && this.headers.get('content-type') || '';
+		return consumeBody.call(this).then(function (buf) {
+			return Object.assign(
+			// Prevent copying
+			new Blob([], {
+				type: ct.toLowerCase()
+			}), {
+				[BUFFER]: buf
+			});
+		});
+	},
+
+	/**
+  * Decode response as json
+  *
+  * @return  Promise
+  */
+	json() {
+		var _this2 = this;
+
+		return consumeBody.call(this).then(function (buffer) {
+			try {
+				return JSON.parse(buffer.toString());
+			} catch (err) {
+				return Body.Promise.reject(new FetchError(`invalid json response body at ${_this2.url} reason: ${err.message}`, 'invalid-json'));
+			}
+		});
+	},
+
+	/**
+  * Decode response as text
+  *
+  * @return  Promise
+  */
+	text() {
+		return consumeBody.call(this).then(function (buffer) {
+			return buffer.toString();
+		});
+	},
+
+	/**
+  * Decode response as buffer (non-spec api)
+  *
+  * @return  Promise
+  */
+	buffer() {
+		return consumeBody.call(this);
+	},
+
+	/**
+  * Decode response as text, while automatically detecting the encoding and
+  * trying to decode to UTF-8 (non-spec api)
+  *
+  * @return  Promise
+  */
+	textConverted() {
+		var _this3 = this;
+
+		return consumeBody.call(this).then(function (buffer) {
+			return convertBody(buffer, _this3.headers);
+		});
+	}
+};
+
+// In browsers, all properties are enumerable.
+Object.defineProperties(Body.prototype, {
+	body: { enumerable: true },
+	bodyUsed: { enumerable: true },
+	arrayBuffer: { enumerable: true },
+	blob: { enumerable: true },
+	json: { enumerable: true },
+	text: { enumerable: true }
+});
+
+Body.mixIn = function (proto) {
+	for (const name of Object.getOwnPropertyNames(Body.prototype)) {
+		// istanbul ignore else: future proof
+		if (!(name in proto)) {
+			const desc = Object.getOwnPropertyDescriptor(Body.prototype, name);
+			Object.defineProperty(proto, name, desc);
+		}
+	}
+};
+
+/**
+ * Consume and convert an entire Body to a Buffer.
+ *
+ * Ref: https://fetch.spec.whatwg.org/#concept-body-consume-body
+ *
+ * @return  Promise
+ */
+function consumeBody() {
+	var _this4 = this;
+
+	if (this[INTERNALS].disturbed) {
+		return Body.Promise.reject(new TypeError(`body used already for: ${this.url}`));
+	}
+
+	this[INTERNALS].disturbed = true;
+
+	if (this[INTERNALS].error) {
+		return Body.Promise.reject(this[INTERNALS].error);
+	}
+
+	let body = this.body;
+
+	// body is null
+	if (body === null) {
+		return Body.Promise.resolve(Buffer.alloc(0));
+	}
+
+	// body is blob
+	if (isBlob(body)) {
+		body = body.stream();
+	}
+
+	// body is buffer
+	if (Buffer.isBuffer(body)) {
+		return Body.Promise.resolve(body);
+	}
+
+	// istanbul ignore if: should never happen
+	if (!(body instanceof Stream)) {
+		return Body.Promise.resolve(Buffer.alloc(0));
+	}
+
+	// body is stream
+	// get ready to actually consume the body
+	let accum = [];
+	let accumBytes = 0;
+	let abort = false;
+
+	return new Body.Promise(function (resolve, reject) {
+		let resTimeout;
+
+		// allow timeout on slow response body
+		if (_this4.timeout) {
+			resTimeout = setTimeout(function () {
+				abort = true;
+				reject(new FetchError(`Response timeout while trying to fetch ${_this4.url} (over ${_this4.timeout}ms)`, 'body-timeout'));
+			}, _this4.timeout);
+		}
+
+		// handle stream errors
+		body.on('error', function (err) {
+			if (err.name === 'AbortError') {
+				// if the request was aborted, reject with this Error
+				abort = true;
+				reject(err);
+			} else {
+				// other errors, such as incorrect content-encoding
+				reject(new FetchError(`Invalid response body while trying to fetch ${_this4.url}: ${err.message}`, 'system', err));
+			}
+		});
+
+		body.on('data', function (chunk) {
+			if (abort || chunk === null) {
+				return;
+			}
+
+			if (_this4.size && accumBytes + chunk.length > _this4.size) {
+				abort = true;
+				reject(new FetchError(`content size at ${_this4.url} over limit: ${_this4.size}`, 'max-size'));
+				return;
+			}
+
+			accumBytes += chunk.length;
+			accum.push(chunk);
+		});
+
+		body.on('end', function () {
+			if (abort) {
+				return;
+			}
+
+			clearTimeout(resTimeout);
+
+			try {
+				resolve(Buffer.concat(accum, accumBytes));
+			} catch (err) {
+				// handle streams that have accumulated too much data (issue #414)
+				reject(new FetchError(`Could not create Buffer from response body for ${_this4.url}: ${err.message}`, 'system', err));
+			}
+		});
+	});
+}
+
+/**
+ * Detect buffer encoding and convert to target encoding
+ * ref: http://www.w3.org/TR/2011/WD-html5-20110113/parsing.html#determining-the-character-encoding
+ *
+ * @param   Buffer  buffer    Incoming buffer
+ * @param   String  encoding  Target encoding
+ * @return  String
+ */
+function convertBody(buffer, headers) {
+	if (typeof convert !== 'function') {
+		throw new Error('The package `encoding` must be installed to use the textConverted() function');
+	}
+
+	const ct = headers.get('content-type');
+	let charset = 'utf-8';
+	let res, str;
+
+	// header
+	if (ct) {
+		res = /charset=([^;]*)/i.exec(ct);
+	}
+
+	// no charset in content type, peek at response body for at most 1024 bytes
+	str = buffer.slice(0, 1024).toString();
+
+	// html5
+	if (!res && str) {
+		res = /<meta.+?charset=(['"])(.+?)\1/i.exec(str);
+	}
+
+	// html4
+	if (!res && str) {
+		res = /<meta[\s]+?http-equiv=(['"])content-type\1[\s]+?content=(['"])(.+?)\2/i.exec(str);
+		if (!res) {
+			res = /<meta[\s]+?content=(['"])(.+?)\1[\s]+?http-equiv=(['"])content-type\3/i.exec(str);
+			if (res) {
+				res.pop(); // drop last quote
+			}
+		}
+
+		if (res) {
+			res = /charset=(.*)/i.exec(res.pop());
+		}
+	}
+
+	// xml
+	if (!res && str) {
+		res = /<\?xml.+?encoding=(['"])(.+?)\1/i.exec(str);
+	}
+
+	// found charset
+	if (res) {
+		charset = res.pop();
+
+		// prevent decode issues when sites use incorrect encoding
+		// ref: https://hsivonen.fi/encoding-menu/
+		if (charset === 'gb2312' || charset === 'gbk') {
+			charset = 'gb18030';
+		}
+	}
+
+	// turn raw buffers into a single utf-8 buffer
+	return convert(buffer, 'UTF-8', charset).toString();
+}
+
+/**
+ * Detect a URLSearchParams object
+ * ref: https://github.com/bitinn/node-fetch/issues/296#issuecomment-307598143
+ *
+ * @param   Object  obj     Object to detect by type or brand
+ * @return  String
+ */
+function isURLSearchParams(obj) {
+	// Duck-typing as a necessary condition.
+	if (typeof obj !== 'object' || typeof obj.append !== 'function' || typeof obj.delete !== 'function' || typeof obj.get !== 'function' || typeof obj.getAll !== 'function' || typeof obj.has !== 'function' || typeof obj.set !== 'function') {
+		return false;
+	}
+
+	// Brand-checking and more duck-typing as optional condition.
+	return obj.constructor.name === 'URLSearchParams' || Object.prototype.toString.call(obj) === '[object URLSearchParams]' || typeof obj.sort === 'function';
+}
+
+/**
+ * Check if `obj` is a W3C `Blob` object (which `File` inherits from)
+ * @param  {*} obj
+ * @return {boolean}
+ */
+function isBlob(obj) {
+	return typeof obj === 'object' && typeof obj.arrayBuffer === 'function' && typeof obj.type === 'string' && typeof obj.stream === 'function' && typeof obj.constructor === 'function' && typeof obj.constructor.name === 'string' && /^(Blob|File)$/.test(obj.constructor.name) && /^(Blob|File)$/.test(obj[Symbol.toStringTag]);
+}
+
+/**
+ * Clone body given Res/Req instance
+ *
+ * @param   Mixed  instance  Response or Request instance
+ * @return  Mixed
+ */
+function clone(instance) {
+	let p1, p2;
+	let body = instance.body;
+
+	// don't allow cloning a used body
+	if (instance.bodyUsed) {
+		throw new Error('cannot clone body after it is used');
+	}
+
+	// check that body is a stream and not form-data object
+	// note: we can't clone the form-data object without having it as a dependency
+	if (body instanceof Stream && typeof body.getBoundary !== 'function') {
+		// tee instance body
+		p1 = new PassThrough();
+		p2 = new PassThrough();
+		body.pipe(p1);
+		body.pipe(p2);
+		// set instance body to teed body and return the other teed body
+		instance[INTERNALS].body = p1;
+		body = p2;
+	}
+
+	return body;
+}
+
+/**
+ * Performs the operation "extract a `Content-Type` value from |object|" as
+ * specified in the specification:
+ * https://fetch.spec.whatwg.org/#concept-bodyinit-extract
+ *
+ * This function assumes that instance.body is present.
+ *
+ * @param   Mixed  instance  Any options.body input
+ */
+function extractContentType(body) {
+	if (body === null) {
+		// body is null
+		return null;
+	} else if (typeof body === 'string') {
+		// body is string
+		return 'text/plain;charset=UTF-8';
+	} else if (isURLSearchParams(body)) {
+		// body is a URLSearchParams
+		return 'application/x-www-form-urlencoded;charset=UTF-8';
+	} else if (isBlob(body)) {
+		// body is blob
+		return body.type || null;
+	} else if (Buffer.isBuffer(body)) {
+		// body is buffer
+		return null;
+	} else if (Object.prototype.toString.call(body) === '[object ArrayBuffer]') {
+		// body is ArrayBuffer
+		return null;
+	} else if (ArrayBuffer.isView(body)) {
+		// body is ArrayBufferView
+		return null;
+	} else if (typeof body.getBoundary === 'function') {
+		// detect form data input from form-data module
+		return `multipart/form-data;boundary=${body.getBoundary()}`;
+	} else if (body instanceof Stream) {
+		// body is stream
+		// can't really do much about this
+		return null;
+	} else {
+		// Body constructor defaults other things to string
+		return 'text/plain;charset=UTF-8';
+	}
+}
+
+/**
+ * The Fetch Standard treats this as if "total bytes" is a property on the body.
+ * For us, we have to explicitly get it with a function.
+ *
+ * ref: https://fetch.spec.whatwg.org/#concept-body-total-bytes
+ *
+ * @param   Body    instance   Instance of Body
+ * @return  Number?            Number of bytes, or null if not possible
+ */
+function getTotalBytes(instance) {
+	const body = instance.body;
+
+
+	if (body === null) {
+		// body is null
+		return 0;
+	} else if (isBlob(body)) {
+		return body.size;
+	} else if (Buffer.isBuffer(body)) {
+		// body is buffer
+		return body.length;
+	} else if (body && typeof body.getLengthSync === 'function') {
+		// detect form data input from form-data module
+		if (body._lengthRetrievers && body._lengthRetrievers.length == 0 || // 1.x
+		body.hasKnownLength && body.hasKnownLength()) {
+			// 2.x
+			return body.getLengthSync();
+		}
+		return null;
+	} else {
+		// body is stream
+		return null;
+	}
+}
+
+/**
+ * Write a Body to a Node.js WritableStream (e.g. http.Request) object.
+ *
+ * @param   Body    instance   Instance of Body
+ * @return  Void
+ */
+function writeToStream(dest, instance) {
+	const body = instance.body;
+
+
+	if (body === null) {
+		// body is null
+		dest.end();
+	} else if (isBlob(body)) {
+		body.stream().pipe(dest);
+	} else if (Buffer.isBuffer(body)) {
+		// body is buffer
+		dest.write(body);
+		dest.end();
+	} else {
+		// body is stream
+		body.pipe(dest);
+	}
+}
+
+// expose Promise
+Body.Promise = global.Promise;
+
+/**
+ * headers.js
+ *
+ * Headers class offers convenient helpers
+ */
+
+const invalidTokenRegex = /[^\^_`a-zA-Z\-0-9!#$%&'*+.|~]/;
+const invalidHeaderCharRegex = /[^\t\x20-\x7e\x80-\xff]/;
+
+function validateName(name) {
+	name = `${name}`;
+	if (invalidTokenRegex.test(name) || name === '') {
+		throw new TypeError(`${name} is not a legal HTTP header name`);
+	}
+}
+
+function validateValue(value) {
+	value = `${value}`;
+	if (invalidHeaderCharRegex.test(value)) {
+		throw new TypeError(`${value} is not a legal HTTP header value`);
+	}
+}
+
+/**
+ * Find the key in the map object given a header name.
+ *
+ * Returns undefined if not found.
+ *
+ * @param   String  name  Header name
+ * @return  String|Undefined
+ */
+function find(map, name) {
+	name = name.toLowerCase();
+	for (const key in map) {
+		if (key.toLowerCase() === name) {
+			return key;
+		}
+	}
+	return undefined;
+}
+
+const MAP = Symbol('map');
+class Headers {
+	/**
+  * Headers class
+  *
+  * @param   Object  headers  Response headers
+  * @return  Void
+  */
+	constructor() {
+		let init = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
+
+		this[MAP] = Object.create(null);
+
+		if (init instanceof Headers) {
+			const rawHeaders = init.raw();
+			const headerNames = Object.keys(rawHeaders);
+
+			for (const headerName of headerNames) {
+				for (const value of rawHeaders[headerName]) {
+					this.append(headerName, value);
+				}
+			}
+
+			return;
+		}
+
+		// We don't worry about converting prop to ByteString here as append()
+		// will handle it.
+		if (init == null) ; else if (typeof init === 'object') {
+			const method = init[Symbol.iterator];
+			if (method != null) {
+				if (typeof method !== 'function') {
+					throw new TypeError('Header pairs must be iterable');
+				}
+
+				// sequence<sequence<ByteString>>
+				// Note: per spec we have to first exhaust the lists then process them
+				const pairs = [];
+				for (const pair of init) {
+					if (typeof pair !== 'object' || typeof pair[Symbol.iterator] !== 'function') {
+						throw new TypeError('Each header pair must be iterable');
+					}
+					pairs.push(Array.from(pair));
+				}
+
+				for (const pair of pairs) {
+					if (pair.length !== 2) {
+						throw new TypeError('Each header pair must be a name/value tuple');
+					}
+					this.append(pair[0], pair[1]);
+				}
+			} else {
+				// record<ByteString, ByteString>
+				for (const key of Object.keys(init)) {
+					const value = init[key];
+					this.append(key, value);
+				}
+			}
+		} else {
+			throw new TypeError('Provided initializer must be an object');
+		}
+	}
+
+	/**
+  * Return combined header value given name
+  *
+  * @param   String  name  Header name
+  * @return  Mixed
+  */
+	get(name) {
+		name = `${name}`;
+		validateName(name);
+		const key = find(this[MAP], name);
+		if (key === undefined) {
+			return null;
+		}
+
+		return this[MAP][key].join(', ');
+	}
+
+	/**
+  * Iterate over all headers
+  *
+  * @param   Function  callback  Executed for each item with parameters (value, name, thisArg)
+  * @param   Boolean   thisArg   `this` context for callback function
+  * @return  Void
+  */
+	forEach(callback) {
+		let thisArg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
+
+		let pairs = getHeaders(this);
+		let i = 0;
+		while (i < pairs.length) {
+			var _pairs$i = pairs[i];
+			const name = _pairs$i[0],
+			      value = _pairs$i[1];
+
+			callback.call(thisArg, value, name, this);
+			pairs = getHeaders(this);
+			i++;
+		}
+	}
+
+	/**
+  * Overwrite header values given name
+  *
+  * @param   String  name   Header name
+  * @param   String  value  Header value
+  * @return  Void
+  */
+	set(name, value) {
+		name = `${name}`;
+		value = `${value}`;
+		validateName(name);
+		validateValue(value);
+		const key = find(this[MAP], name);
+		this[MAP][key !== undefined ? key : name] = [value];
+	}
+
+	/**
+  * Append a value onto existing header
+  *
+  * @param   String  name   Header name
+  * @param   String  value  Header value
+  * @return  Void
+  */
+	append(name, value) {
+		name = `${name}`;
+		value = `${value}`;
+		validateName(name);
+		validateValue(value);
+		const key = find(this[MAP], name);
+		if (key !== undefined) {
+			this[MAP][key].push(value);
+		} else {
+			this[MAP][name] = [value];
+		}
+	}
+
+	/**
+  * Check for header name existence
+  *
+  * @param   String   name  Header name
+  * @return  Boolean
+  */
+	has(name) {
+		name = `${name}`;
+		validateName(name);
+		return find(this[MAP], name) !== undefined;
+	}
+
+	/**
+  * Delete all header values given name
+  *
+  * @param   String  name  Header name
+  * @return  Void
+  */
+	delete(name) {
+		name = `${name}`;
+		validateName(name);
+		const key = find(this[MAP], name);
+		if (key !== undefined) {
+			delete this[MAP][key];
+		}
+	}
+
+	/**
+  * Return raw headers (non-spec api)
+  *
+  * @return  Object
+  */
+	raw() {
+		return this[MAP];
+	}
+
+	/**
+  * Get an iterator on keys.
+  *
+  * @return  Iterator
+  */
+	keys() {
+		return createHeadersIterator(this, 'key');
+	}
+
+	/**
+  * Get an iterator on values.
+  *
+  * @return  Iterator
+  */
+	values() {
+		return createHeadersIterator(this, 'value');
+	}
+
+	/**
+  * Get an iterator on entries.
+  *
+  * This is the default iterator of the Headers object.
+  *
+  * @return  Iterator
+  */
+	[Symbol.iterator]() {
+		return createHeadersIterator(this, 'key+value');
+	}
+}
+Headers.prototype.entries = Headers.prototype[Symbol.iterator];
+
+Object.defineProperty(Headers.prototype, Symbol.toStringTag, {
+	value: 'Headers',
+	writable: false,
+	enumerable: false,
+	configurable: true
+});
+
+Object.defineProperties(Headers.prototype, {
+	get: { enumerable: true },
+	forEach: { enumerable: true },
+	set: { enumerable: true },
+	append: { enumerable: true },
+	has: { enumerable: true },
+	delete: { enumerable: true },
+	keys: { enumerable: true },
+	values: { enumerable: true },
+	entries: { enumerable: true }
+});
+
+function getHeaders(headers) {
+	let kind = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'key+value';
+
+	const keys = Object.keys(headers[MAP]).sort();
+	return keys.map(kind === 'key' ? function (k) {
+		return k.toLowerCase();
+	} : kind === 'value' ? function (k) {
+		return headers[MAP][k].join(', ');
+	} : function (k) {
+		return [k.toLowerCase(), headers[MAP][k].join(', ')];
+	});
+}
+
+const INTERNAL = Symbol('internal');
+
+function createHeadersIterator(target, kind) {
+	const iterator = Object.create(HeadersIteratorPrototype);
+	iterator[INTERNAL] = {
+		target,
+		kind,
+		index: 0
+	};
+	return iterator;
+}
+
+const HeadersIteratorPrototype = Object.setPrototypeOf({
+	next() {
+		// istanbul ignore if
+		if (!this || Object.getPrototypeOf(this) !== HeadersIteratorPrototype) {
+			throw new TypeError('Value of `this` is not a HeadersIterator');
+		}
+
+		var _INTERNAL = this[INTERNAL];
+		const target = _INTERNAL.target,
+		      kind = _INTERNAL.kind,
+		      index = _INTERNAL.index;
+
+		const values = getHeaders(target, kind);
+		const len = values.length;
+		if (index >= len) {
+			return {
+				value: undefined,
+				done: true
+			};
+		}
+
+		this[INTERNAL].index = index + 1;
+
+		return {
+			value: values[index],
+			done: false
+		};
+	}
+}, Object.getPrototypeOf(Object.getPrototypeOf([][Symbol.iterator]())));
+
+Object.defineProperty(HeadersIteratorPrototype, Symbol.toStringTag, {
+	value: 'HeadersIterator',
+	writable: false,
+	enumerable: false,
+	configurable: true
+});
+
+/**
+ * Export the Headers object in a form that Node.js can consume.
+ *
+ * @param   Headers  headers
+ * @return  Object
+ */
+function exportNodeCompatibleHeaders(headers) {
+	const obj = Object.assign({ __proto__: null }, headers[MAP]);
+
+	// http.request() only supports string as Host header. This hack makes
+	// specifying custom Host header possible.
+	const hostHeaderKey = find(headers[MAP], 'Host');
+	if (hostHeaderKey !== undefined) {
+		obj[hostHeaderKey] = obj[hostHeaderKey][0];
+	}
+
+	return obj;
+}
+
+/**
+ * Create a Headers object from an object of headers, ignoring those that do
+ * not conform to HTTP grammar productions.
+ *
+ * @param   Object  obj  Object of headers
+ * @return  Headers
+ */
+function createHeadersLenient(obj) {
+	const headers = new Headers();
+	for (const name of Object.keys(obj)) {
+		if (invalidTokenRegex.test(name)) {
+			continue;
+		}
+		if (Array.isArray(obj[name])) {
+			for (const val of obj[name]) {
+				if (invalidHeaderCharRegex.test(val)) {
+					continue;
+				}
+				if (headers[MAP][name] === undefined) {
+					headers[MAP][name] = [val];
+				} else {
+					headers[MAP][name].push(val);
+				}
+			}
+		} else if (!invalidHeaderCharRegex.test(obj[name])) {
+			headers[MAP][name] = [obj[name]];
+		}
+	}
+	return headers;
+}
+
+const INTERNALS$1 = Symbol('Response internals');
+
+// fix an issue where "STATUS_CODES" aren't a named export for node <10
+const STATUS_CODES = http.STATUS_CODES;
+
+/**
+ * Response class
+ *
+ * @param   Stream  body  Readable stream
+ * @param   Object  opts  Response options
+ * @return  Void
+ */
+class Response {
+	constructor() {
+		let body = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+		let opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+		Body.call(this, body, opts);
+
+		const status = opts.status || 200;
+		const headers = new Headers(opts.headers);
+
+		if (body != null && !headers.has('Content-Type')) {
+			const contentType = extractContentType(body);
+			if (contentType) {
+				headers.append('Content-Type', contentType);
+			}
+		}
+
+		this[INTERNALS$1] = {
+			url: opts.url,
+			status,
+			statusText: opts.statusText || STATUS_CODES[status],
+			headers,
+			counter: opts.counter
+		};
+	}
+
+	get url() {
+		return this[INTERNALS$1].url || '';
+	}
+
+	get status() {
+		return this[INTERNALS$1].status;
+	}
+
+	/**
+  * Convenience property representing if the request ended normally
+  */
+	get ok() {
+		return this[INTERNALS$1].status >= 200 && this[INTERNALS$1].status < 300;
+	}
+
+	get redirected() {
+		return this[INTERNALS$1].counter > 0;
+	}
+
+	get statusText() {
+		return this[INTERNALS$1].statusText;
+	}
+
+	get headers() {
+		return this[INTERNALS$1].headers;
+	}
+
+	/**
+  * Clone this response
+  *
+  * @return  Response
+  */
+	clone() {
+		return new Response(clone(this), {
+			url: this.url,
+			status: this.status,
+			statusText: this.statusText,
+			headers: this.headers,
+			ok: this.ok,
+			redirected: this.redirected
+		});
+	}
+}
+
+Body.mixIn(Response.prototype);
+
+Object.defineProperties(Response.prototype, {
+	url: { enumerable: true },
+	status: { enumerable: true },
+	ok: { enumerable: true },
+	redirected: { enumerable: true },
+	statusText: { enumerable: true },
+	headers: { enumerable: true },
+	clone: { enumerable: true }
+});
+
+Object.defineProperty(Response.prototype, Symbol.toStringTag, {
+	value: 'Response',
+	writable: false,
+	enumerable: false,
+	configurable: true
+});
+
+const INTERNALS$2 = Symbol('Request internals');
+
+// fix an issue where "format", "parse" aren't a named export for node <10
+const parse_url = Url.parse;
+const format_url = Url.format;
+
+const streamDestructionSupported = 'destroy' in Stream.Readable.prototype;
+
+/**
+ * Check if a value is an instance of Request.
+ *
+ * @param   Mixed   input
+ * @return  Boolean
+ */
+function isRequest(input) {
+	return typeof input === 'object' && typeof input[INTERNALS$2] === 'object';
+}
+
+function isAbortSignal(signal) {
+	const proto = signal && typeof signal === 'object' && Object.getPrototypeOf(signal);
+	return !!(proto && proto.constructor.name === 'AbortSignal');
+}
+
+/**
+ * Request class
+ *
+ * @param   Mixed   input  Url or Request instance
+ * @param   Object  init   Custom options
+ * @return  Void
+ */
+class Request {
+	constructor(input) {
+		let init = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+		let parsedURL;
+
+		// normalize input
+		if (!isRequest(input)) {
+			if (input && input.href) {
+				// in order to support Node.js' Url objects; though WHATWG's URL objects
+				// will fall into this branch also (since their `toString()` will return
+				// `href` property anyway)
+				parsedURL = parse_url(input.href);
+			} else {
+				// coerce input to a string before attempting to parse
+				parsedURL = parse_url(`${input}`);
+			}
+			input = {};
+		} else {
+			parsedURL = parse_url(input.url);
+		}
+
+		let method = init.method || input.method || 'GET';
+		method = method.toUpperCase();
+
+		if ((init.body != null || isRequest(input) && input.body !== null) && (method === 'GET' || method === 'HEAD')) {
+			throw new TypeError('Request with GET/HEAD method cannot have body');
+		}
+
+		let inputBody = init.body != null ? init.body : isRequest(input) && input.body !== null ? clone(input) : null;
+
+		Body.call(this, inputBody, {
+			timeout: init.timeout || input.timeout || 0,
+			size: init.size || input.size || 0
+		});
+
+		const headers = new Headers(init.headers || input.headers || {});
+
+		if (inputBody != null && !headers.has('Content-Type')) {
+			const contentType = extractContentType(inputBody);
+			if (contentType) {
+				headers.append('Content-Type', contentType);
+			}
+		}
+
+		let signal = isRequest(input) ? input.signal : null;
+		if ('signal' in init) signal = init.signal;
+
+		if (signal != null && !isAbortSignal(signal)) {
+			throw new TypeError('Expected signal to be an instanceof AbortSignal');
+		}
+
+		this[INTERNALS$2] = {
+			method,
+			redirect: init.redirect || input.redirect || 'follow',
+			headers,
+			parsedURL,
+			signal
+		};
+
+		// node-fetch-only options
+		this.follow = init.follow !== undefined ? init.follow : input.follow !== undefined ? input.follow : 20;
+		this.compress = init.compress !== undefined ? init.compress : input.compress !== undefined ? input.compress : true;
+		this.counter = init.counter || input.counter || 0;
+		this.agent = init.agent || input.agent;
+	}
+
+	get method() {
+		return this[INTERNALS$2].method;
+	}
+
+	get url() {
+		return format_url(this[INTERNALS$2].parsedURL);
+	}
+
+	get headers() {
+		return this[INTERNALS$2].headers;
+	}
+
+	get redirect() {
+		return this[INTERNALS$2].redirect;
+	}
+
+	get signal() {
+		return this[INTERNALS$2].signal;
+	}
+
+	/**
+  * Clone this request
+  *
+  * @return  Request
+  */
+	clone() {
+		return new Request(this);
+	}
+}
+
+Body.mixIn(Request.prototype);
+
+Object.defineProperty(Request.prototype, Symbol.toStringTag, {
+	value: 'Request',
+	writable: false,
+	enumerable: false,
+	configurable: true
+});
+
+Object.defineProperties(Request.prototype, {
+	method: { enumerable: true },
+	url: { enumerable: true },
+	headers: { enumerable: true },
+	redirect: { enumerable: true },
+	clone: { enumerable: true },
+	signal: { enumerable: true }
+});
+
+/**
+ * Convert a Request to Node.js http request options.
+ *
+ * @param   Request  A Request instance
+ * @return  Object   The options object to be passed to http.request
+ */
+function getNodeRequestOptions(request) {
+	const parsedURL = request[INTERNALS$2].parsedURL;
+	const headers = new Headers(request[INTERNALS$2].headers);
+
+	// fetch step 1.3
+	if (!headers.has('Accept')) {
+		headers.set('Accept', '*/*');
+	}
+
+	// Basic fetch
+	if (!parsedURL.protocol || !parsedURL.hostname) {
+		throw new TypeError('Only absolute URLs are supported');
+	}
+
+	if (!/^https?:$/.test(parsedURL.protocol)) {
+		throw new TypeError('Only HTTP(S) protocols are supported');
+	}
+
+	if (request.signal && request.body instanceof Stream.Readable && !streamDestructionSupported) {
+		throw new Error('Cancellation of streamed requests with AbortSignal is not supported in node < 8');
+	}
+
+	// HTTP-network-or-cache fetch steps 2.4-2.7
+	let contentLengthValue = null;
+	if (request.body == null && /^(POST|PUT)$/i.test(request.method)) {
+		contentLengthValue = '0';
+	}
+	if (request.body != null) {
+		const totalBytes = getTotalBytes(request);
+		if (typeof totalBytes === 'number') {
+			contentLengthValue = String(totalBytes);
+		}
+	}
+	if (contentLengthValue) {
+		headers.set('Content-Length', contentLengthValue);
+	}
+
+	// HTTP-network-or-cache fetch step 2.11
+	if (!headers.has('User-Agent')) {
+		headers.set('User-Agent', 'node-fetch/1.0 (+https://github.com/bitinn/node-fetch)');
+	}
+
+	// HTTP-network-or-cache fetch step 2.15
+	if (request.compress && !headers.has('Accept-Encoding')) {
+		headers.set('Accept-Encoding', 'gzip,deflate');
+	}
+
+	let agent = request.agent;
+	if (typeof agent === 'function') {
+		agent = agent(parsedURL);
+	}
+
+	if (!headers.has('Connection') && !agent) {
+		headers.set('Connection', 'close');
+	}
+
+	// HTTP-network fetch step 4.2
+	// chunked encoding is handled by Node.js
+
+	return Object.assign({}, parsedURL, {
+		method: request.method,
+		headers: exportNodeCompatibleHeaders(headers),
+		agent
+	});
+}
+
+/**
+ * abort-error.js
+ *
+ * AbortError interface for cancelled requests
+ */
+
+/**
+ * Create AbortError instance
+ *
+ * @param   String      message      Error message for human
+ * @return  AbortError
+ */
+function AbortError(message) {
+  Error.call(this, message);
+
+  this.type = 'aborted';
+  this.message = message;
+
+  // hide custom error implementation details from end-users
+  Error.captureStackTrace(this, this.constructor);
+}
+
+AbortError.prototype = Object.create(Error.prototype);
+AbortError.prototype.constructor = AbortError;
+AbortError.prototype.name = 'AbortError';
+
+// fix an issue where "PassThrough", "resolve" aren't a named export for node <10
+const PassThrough$1 = Stream.PassThrough;
+const resolve_url = Url.resolve;
+
+/**
+ * Fetch function
+ *
+ * @param   Mixed    url   Absolute url or Request instance
+ * @param   Object   opts  Fetch options
+ * @return  Promise
+ */
+function fetch(url, opts) {
+
+	// allow custom promise
+	if (!fetch.Promise) {
+		throw new Error('native promise missing, set fetch.Promise to your favorite alternative');
+	}
+
+	Body.Promise = fetch.Promise;
+
+	// wrap http.request into fetch
+	return new fetch.Promise(function (resolve, reject) {
+		// build request object
+		const request = new Request(url, opts);
+		const options = getNodeRequestOptions(request);
+
+		const send = (options.protocol === 'https:' ? https : http).request;
+		const signal = request.signal;
+
+		let response = null;
+
+		const abort = function abort() {
+			let error = new AbortError('The user aborted a request.');
+			reject(error);
+			if (request.body && request.body instanceof Stream.Readable) {
+				request.body.destroy(error);
+			}
+			if (!response || !response.body) return;
+			response.body.emit('error', error);
+		};
+
+		if (signal && signal.aborted) {
+			abort();
+			return;
+		}
+
+		const abortAndFinalize = function abortAndFinalize() {
+			abort();
+			finalize();
+		};
+
+		// send request
+		const req = send(options);
+		let reqTimeout;
+
+		if (signal) {
+			signal.addEventListener('abort', abortAndFinalize);
+		}
+
+		function finalize() {
+			req.abort();
+			if (signal) signal.removeEventListener('abort', abortAndFinalize);
+			clearTimeout(reqTimeout);
+		}
+
+		if (request.timeout) {
+			req.once('socket', function (socket) {
+				reqTimeout = setTimeout(function () {
+					reject(new FetchError(`network timeout at: ${request.url}`, 'request-timeout'));
+					finalize();
+				}, request.timeout);
+			});
+		}
+
+		req.on('error', function (err) {
+			reject(new FetchError(`request to ${request.url} failed, reason: ${err.message}`, 'system', err));
+			finalize();
+		});
+
+		req.on('response', function (res) {
+			clearTimeout(reqTimeout);
+
+			const headers = createHeadersLenient(res.headers);
+
+			// HTTP fetch step 5
+			if (fetch.isRedirect(res.statusCode)) {
+				// HTTP fetch step 5.2
+				const location = headers.get('Location');
+
+				// HTTP fetch step 5.3
+				const locationURL = location === null ? null : resolve_url(request.url, location);
+
+				// HTTP fetch step 5.5
+				switch (request.redirect) {
+					case 'error':
+						reject(new FetchError(`uri requested responds with a redirect, redirect mode is set to error: ${request.url}`, 'no-redirect'));
+						finalize();
+						return;
+					case 'manual':
+						// node-fetch-specific step: make manual redirect a bit easier to use by setting the Location header value to the resolved URL.
+						if (locationURL !== null) {
+							// handle corrupted header
+							try {
+								headers.set('Location', locationURL);
+							} catch (err) {
+								// istanbul ignore next: nodejs server prevent invalid response headers, we can't test this through normal request
+								reject(err);
+							}
+						}
+						break;
+					case 'follow':
+						// HTTP-redirect fetch step 2
+						if (locationURL === null) {
+							break;
+						}
+
+						// HTTP-redirect fetch step 5
+						if (request.counter >= request.follow) {
+							reject(new FetchError(`maximum redirect reached at: ${request.url}`, 'max-redirect'));
+							finalize();
+							return;
+						}
+
+						// HTTP-redirect fetch step 6 (counter increment)
+						// Create a new Request object.
+						const requestOpts = {
+							headers: new Headers(request.headers),
+							follow: request.follow,
+							counter: request.counter + 1,
+							agent: request.agent,
+							compress: request.compress,
+							method: request.method,
+							body: request.body,
+							signal: request.signal,
+							timeout: request.timeout,
+							size: request.size
+						};
+
+						// HTTP-redirect fetch step 9
+						if (res.statusCode !== 303 && request.body && getTotalBytes(request) === null) {
+							reject(new FetchError('Cannot follow redirect with body being a readable stream', 'unsupported-redirect'));
+							finalize();
+							return;
+						}
+
+						// HTTP-redirect fetch step 11
+						if (res.statusCode === 303 || (res.statusCode === 301 || res.statusCode === 302) && request.method === 'POST') {
+							requestOpts.method = 'GET';
+							requestOpts.body = undefined;
+							requestOpts.headers.delete('content-length');
+						}
+
+						// HTTP-redirect fetch step 15
+						resolve(fetch(new Request(locationURL, requestOpts)));
+						finalize();
+						return;
+				}
+			}
+
+			// prepare response
+			res.once('end', function () {
+				if (signal) signal.removeEventListener('abort', abortAndFinalize);
+			});
+			let body = res.pipe(new PassThrough$1());
+
+			const response_options = {
+				url: request.url,
+				status: res.statusCode,
+				statusText: res.statusMessage,
+				headers: headers,
+				size: request.size,
+				timeout: request.timeout,
+				counter: request.counter
+			};
+
+			// HTTP-network fetch step 12.1.1.3
+			const codings = headers.get('Content-Encoding');
+
+			// HTTP-network fetch step 12.1.1.4: handle content codings
+
+			// in following scenarios we ignore compression support
+			// 1. compression support is disabled
+			// 2. HEAD request
+			// 3. no Content-Encoding header
+			// 4. no content response (204)
+			// 5. content not modified response (304)
+			if (!request.compress || request.method === 'HEAD' || codings === null || res.statusCode === 204 || res.statusCode === 304) {
+				response = new Response(body, response_options);
+				resolve(response);
+				return;
+			}
+
+			// For Node v6+
+			// Be less strict when decoding compressed responses, since sometimes
+			// servers send slightly invalid responses that are still accepted
+			// by common browsers.
+			// Always using Z_SYNC_FLUSH is what cURL does.
+			const zlibOptions = {
+				flush: zlib.Z_SYNC_FLUSH,
+				finishFlush: zlib.Z_SYNC_FLUSH
+			};
+
+			// for gzip
+			if (codings == 'gzip' || codings == 'x-gzip') {
+				body = body.pipe(zlib.createGunzip(zlibOptions));
+				response = new Response(body, response_options);
+				resolve(response);
+				return;
+			}
+
+			// for deflate
+			if (codings == 'deflate' || codings == 'x-deflate') {
+				// handle the infamous raw deflate response from old servers
+				// a hack for old IIS and Apache servers
+				const raw = res.pipe(new PassThrough$1());
+				raw.once('data', function (chunk) {
+					// see http://stackoverflow.com/questions/37519828
+					if ((chunk[0] & 0x0F) === 0x08) {
+						body = body.pipe(zlib.createInflate());
+					} else {
+						body = body.pipe(zlib.createInflateRaw());
+					}
+					response = new Response(body, response_options);
+					resolve(response);
+				});
+				return;
+			}
+
+			// for br
+			if (codings == 'br' && typeof zlib.createBrotliDecompress === 'function') {
+				body = body.pipe(zlib.createBrotliDecompress());
+				response = new Response(body, response_options);
+				resolve(response);
+				return;
+			}
+
+			// otherwise, use response as-is
+			response = new Response(body, response_options);
+			resolve(response);
+		});
+
+		writeToStream(req, request);
+	});
+}
+/**
+ * Redirect code matching
+ *
+ * @param   Number   code  Status code
+ * @return  Boolean
+ */
+fetch.isRedirect = function (code) {
+	return code === 301 || code === 302 || code === 303 || code === 307 || code === 308;
+};
+
+// expose Promise
+fetch.Promise = global.Promise;
+
+module.exports = exports = fetch;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.default = exports;
+exports.Headers = Headers;
+exports.Request = Request;
+exports.Response = Response;
+exports.FetchError = FetchError;
+
+
+/***/ }),
+
+/***/ 6385:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var wrappy = __webpack_require__(3075)
+module.exports = wrappy(once)
+module.exports.strict = wrappy(onceStrict)
+
+once.proto = once(function () {
+  Object.defineProperty(Function.prototype, 'once', {
+    value: function () {
+      return once(this)
+    },
+    configurable: true
+  })
+
+  Object.defineProperty(Function.prototype, 'onceStrict', {
+    value: function () {
+      return onceStrict(this)
+    },
+    configurable: true
+  })
+})
+
+function once (fn) {
+  var f = function () {
+    if (f.called) return f.value
+    f.called = true
+    return f.value = fn.apply(this, arguments)
+  }
+  f.called = false
+  return f
+}
+
+function onceStrict (fn) {
+  var f = function () {
+    if (f.called)
+      throw new Error(f.onceError)
+    f.called = true
+    return f.value = fn.apply(this, arguments)
+  }
+  var name = fn.name || 'Function wrapped with `once`'
+  f.onceError = name + " shouldn't be called more than once"
+  f.called = false
+  return f
+}
+
+
+/***/ }),
+
+/***/ 5211:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__(1667);
+
+
+/***/ }),
+
+/***/ 1667:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var net = __webpack_require__(1631);
+var tls = __webpack_require__(4016);
+var http = __webpack_require__(8605);
+var https = __webpack_require__(7211);
+var events = __webpack_require__(8614);
+var assert = __webpack_require__(2357);
+var util = __webpack_require__(1669);
+
+
+exports.httpOverHttp = httpOverHttp;
+exports.httpsOverHttp = httpsOverHttp;
+exports.httpOverHttps = httpOverHttps;
+exports.httpsOverHttps = httpsOverHttps;
+
+
+function httpOverHttp(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = http.request;
+  return agent;
+}
+
+function httpsOverHttp(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = http.request;
+  agent.createSocket = createSecureSocket;
+  agent.defaultPort = 443;
+  return agent;
+}
+
+function httpOverHttps(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = https.request;
+  return agent;
+}
+
+function httpsOverHttps(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = https.request;
+  agent.createSocket = createSecureSocket;
+  agent.defaultPort = 443;
+  return agent;
+}
+
+
+function TunnelingAgent(options) {
+  var self = this;
+  self.options = options || {};
+  self.proxyOptions = self.options.proxy || {};
+  self.maxSockets = self.options.maxSockets || http.Agent.defaultMaxSockets;
+  self.requests = [];
+  self.sockets = [];
+
+  self.on('free', function onFree(socket, host, port, localAddress) {
+    var options = toOptions(host, port, localAddress);
+    for (var i = 0, len = self.requests.length; i < len; ++i) {
+      var pending = self.requests[i];
+      if (pending.host === options.host && pending.port === options.port) {
+        // Detect the request to connect same origin server,
+        // reuse the connection.
+        self.requests.splice(i, 1);
+        pending.request.onSocket(socket);
+        return;
+      }
+    }
+    socket.destroy();
+    self.removeSocket(socket);
+  });
+}
+util.inherits(TunnelingAgent, events.EventEmitter);
+
+TunnelingAgent.prototype.addRequest = function addRequest(req, host, port, localAddress) {
+  var self = this;
+  var options = mergeOptions({request: req}, self.options, toOptions(host, port, localAddress));
+
+  if (self.sockets.length >= this.maxSockets) {
+    // We are over limit so we'll add it to the queue.
+    self.requests.push(options);
+    return;
+  }
+
+  // If we are under maxSockets create a new one.
+  self.createSocket(options, function(socket) {
+    socket.on('free', onFree);
+    socket.on('close', onCloseOrRemove);
+    socket.on('agentRemove', onCloseOrRemove);
+    req.onSocket(socket);
+
+    function onFree() {
+      self.emit('free', socket, options);
+    }
+
+    function onCloseOrRemove(err) {
+      self.removeSocket(socket);
+      socket.removeListener('free', onFree);
+      socket.removeListener('close', onCloseOrRemove);
+      socket.removeListener('agentRemove', onCloseOrRemove);
+    }
+  });
+};
+
+TunnelingAgent.prototype.createSocket = function createSocket(options, cb) {
+  var self = this;
+  var placeholder = {};
+  self.sockets.push(placeholder);
+
+  var connectOptions = mergeOptions({}, self.proxyOptions, {
+    method: 'CONNECT',
+    path: options.host + ':' + options.port,
+    agent: false,
+    headers: {
+      host: options.host + ':' + options.port
+    }
+  });
+  if (options.localAddress) {
+    connectOptions.localAddress = options.localAddress;
+  }
+  if (connectOptions.proxyAuth) {
+    connectOptions.headers = connectOptions.headers || {};
+    connectOptions.headers['Proxy-Authorization'] = 'Basic ' +
+        new Buffer(connectOptions.proxyAuth).toString('base64');
+  }
+
+  debug('making CONNECT request');
+  var connectReq = self.request(connectOptions);
+  connectReq.useChunkedEncodingByDefault = false; // for v0.6
+  connectReq.once('response', onResponse); // for v0.6
+  connectReq.once('upgrade', onUpgrade);   // for v0.6
+  connectReq.once('connect', onConnect);   // for v0.7 or later
+  connectReq.once('error', onError);
+  connectReq.end();
+
+  function onResponse(res) {
+    // Very hacky. This is necessary to avoid http-parser leaks.
+    res.upgrade = true;
+  }
+
+  function onUpgrade(res, socket, head) {
+    // Hacky.
+    process.nextTick(function() {
+      onConnect(res, socket, head);
+    });
+  }
+
+  function onConnect(res, socket, head) {
+    connectReq.removeAllListeners();
+    socket.removeAllListeners();
+
+    if (res.statusCode !== 200) {
+      debug('tunneling socket could not be established, statusCode=%d',
+        res.statusCode);
+      socket.destroy();
+      var error = new Error('tunneling socket could not be established, ' +
+        'statusCode=' + res.statusCode);
+      error.code = 'ECONNRESET';
+      options.request.emit('error', error);
+      self.removeSocket(placeholder);
+      return;
+    }
+    if (head.length > 0) {
+      debug('got illegal response body from proxy');
+      socket.destroy();
+      var error = new Error('got illegal response body from proxy');
+      error.code = 'ECONNRESET';
+      options.request.emit('error', error);
+      self.removeSocket(placeholder);
+      return;
+    }
+    debug('tunneling connection has established');
+    self.sockets[self.sockets.indexOf(placeholder)] = socket;
+    return cb(socket);
+  }
+
+  function onError(cause) {
+    connectReq.removeAllListeners();
+
+    debug('tunneling socket could not be established, cause=%s\n',
+          cause.message, cause.stack);
+    var error = new Error('tunneling socket could not be established, ' +
+                          'cause=' + cause.message);
+    error.code = 'ECONNRESET';
+    options.request.emit('error', error);
+    self.removeSocket(placeholder);
+  }
+};
+
+TunnelingAgent.prototype.removeSocket = function removeSocket(socket) {
+  var pos = this.sockets.indexOf(socket)
+  if (pos === -1) {
+    return;
+  }
+  this.sockets.splice(pos, 1);
+
+  var pending = this.requests.shift();
+  if (pending) {
+    // If we have pending requests and a socket gets closed a new one
+    // needs to be created to take over in the pool for the one that closed.
+    this.createSocket(pending, function(socket) {
+      pending.request.onSocket(socket);
+    });
+  }
+};
+
+function createSecureSocket(options, cb) {
+  var self = this;
+  TunnelingAgent.prototype.createSocket.call(self, options, function(socket) {
+    var hostHeader = options.request.getHeader('host');
+    var tlsOptions = mergeOptions({}, self.options, {
+      socket: socket,
+      servername: hostHeader ? hostHeader.replace(/:.*$/, '') : options.host
+    });
+
+    // 0 is dummy port for v0.6
+    var secureSocket = tls.connect(0, tlsOptions);
+    self.sockets[self.sockets.indexOf(socket)] = secureSocket;
+    cb(secureSocket);
+  });
+}
+
+
+function toOptions(host, port, localAddress) {
+  if (typeof host === 'string') { // since v0.10
+    return {
+      host: host,
+      port: port,
+      localAddress: localAddress
+    };
+  }
+  return host; // for v0.11 or later
+}
+
+function mergeOptions(target) {
+  for (var i = 1, len = arguments.length; i < len; ++i) {
+    var overrides = arguments[i];
+    if (typeof overrides === 'object') {
+      var keys = Object.keys(overrides);
+      for (var j = 0, keyLen = keys.length; j < keyLen; ++j) {
+        var k = keys[j];
+        if (overrides[k] !== undefined) {
+          target[k] = overrides[k];
+        }
+      }
+    }
+  }
+  return target;
+}
+
+
+var debug;
+if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
+  debug = function() {
+    var args = Array.prototype.slice.call(arguments);
+    if (typeof args[0] === 'string') {
+      args[0] = 'TUNNEL: ' + args[0];
+    } else {
+      args.unshift('TUNNEL:');
+    }
+    console.error.apply(console, args);
+  }
+} else {
+  debug = function() {};
+}
+exports.debug = debug; // for test
+
+
+/***/ }),
+
+/***/ 3567:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+function getUserAgent() {
+  if (typeof navigator === "object" && "userAgent" in navigator) {
+    return navigator.userAgent;
+  }
+
+  if (typeof process === "object" && "version" in process) {
+    return `Node.js/${process.version.substr(1)} (${process.platform}; ${process.arch})`;
+  }
+
+  return "<environment undetectable>";
+}
+
+exports.getUserAgent = getUserAgent;
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ 3075:
+/***/ ((module) => {
+
+// Returns a wrapper function that returns a wrapped callback
+// The wrapper function should do some stuff, and return a
+// presumably different callback function.
+// This makes sure that own properties are retained, so that
+// decorations and such are not lost along the way.
+module.exports = wrappy
+function wrappy (fn, cb) {
+  if (fn && cb) return wrappy(fn)(cb)
+
+  if (typeof fn !== 'function')
+    throw new TypeError('need wrapper function')
+
+  Object.keys(fn).forEach(function (k) {
+    wrapper[k] = fn[k]
+  })
+
+  return wrapper
+
+  function wrapper() {
+    var args = new Array(arguments.length)
+    for (var i = 0; i < args.length; i++) {
+      args[i] = arguments[i]
+    }
+    var ret = fn.apply(this, args)
+    var cb = args[args.length-1]
+    if (typeof ret === 'function' && ret !== cb) {
+      Object.keys(cb).forEach(function (k) {
+        ret[k] = cb[k]
+      })
+    }
+    return ret
+  }
+}
+
+
+/***/ }),
+
+/***/ 4228:
+/***/ ((module) => {
+
+module.exports = eval("require")("encoding");
+
+
+/***/ }),
+
+/***/ 5100:
+/***/ ((module) => {
+
+module.exports = eval("require")("hogan.js");
+
+
+/***/ }),
+
+/***/ 8577:
+/***/ ((module) => {
+
+// Module
+var code = "<p>If you are an affiliated collaborator of this repository, you may check if this pull request leaks sensitive security secrets or abuses them for purposes other than their intended scopes.</p> <p>Please take your time to validate how action secrets are propagated and used. They can be identified in the workflow and action configs. Special notice has to be taken for the environment variable <code>GITHUB_TOKEN</code> and context variable <code>github.token</code>.</p> <p>If you are certain this pull request is safe to check, confirm your approval via the button. Otherwise, request changes from the author in a review. If you think it is clear that the author intentionally tries to circumvent security practices in order to gain access to the token or manipulate repository data, please follow the <a href=\"https://docs.github.com/en/free-pro-team@latest/github/building-a-strong-community/reporting-abuse-or-spam\">guidelines</a> to report the user.</p> ";
+// Exports
+module.exports = code;
+
+/***/ }),
+
+/***/ 962:
+/***/ ((module) => {
+
+// Module
+var code = "<p>Thank you for this pull request, @{{user}}.</p> <p>For security reasons, pull requests from non-affiliated contributors need approval for all checks to run.</p> <details> <summary>How to approve the pull request checks as a collaborator</summary> <p><br> If you are an affiliated collaborator of this repository, you may check if this pull request leaks sensitive security secrets or abuses them for purposes other than their intended scopes. </p><p>Please take your time to validate how action secrets are propagated and used. They can be identified in the workflow and action configs. Special notice has to be taken for the environment variable <code>GITHUB_TOKEN</code> and context variable <code>github.token</code>.</p> <p>Use the check action button to approve the check of the last commit and press <code>Approve Check</code>. To approve a specific commit, create a comment that contains <code>{{cmd}}</code>.</p> <p></p> </details> ";
+// Exports
+module.exports = code;
+
+/***/ }),
+
+/***/ 8212:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var result = __webpack_require__(8577)
+var H = __webpack_require__(5100);
+module.exports = function() {
+var T = H.compile(result, {});
+return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 177:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var result = __webpack_require__(962)
+var H = __webpack_require__(5100);
+module.exports = function() {
+var T = H.compile(result, {});
+return T.render.apply(T, arguments); };
+
+/***/ }),
+
+/***/ 2357:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("assert");
+
+/***/ }),
+
+/***/ 8614:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("events");
+
+/***/ }),
+
+/***/ 5747:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("fs");
+
+/***/ }),
+
+/***/ 8605:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("http");
+
+/***/ }),
+
+/***/ 7211:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("https");
+
+/***/ }),
+
+/***/ 1631:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("net");
+
+/***/ }),
+
+/***/ 2087:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("os");
+
+/***/ }),
+
+/***/ 5622:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("path");
+
+/***/ }),
+
+/***/ 2413:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("stream");
+
+/***/ }),
+
+/***/ 4016:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("tls");
+
+/***/ }),
+
+/***/ 8835:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("url");
+
+/***/ }),
+
+/***/ 1669:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("util");
+
+/***/ }),
+
+/***/ 8761:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("zlib");
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		if(__webpack_module_cache__[moduleId]) {
+/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		var threw = true;
+/******/ 		try {
+/******/ 			__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 			threw = false;
+/******/ 		} finally {
+/******/ 			if(threw) delete __webpack_module_cache__[moduleId];
+/******/ 		}
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/compat */
+/******/ 	
+/******/ 	__webpack_require__.ab = __dirname + "/";/************************************************************************/
+/******/ 	// module exports must be returned from runtime so entry inlining is disabled
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(605);
+/******/ })()
+;
