@@ -1,5 +1,5 @@
 name: interactive event dispatcher
-description: recoup various deficits of the default GitHub action and event system
+description: an effort to correct various shortcomings of the default GitHub action and event system
 outputs:
   triggered:
     description: if `inputs.prefix` is enabled, only true if the prefix was matched, otherwise always true

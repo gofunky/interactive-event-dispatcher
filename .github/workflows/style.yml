@@ -1,0 +1,80 @@
+name: check
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - '**.ts'
+      - '**.js'
+      - '**/package.json'
+      - '**/pnpm-lock.yaml'
+      - '**/style.yml'
+  pull_request_target:
+    branches: [ master ]
+    paths:
+      - '**.ts'
+      - '**.js'
+      - '**/package.json'
+      - '**/pnpm-lock.yaml'
+      - '**/style.yml'
+
+jobs:
+  style:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node-version: [ 12.x ]
+        os: [ ubuntu-latest ]
+        pnpm-version: 5.7.0
+    name: code style
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v2.3.3
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.BOT }}
+      - name: setup node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: cache node modules
+        uses: actions/cache@v2.1.1
+        with:
+          path: |
+            **/node_modules
+            **/.putoutcache
+          key: ${{ runner.OS }}-${{ matrix.node-version }}-${{ hashFiles('/pnpm-lock.yaml') }}-${{ matrix.pnpm-version }}
+          restore-keys: |
+            ${{ runner.OS }}-${{ matrix.node-version }}-${{ hashFiles('/pnpm-lock.yaml') }}-${{ matrix.pnpm-version }}
+            ${{ runner.OS }}-${{ matrix.node-version }}-${{ hashFiles('/pnpm-lock.yaml') }}
+            ${{ runner.OS }}-${{ matrix.node-version }}
+      - name: setup pnpm
+        uses: pnpm/action-setup@v1.2.0
+        with:
+          version: ${{ matrix.pnpm-version }}
+          run-install: true
+      - name: running xo
+        run: |
+          pnpm fix:lint
+      - name: creating pull request
+        if: ${{ github.head_ref == '' }}
+        uses: peter-evans/create-pull-request@v3.4.0
+        with:
+          commit-message: 'style(lint): reformat and autolint code'
+          title: 'style(lint): reformat and autolint code'
+          body: |
+            This pull request enforces the code style using [xo](https://github.com/xojs/xo).
+          labels: |
+            style
+            chore
+          branch: black
+      - name: committing changed files
+        if: ${{ github.head_ref != '' }}
+        uses: stefanzweifel/git-auto-commit-action@v4.5.1
+        with:
+          commit_message: 'style(lint): reformat and autolint code'
+          branch: ${{ github.head_ref }}
+          file_pattern: '**.ts **.js'

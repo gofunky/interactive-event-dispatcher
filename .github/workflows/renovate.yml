@@ -1,0 +1,34 @@
+name: renovate
+
+on:
+  workflow_dispatch:
+    branches:
+      - master
+  schedule:
+    - cron: '0 6-20 * * *'
+  pull_request_target:
+    branches:
+      - master
+    types:
+      - closed
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2.3.2
+      - name: convert renovate config
+        uses: fabasoad/yaml-json-xml-converter-action@v1.0.0
+        id: yaml2json
+        with:
+          path: .github/renovate.yml
+          from: yaml
+          to: json
+      - name: store renovate config
+        run: echo "${{ steps.yaml2json.outputs.data }}" > .github/renovate.json
+      - name: run renovate bot
+        uses: renovatebot/github-action@v23.26.0
+        with:
+          configurationFile: .github/renovate.json
+          token: ${{ secrets.BOT }}
