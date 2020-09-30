@@ -1,96 +1,114 @@
-import {stringify} from "querystring";
-import {isNumber} from "util";
-
 export type AffiliationType = 'direct' | 'outside' | 'all'
-export type WorkflowStatusType = "status" | "completed" | "conclusion"
-export type CheckStatusType = "queued" | "in_progress" | "completed"
-export type CheckConclusionType =  "success" | "failure" | "neutral" | "cancelled" | "skipped" | "timed_out" | "action_required"
-export type ReactionType =  "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes"
-export type MinimizeReason =  "ABUSE" | "DUPLICATE" | "OFF_TOPIC" | "OUTDATED" | "RESOLVED" | "SPAM"
+export type WorkflowStatusType = 'status' | 'completed' | 'conclusion'
+export type CheckStatusType = 'queued' | 'in_progress' | 'completed'
+export type CheckConclusionType =
+	| 'success'
+	| 'failure'
+	| 'neutral'
+	| 'cancelled'
+	| 'skipped'
+	| 'timed_out'
+	| 'action_required'
+export type ReactionType =
+	| '+1'
+	| '-1'
+	| 'laugh'
+	| 'confused'
+	| 'heart'
+	| 'hooray'
+	| 'rocket'
+	| 'eyes'
+export type MinimizeReason =
+	| 'ABUSE'
+	| 'DUPLICATE'
+	| 'OFF_TOPIC'
+	| 'OUTDATED'
+	| 'RESOLVED'
+	| 'SPAM'
 
 export interface IssueParams {
-    issueNumber: number
+	issueNumber: number
 }
 
 export interface NewCommentParams extends IssueParams {
-    body: string
+	body: string
 }
 
 export interface CommentParams {
-    commentId: number
+	commentId: number
 }
 
 export interface EventParams {
-    eventName: string
+	eventName: string
 }
 
 export interface DispatchEventParams extends EventParams {
-    payload: any
+	payload: any
 }
 
 export interface ListRunsParams extends EventParams {
-    status?: WorkflowStatusType | undefined
+	status?: WorkflowStatusType | undefined
 }
 
 export interface CheckIdParams {
-    checkId: number
+	checkId: number
 }
 
 export interface CheckRelationParams {
-    sha: string
+	sha: string
 }
 
-export interface CheckParams extends CheckRelationParams{
-    name: string
-    status?: CheckStatusType
-    conclusion?: CheckConclusionType
-    detailsUrl?: string
-    externalId?: string
-    startedAt?: string
-    completedAt?: string
-    actions?: {
-        label: string
-        description: string
-        identifier: string
-    }[]
-    output?: {
-        title: string
-        summary: string
-        text?: string
-    }
+export interface CheckParams extends CheckRelationParams {
+	name: string
+	status?: CheckStatusType
+	conclusion?: CheckConclusionType
+	detailsUrl?: string
+	externalId?: string
+	startedAt?: string
+	completedAt?: string
+	actions?: Array<{
+		label: string
+		description: string
+		identifier: string
+	}>
+	output?: {
+		title: string
+		summary: string
+		text?: string
+	}
 }
 
 export interface Reaction {
-    reaction: ReactionType
+	reaction: ReactionType
 }
 
 export interface MinimizeReasonParams {
-    reason: MinimizeReason
+	reason: MinimizeReason
 }
 
 export interface GraphNodeParams {
-    nodeId: string
+	nodeId: string
 }
 
 export interface WorkflowRunParams {
-    runId: number
+	runId: number
 }
 
 export interface WorkflowParams {
-    workflowId: number
+	workflowId: number
 }
 
 export interface FilterParams {
-    filter?: "latest" | "all"
+	filter?: 'latest' | 'all'
 }
 
 export interface CheckSelectorParams {
-    name: string
-    ref: string
+	name: string
+	ref: string
 }
 
 export interface ApiParams {
-    token: string
-    actionsToken: string
-    perPage?: number
+	token: string
+	actionsToken: string
+	perPage?: number
 }

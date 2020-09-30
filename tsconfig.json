@@ -1,0 +1,16 @@
+{
+  "exclude": ["__test__", "lib", "node_modules"],
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "declaration": false,
+    "strict": true,
+    "target": "ES2019",
+    "module": "ES2020",
+    "lib": [
+      "ES2019"
+    ],
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "moduleResolution": "Node"
+  }
+}
