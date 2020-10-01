@@ -99,9 +99,9 @@ export class Event {
 			payload: await this.payload()
 		})
 
-		if (!Inputs.forwardChecks) {
+		if (!Inputs.observingChecks) {
 			core.info(
-				'Skipping workflow check tracing because `inputs.forwardChecks` is disabled.'
+				'Skipping workflow check tracing because `inputs.observingChecks` is disabled.'
 			)
 			return
 		}

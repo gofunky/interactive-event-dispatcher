@@ -7,12 +7,13 @@
 {{- $action := (datasource "action") -}}
 ## Inputs
 {{- range $key, $input := $action.inputs }}
-
+{{ if (not ($input.description | strings.Contains "<--")) }}
 ### {{ tmpl.Exec "escape_chars" $key }}
 ![Required](https://img.shields.io/badge/Required-{{ if (has $input "required") }}{{ tmpl.Exec "sanitize_boolean" $input.required }}{{ else }}no{{ end }}-{{ if (has $input "required") }}{{ tmpl.Exec "boolean_color" $input.required }}{{ else }}inactive{{ end }}?style=flat-square)
-![Default](https://img.shields.io/badge/Default-{{ if (has $input "default") }}{{ if (ne $input.default "") }}{{ tmpl.Exec "sanitize_url" $input.default }}{{ else }}''{{ end }}{{ else }}none{{ end }}-{{ if (and (has $input "default") (ne $input.default "")) }}{{ strings.Trunc 6 (crypto.SHA1 $input.default) }}{{ else }}inactive{{ end }}?style=flat-square)
+![Default](https://img.shields.io/badge/Default-{{ if (has $input "default") }}{{ if (ne $input.default "") }}{{ tmpl.Exec "sanitize_url" $input.default }}{{ else }}'_'{{ end }}{{ else }}none{{ end }}-{{ if (and (has $input "default") (ne $input.default "")) }}{{ strings.Trunc 6 (crypto.SHA1 $input.default) }}{{ else }}inactive{{ end }}?style=flat-square)
 
 {{ tmpl.Exec "escape_chars" $input.description }}
+{{- end }}
 {{- end }}
 {{ if (has $action "outputs") }}
 ## Outputs

@@ -137,8 +137,8 @@ export class PullRequestEvent extends Event {
 						noticeTpl({
 							user: pullRequest.user.id,
 							cmd:
-								Inputs.prefix !== ''
-									? `${Inputs.prefix} check <sha>`
+								Inputs.prefixFilter !== ''
+									? `${Inputs.prefixFilter} check <sha>`
 									: 'check <sha>'
 						})
 					) + NOTICE_HEADER

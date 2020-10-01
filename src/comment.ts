@@ -44,8 +44,8 @@ export class PullRequestCommentEvent extends PullRequestEvent {
 		if (command === '') {
 			return prefix
 		}
-
-		return `${prefix}_${command}`
+		const escapedCommand = command.replace(' ', '_')
+		return `${prefix}_${escapedCommand}`
 	}
 
 	@memoize()
@@ -67,7 +67,7 @@ export class PullRequestCommentEvent extends PullRequestEvent {
 
 	@memoize()
 	async command(): Promise<string> {
-		if (Inputs.prefix === '') {
+		if (Inputs.prefixFilter === '') {
 			return ''
 		}
 		const {command} = await this.matchedPrefix()
@@ -84,7 +84,7 @@ export class PullRequestCommentEvent extends PullRequestEvent {
 	@memoize()
 	async matchedPrefix(): Promise<Match> {
 		const body = await this.body()
-		const regex = new RegExp(`${Inputs.prefix}\\s*(.*)\\s*$`)
+		const regex = new RegExp(`${Inputs.prefixFilter}\\s*(.*)\\s*$`)
 		const matches = regex.exec(body)
 
 		if (!matches || matches.length < 2 || matches[0] === '') {

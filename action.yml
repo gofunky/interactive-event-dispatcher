@@ -2,9 +2,12 @@ name: interactive event dispatcher
 description: an effort to correct various shortcomings of the default GitHub action and event system
 outputs:
   triggered:
-    description: if `inputs.prefix` is enabled, only true if the prefix was matched, otherwise always true
+    description: |
+      If [inputs.prefixFilter](#prefixFilter) is enabled, only true if the prefix was matched, otherwise always true.
   command:
-    description: if `inputs.prefix` is enabled, contains the matched subsequent command if a command is given
+    description: |
+      If [inputs.prefixFilter](#prefixFilter) is enabled,
+      this output contains the matched subsequent command of a filtered command comment.
 runs:
   using: node12
   main: dist/index.js
@@ -13,64 +16,138 @@ branding:
   color: gray-dark
 inputs:
   token:
-    description: a repository-scoped personal access token (the GITHUB_TOKEN will not work)
+    description: |
+      A repository-scoped personal access token is necessary because for API access.
+      The default GitHub token will not work because events from this token are ignored by GitHub's event controller.
     required: true
   actionsToken:
     description: |
-      WARNING: Do not change this! It will be used for API requests that only the default token can perform.
+      **WARNING:** Do not change this! It will be used for API requests that only the default token can perform.
     required: false
     default: ${{ github.token }}
   event:
-    description: the name of the event to trigger
-    required: false
-    default: pull_request_comment
-  prefix:
-    description: only trigger events if this prefix is matched and pass the subsequent command (regex syntax is allowed)
+    description: |
+      This input defines the type name of the `repository_dispatch` event to trigger.
+    required: true
+  prefixFilter:
+    description: |
+      Incoming comment events can be filtered by their content.
+      This input enables a filter for trigger events to contain the given prefix to be matched.
+      If enabled, the suffix of this prefix will be passed as [outputs.command](#command)
+      and as `github.event.client_payload.command` to the target event.
+      The filter accepts regular expression syntax.
+      This input is enabled if any non-empty value is set.
+
+      ### Example
+
+      ```yaml
+      prefixFilter: '$action(s?)'
+      ```
+
+      #### Comment
+
+      ```
+      $action publish something
+      ```
+
+      The determined command will be `publish something`.
+
     required: false
     default: ''
   commandFilter:
-    description: only accept the given line-separated list of regular-expressed commands as triggers
+    description: |
+      Besides the prefix, comments can further be filtered for their commands.
+      If enabled, only the given command expressions are accpeted for events to trigger.
+      The filter accepts regular expression syntax.
+      The input is enabled if any non-zero value is set.
+      A list can be set via a line separation.
     required: false
     default: ''
   appendCommand:
-    description: append the command to the event's name that is to be triggered
+    description: |
+      By default, this action always triggers the same output event type as defined in [prefixFilter](#prefixFilter).
+      The type name can be extended by the determined command name.
+
+      ### Example
+
+      ```yaml
+      event: dispatched
+      prefixFilter: '$action(s?)'
+      commandFilter: |
+        publish docs
+        publish release
+      appendCommand: true
+      ```
+
+      #### Comment
+
+      ```
+      $actions publish docs
+      ```
+
+      The triggered event type will be `dispatched_publish_docs`.
+
     required: false
     default: 'false'
   outsiderCommands:
-    description: also accept commands from non-affiliated users
+    description: |
+      By default, comments will only be accepted and dispatched if they originate from collaborators of the repository.
+      This behavior can be extended to all users, regardless of affiliation status, by enabling this input.
     required: false
     default: 'false'
   number:
-    description: override the number of the issue or pull request that triggers this action
+    description: |
+      <-- only for testing purposes -->
+      For overriding the number of the issue or pull request that triggers this action.
     required: false
     default: ''
   body:
-    description: override the body of the issue comment that triggers this action
+    description: |
+      <-- only for testing purposes -->
+      For overriding the body of the issue comment that triggers this action.
     required: false
     default: ''
   affiliation:
-    description: the required affiliation status of a collaborator who is allowed to approve forked pull requests
+    description: |
+      Collaborators are determined by the given affiliation status.
+      Can be either of `direct`, `outside`, or `all`.
+      Outside collaborators and unaffiliated outsiders are different things.
+      `outside` defines collaborators who are not part of your organization.
     required: false
     default: all
-  forwardChecks:
-    description: for adding checks for each triggered workflow
+  observingChecks:
+    description: |
+      Triggered events do not create any checks by default because they naturally do not belong to any commit.
+      This action can still create the checks by observing the triggered workflows and updating the checks as they
+      progress.
+      This input allows to disable this behavior.
     required: false
     default: 'true'
   interval:
-    description: the fetch interval for the triggered workflows in miliseconds
+    description: |
+      If [observingChecks](#observingChecks) is enabled, the workflows are observed with a given tick rate.
+      This interval defines the the miliseconds to sleep between each tick.
     required: false
     default: '500'
   pullMode:
     description: |
-      WARNING: Do not use this for workflows that execute code or checks beyond static code analysis on the target.
-      This will skip the affiliation check and always forward events without affiliation checks
-      and from any source (i.e. pull requests and issues). Check commands will not be processed.
+      **WARNING:** Do not disable this for target workflows that execute code or tests on pull requests.
+      By default, pull requests events are checked for the author's affiliation status.
+      If the author is not affiliated, they will receive a friendly comment that notifies them
+      that not all checks can be run yet until a collaborator's approval.
+      Collaborators can then check the pull request and approve a specific commit by commenting a command
+      or by using an action button provided by the check itself that approves the most recent commit.
+
+      If disabled, this action will skip the affiliation check and always forward events
+      from any source (i.e. pull requests and issues). Check commands will not be processed.
     required: false
     default: 'true'
   perPage:
     description: |
       For repositories with frequent and large numbers of comments or workflows, the API might not return all
       nodes for all requests. That is because not every endpoint provides the appropriate filtering methods.
-      This input can compensate for this limitation by setting it up to 100.
+      This input can compensate for this limitation. It can be set up to 100.
+
+      **Recommendation:** Leave this parameter untouched unless checks are missing in the commit reference.
     required: false
     default: '30'

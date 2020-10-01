@@ -14,8 +14,8 @@ export class Inputs {
 	}
 
 	@lazy(true, true)
-	static get prefix(): string {
-		return core.getInput('prefix')
+	static get prefixFilter(): string {
+		return core.getInput('prefixFilter')
 	}
 
 	@lazy(true, true)
@@ -65,8 +65,8 @@ export class Inputs {
 	}
 
 	@lazy(true, true)
-	static get forwardChecks(): boolean {
-		return core.getInput('forwardChecks').toLowerCase() === 'true'
+	static get observingChecks(): boolean {
+		return core.getInput('observingChecks').toLowerCase() === 'true'
 	}
 
 	@lazy(true, true)
