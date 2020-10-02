@@ -17,9 +17,9 @@ async function run(): Promise<void> {
 				await (<PullRequestCommentEvent>event).command()
 			)
 			break
-		case 'pull_request' ||
-			'pull_request_review' ||
-			'pull_request_review_comment':
+		case 'pull_request':
+		case 'pull_request_review':
+		case 'pull_request_review_comment':
 			event = new PullRequestEvent()
 			break
 		default:

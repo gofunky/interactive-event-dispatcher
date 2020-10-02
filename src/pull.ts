@@ -8,10 +8,15 @@ import type {EventPayloads} from '@octokit/webhooks'
 import {LazyGetter as lazy} from 'lazy-get-decorator'
 import {memoize} from 'memoize-cache-decorator'
 import {context} from '@actions/github'
+import {compile} from 'micromustache'
 
 export const NOTICE_HEADER = '<!-- pull request condition notice -->'
-export const noticeTpl = require('!!mustache-loader!html-loader!markdown-loader!../templates/notice.md')
-export const checkMsgTpl = require('!!mustache-loader!html-loader!markdown-loader!../templates/check.md')
+export const noticeTpl = compile(
+	require('!!html-loader!markdown-loader!../templates/notice.md')
+)
+export const checkMessageTpl = compile(
+	require('!!html-loader!markdown-loader!../templates/check.md')
+)
 export const ACCEPTED_ASSOCIATIONS = ['OWNER', 'MEMBER', 'COLLABORATOR']
 export const CHECK_NAME = 'Pending Check'
 
@@ -133,15 +138,13 @@ export class PullRequestEvent extends Event {
 			await this.api.respond({
 				issueNumber: this.number,
 				body:
-					String(
-						noticeTpl({
-							user: pullRequest.user.id,
-							cmd:
-								Inputs.prefixFilter !== ''
-									? `${Inputs.prefixFilter} check <sha>`
-									: 'check <sha>'
-						})
-					) + NOTICE_HEADER
+					noticeTpl.render({
+						user: pullRequest.user.id,
+						cmd:
+							Inputs.prefixFilter !== ''
+								? `${Inputs.prefixFilter} check <sha>`
+								: 'check <sha>'
+					}) + NOTICE_HEADER
 			})
 		}
 
@@ -160,7 +163,7 @@ export class PullRequestEvent extends Event {
 			output: {
 				title: `Pending check of ${short}`,
 				summary: `This pull request is waiting for an approval to run all of its checks`,
-				text: checkMsgTpl({})
+				text: checkMessageTpl.render({})
 			},
 			actions: [
 				{

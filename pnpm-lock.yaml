@@ -5,6 +5,7 @@ dependencies:
   '@octokit/webhooks': 7.11.3
   lazy-get-decorator: 2.2.0
   memoize-cache-decorator: 1.3.2
+  micromustache: 8.0.3
 devDependencies:
   '@octokit/types': 5.5.0
   '@types/node': 14.11.1
@@ -12,7 +13,6 @@ devDependencies:
   eslint-plugin-putout: 5.2.0_putout@10.0.5
   html-loader: 1.3.1_webpack@4.44.2
   markdown-loader: 5.1.0
-  mustache-loader: 1.4.3_webpack@4.44.2
   putout: 10.0.5_putout@10.0.5
   typescript: 4.0.3
   webpack: 4.44.2_webpack@4.44.2
@@ -1687,10 +1687,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
-  /abbrev/1.1.1:
-    dev: true
-    resolution:
-      integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==
   /acorn-jsx/5.3.1_acorn@7.4.0:
     dependencies:
       acorn: 7.4.0
@@ -2262,13 +2258,6 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
-  /camel-case/3.0.0:
-    dependencies:
-      no-case: 2.3.2
-      upper-case: 1.1.3
-    dev: true
-    resolution:
-      integrity: sha1-yjw2iKTpzzpM2nd9xNy8cTJJz3M=
   /camel-case/4.1.1:
     dependencies:
       pascal-case: 3.1.1
@@ -2472,14 +2461,6 @@ packages:
       node: '>=0.1.90'
     resolution:
       integrity: sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==
-  /commander/2.17.1:
-    dev: true
-    resolution:
-      integrity: sha512-wPMUt6FnH2yzG95SA6mzjQOEKUU3aLaDEmzs1ti+1E9h+CsrZghRlqEM/EJ4KscsQVG8uNN4uVreUeT8+drlgg==
-  /commander/2.19.0:
-    dev: true
-    resolution:
-      integrity: sha512-6tvAOO+D6OENvRAh524Dh9jcfKTYDQAqvqezbCW82xj5X0pSrcpxtvRKHLG0yBY6SD7PSDrJaj+0AiOcKVd1Xg==
   /commander/2.20.3:
     dev: true
     resolution:
@@ -4010,14 +3991,6 @@ packages:
     dev: true
     resolution:
       integrity: sha1-0nRXAQJabHdabFRXk+1QL8DGSaE=
-  /hogan.js/3.0.2:
-    dependencies:
-      mkdirp: 0.3.0
-      nopt: 1.0.10
-    dev: true
-    hasBin: true
-    resolution:
-      integrity: sha1-TNnhq9QpQUbnZ55B14mHMrAse/0=
   /hosted-git-info/2.8.8:
     dev: true
     resolution:
@@ -4051,21 +4024,6 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-ZPr5MNObqnV/T9akshPKbVgyOqLmy+Bxo7juKCfTfnjNniTAMdy4hz21YQqoofMBJD2kdREaqPPdThoR78Tgxg==
-  /html-minifier/3.5.21:
-    dependencies:
-      camel-case: 3.0.0
-      clean-css: 4.2.3
-      commander: 2.17.1
-      he: 1.2.0
-      param-case: 2.1.1
-      relateurl: 0.2.7
-      uglify-js: 3.4.10
-    dev: true
-    engines:
-      node: '>=4'
-    hasBin: true
-    resolution:
-      integrity: sha512-LKUKwuJDhxNa3uf/LPR/KVjm/l3rBqtYeCOAekvG8F1vItxMUpueGd94i/asDDr8/1u7InxzFA5EeGjhhG5mMA==
   /htmlparser2/4.1.0:
     dependencies:
       domelementtype: 2.0.2
@@ -4796,10 +4754,6 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-FN8JBzLx6CzeMrB0tg6pqlGU1wCrXW+ZXGH481kfsBqer0hToTIiHdjH4Mq8xJUbvATujKCvaREGWpGUionraA==
-  /lower-case/1.1.4:
-    dev: true
-    resolution:
-      integrity: sha1-miyr0bno4K6ZOkv31YdcOcQujqw=
   /lower-case/2.0.1:
     dependencies:
       tslib: 1.13.0
@@ -4974,6 +4928,12 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-y7FpHSbMUMoyPbYUSzO6PaZ6FyRnQOpHuKwbo1G+Knck95XVU4QAiKdGEnj5wwoS7PlOgthX/09u5iFJ+aYf5Q==
+  /micromustache/8.0.3:
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-SXjrEPuYNtWq0reR9LR2nHdzdQx/3re9HPcDGjm00L7hi2RsH5KMRBhYEBvPdyQC51RW/2TznjwX/sQLPPyHNw==
   /miller-rabin/4.0.1:
     dependencies:
       bn.js: 4.11.9
@@ -5064,11 +5024,6 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-WRoDn//mXBiJ1H40rqa3vH0toePwSsGb45iInWlTySa+Uu4k3tYUSxa2v1KqAiLtvlrSzaExqS1gtk96A9zvEA==
-  /mkdirp/0.3.0:
-    deprecated: Legacy versions of mkdirp are no longer supported. Please update to mkdirp 1.x. (Note that the API surface has changed to use Promises in 1.x.)
-    dev: true
-    resolution:
-      integrity: sha1-G79asbqCevI1dRQ0kEJkVfSB/h4=
   /mkdirp/0.5.5:
     dependencies:
       minimist: 1.2.5
@@ -5097,19 +5052,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-0ZIR9PasPxGXmRsEF8jsDzndzHDj7tIav+JUmvIFB/WHswliFnquxECT/De7GR4yg99ky/NlRKJT82G1y271bw==
-  /mustache-loader/1.4.3_webpack@4.44.2:
-    dependencies:
-      hogan.js: 3.0.2
-      html-minifier: 3.5.21
-      loader-utils: 1.4.0
-      webpack: 4.44.2_webpack@4.44.2
-    dev: true
-    engines:
-      node: '>=4.0.0'
-    peerDependencies:
-      webpack: '* || ^2.1.0-beta || ^4.0.0-beta'
-    resolution:
-      integrity: sha512-RHhwX6A2VqOtqgX3/wE6I+l0V7xjhwRMnmDIt2HoPFRtmFh4KWa0RLGcQMaWOylQc0a5Wed0qmAEpLFejy3Gmg==
   /nan/2.14.1:
     dev: true
     optional: true
@@ -5150,12 +5092,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-CZFL/s2/jY76GTCASnHpwRoWIacFVH05IoHDodgJmC06BPrkai69T90/3hpXvZcIBL8eqZNmvvXmDgPHS9ALWQ==
-  /no-case/2.3.2:
-    dependencies:
-      lower-case: 1.1.4
-    dev: true
-    resolution:
-      integrity: sha512-rmTZ9kz+f3rCvK2TD1Ue/oZlns7OGoIWP4fc3llxxRXlOkHKoWPPWJOfFYpITabSow43QJbRIoHQXtt10VldyQ==
   /no-case/3.0.3:
     dependencies:
       lower-case: 2.0.1
@@ -5211,13 +5147,6 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-jZ2+KJZKSsVxLpExZCEHxx6Q7EA=
-  /nopt/1.0.10:
-    dependencies:
-      abbrev: 1.1.1
-    dev: true
-    hasBin: true
-    resolution:
-      integrity: sha1-bd0hvSoxQXuScn3Vhfim83YI6+4=
   /normalize-package-data/2.5.0:
     dependencies:
       hosted-git-info: 2.8.8
@@ -5484,12 +5413,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-P2vSmIu38uIlvdcU7fDkyrxj33gTUy/ABO5ZUbGowxNCopBq/OoD42bP4UmMrJoPyk4Uqf0mu3mtWBhHCZD8yg==
-  /param-case/2.1.1:
-    dependencies:
-      no-case: 2.3.2
-    dev: true
-    resolution:
-      integrity: sha1-35T9jPZTHs915r75oIWPvHK+Ikc=
   /param-case/3.0.3:
     dependencies:
       dot-case: 3.0.3
@@ -6939,16 +6862,6 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-tEu6DGxGgRJPb/mVPIZ48e69xCn2yRmCgYmDugAVwmJ6o+0u1RI18eO7E7WBTLYLaEVVOhwQmcdhQHweux/WPg==
-  /uglify-js/3.4.10:
-    dependencies:
-      commander: 2.19.0
-      source-map: 0.6.1
-    dev: true
-    engines:
-      node: '>=0.8.0'
-    hasBin: true
-    resolution:
-      integrity: sha512-Y2VsbPVs0FIshJztycsO2SfPk7/KAF/T72qzv9u5EpQ4kB2hQoHlhNQTsNyy6ul7lQtqJN/AoWeS23OzEiEFxw==
   /unc-path-regex/0.1.2:
     dev: true
     engines:
@@ -7032,10 +6945,6 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-Yld6Z0RyCYGB6ckIjffGOSOmHXj1gMeE7aROz4MG+XMkmixBX4jUngrGXNYz7wPKBmtoD4MnBa2Anu7RSKht/A==
-  /upper-case/1.1.3:
-    dev: true
-    resolution:
-      integrity: sha1-9rRQHC7EzdJrp4vnIilh3ndiFZg=
   /uri-js/4.4.0:
     dependencies:
       punycode: 2.1.1
@@ -7332,7 +7241,7 @@ specifiers:
   lazy-get-decorator: ^2.2.0
   markdown-loader: ^5.1.0
   memoize-cache-decorator: ^1.3.2
-  mustache-loader: ^1.4.3
+  micromustache: ^8.0.3
   putout: ^10.0.5
   typescript: ^4.0.3
   webpack: ^4.44.2
