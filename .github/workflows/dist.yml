@@ -1,0 +1,84 @@
+name: rebuild
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  distributables:
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      matrix:
+        node-version:
+          - 12.x
+        os:
+          - ubuntu-latest
+        pnpm-version:
+          - 5.7.0
+    name: node.js ${{ matrix.node-version }}
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2.3.2
+        with:
+          persist-credentials: false
+      - name: setup node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: cache node modules
+        uses: actions/cache@v2.1.1
+        with:
+          path: |
+            **/node_modules
+            **/.putoutcache
+          key: ${{ runner.OS }}-${{ matrix.node-version }}-${{ hashFiles('/pnpm-lock.yaml') }}-${{ matrix.pnpm-version }}
+          restore-keys: |
+            ${{ runner.OS }}-${{ matrix.node-version }}-${{ hashFiles('/pnpm-lock.yaml') }}-${{ matrix.pnpm-version }}
+            ${{ runner.OS }}-${{ matrix.node-version }}-${{ hashFiles('/pnpm-lock.yaml') }}
+            ${{ runner.OS }}-${{ matrix.node-version }}
+      - name: setup pnpm
+        uses: pnpm/action-setup@v1.2.0
+        with:
+          version: ${{ matrix.pnpm-version }}
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
+      - name: determine ncc cache dir and version
+        run: |
+          echo "::set-env name=ncc-cache::$(pnpx ncc cache dir)"
+          echo "::set-env name=ncc-version::$(pnpx ncc version)"
+      - name: cache ncc
+        uses: actions/cache@v2.1.1
+        with:
+          path: ${{ env.ncc-cache }}
+          key: ${{ runner.OS }}-${{ matrix.node-version }}-${{ env.ncc-version }}-${{ hashFiles('**/*.ts') }}
+          restore-keys: |
+            ${{ runner.OS }}-${{ matrix.node-version }}-${{ env.ncc-version }}-${{ hashFiles('**/*.ts') }}
+            ${{ runner.OS }}-${{ matrix.node-version }}-${{ env.ncc-version }}
+      - name: build
+        run: pnpm build
+      - name: creating pull request
+        if: ${{ github.head_ref == '' }}
+        uses: peter-evans/create-pull-request@v3.4.0
+        with:
+          commit-message: 'chore(dist): update the distributed action script'
+          title: 'chore(dist): Update the distributed action script'
+          body: |
+            This pull requests updates the distributed version of the action script as described in the
+            [GitHub Action docs](https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action).
+
+            Every update on the main branche will cause an update of this pull request.
+            It only needs to be merged once a release is due.
+          labels: |
+            chore
+          branch: dist
+      - name: committing changed files
+        if: ${{ github.head_ref != '' }}
+        uses: stefanzweifel/git-auto-commit-action@v4.5.1
+        with:
+          commit_message: 'chore(dist): update the distributed action script'
+          file_pattern: 'dist/index.js'
