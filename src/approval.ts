@@ -9,7 +9,7 @@ import {memoize} from 'memoize-cache-decorator'
 export class PullRequestActionEvent extends PullRequestEvent {
 	@lazy()
 	get number(): number {
-		return super.number ?? github.context.payload.requested_action.identifier
+		return super.number ?? github.context.payload.requested_action?.identifier
 	}
 
 	@lazy()

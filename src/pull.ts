@@ -33,8 +33,8 @@ export class PullRequestEvent extends Event {
 		const payload = context.payload as EventPayloads.WebhookPayloadPullRequest
 
 		if (
-			payload.pull_request.title !== undefined &&
-			payload.pull_request.title !== ''
+			payload.pull_request !== undefined &&
+			payload.pull_request?.title !== ''
 		) {
 			return payload.pull_request
 		}

@@ -25,7 +25,7 @@ export class PullRequestCommentEvent extends PullRequestEvent {
 	get commentEvent(): EventPayloads.WebhookPayloadIssueComment | undefined {
 		const payload = context.payload as EventPayloads.WebhookPayloadIssueComment
 
-		if (payload.comment.id !== undefined && payload.comment.id !== 0) {
+		if (payload.comment !== undefined && payload.comment?.id !== 0) {
 			return payload
 		}
 

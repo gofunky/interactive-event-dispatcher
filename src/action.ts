@@ -6,16 +6,14 @@ import {PullRequestEvent} from './pull'
 
 async function run(): Promise<void> {
 	let event: Event
+	let command = ''
 	switch (Event.sourceEvent) {
 		case 'check_run':
 			event = new PullRequestActionEvent()
 			break
 		case 'issue_comment':
 			event = new PullRequestCommentEvent()
-			core.setOutput(
-				'command',
-				await (<PullRequestCommentEvent>event).command()
-			)
+			command = await (<PullRequestCommentEvent>event).command()
 			break
 		case 'pull_request':
 		case 'pull_request_review':
@@ -26,6 +24,7 @@ async function run(): Promise<void> {
 			event = new Event()
 			break
 	}
+	core.setOutput('command', command)
 	core.setOutput('triggered', await event.triggered())
 
 	await event.dispatch()
