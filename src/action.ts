@@ -30,4 +30,6 @@ async function run(): Promise<void> {
 	await event.dispatch()
 }
 
-run().catch(core.setFailed)
+run().catch((error) => {
+	core.setFailed(error.stack)
+})

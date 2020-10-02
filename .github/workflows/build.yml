@@ -201,10 +201,10 @@ jobs:
       - name: check trigger
         if: steps.test.outputs.triggered != matrix.triggered
         run: |
-          echo '::error::`outputs.triggered` was expected to be `${{ matrix.triggered }}`'
+          echo '::error::`outputs.triggered` was expected to be `${{ matrix.triggered }}` but was actually `${{ steps.test.outputs.triggered }}`'
           exit 1
       - name: check command
         if: matrix.command != '' && steps.test.outputs.command != matrix.command
         run: |
-          echo '::error::`outputs.command` was expected to be `${{ matrix.command }}`'
+          echo '::error::`outputs.command` was expected to be `${{ matrix.command }}` but was actually `${{ steps.test.outputs.command }}`'
           exit 1
