@@ -87,17 +87,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        id: [ test_push ]
+        sourceEvent: [ push ]
+        appendCommand: [ false ]
+        pullMode: [ false ]
+        triggered: [ true ]
+        number: [ '' ]
+        prefixFilter: [ '' ]
+        commandFilter: [ '' ]
+        body: [ '' ]
+        command: [ '' ]
         include:
           - id: test_push_pullMode
-            sourceEvent: push
-            appendCommand: false
             pullMode: true
-            triggered: true
-          - id: test_push
-            sourceEvent: push
-            appendCommand: false
-            pullMode: false
-            triggered: true
           - id: test_regex
             sourceEvent: push
             number: ''
@@ -199,10 +201,10 @@ jobs:
       - name: check trigger
         if: steps.test.outputs.triggered != matrix.triggered
         run: |
-          echo "::error:: `outputs.triggered` was expected to be `${{ matrix.triggered }}`"
+          echo '::error::`outputs.triggered` was expected to be `${{ matrix.triggered }}`'
           exit 1
       - name: check command
-        if: steps.test.outputs.command != matrix.command
+        if: matrix.command != '' && steps.test.outputs.command != matrix.command
         run: |
-          echo "::error:: `outputs.command` was expected to be `${{ matrix.command }}`"
+          echo '::error::`outputs.command` was expected to be `${{ matrix.command }}`'
           exit 1

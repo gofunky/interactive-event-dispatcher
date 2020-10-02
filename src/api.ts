@@ -34,6 +34,14 @@ import type {
 } from '@octokit/types'
 import {GitHub} from '@actions/github/lib/utils'
 import {context, getOctokit} from '@actions/github'
+import * as core from '@actions/core'
+
+const ConstLogger = {
+	debug: core.debug,
+	info: core.info,
+	warn: core.warning,
+	error: core.error
+}
 
 interface RepoRequest {
 	repo: string
@@ -53,8 +61,14 @@ export class Api {
 	private readonly repoList: RepoListRequest
 
 	constructor({token, actionsToken, perPage}: ApiParams) {
-		this.octokit = getOctokit(token)
-		this.actionsKit = getOctokit(actionsToken)
+		this.octokit = getOctokit(token, {
+			log: ConstLogger,
+			userAgent: 'gofunky/interactive-event-dispatcher/pat'
+		})
+		this.actionsKit = getOctokit(actionsToken, {
+			log: ConstLogger,
+			userAgent: 'gofunky/interactive-event-dispatcher/gh'
+		})
 		this.repo = {
 			repo: context.repo.repo,
 			owner: context.repo.owner
