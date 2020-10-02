@@ -1,4 +1,4 @@
-name: test event
+name: test
 
 on:
   repository_dispatch:
@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  test:
+  event:
     if: !contains(github.event.action, 'notrigger')
     runs-on: ubuntu-latest
     steps:

@@ -80,7 +80,7 @@ jobs:
           wait-max: 300
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           no-work-break: true
-          ref: main
+          ref: master
   test:
     needs: [ wait, build ]
     runs-on: ubuntu-latest
