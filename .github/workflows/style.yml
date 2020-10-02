@@ -25,7 +25,7 @@ jobs:
       matrix:
         node-version: [ 12.x ]
         os: [ ubuntu-latest ]
-        pnpm-version: 5.7.0
+        pnpm-version: [ 5.7.0 ]
     name: code style
     defaults:
       run:
@@ -70,7 +70,7 @@ jobs:
           labels: |
             style
             chore
-          branch: black
+          branch: style
       - name: committing changed files
         if: ${{ github.head_ref != '' }}
         uses: stefanzweifel/git-auto-commit-action@v4.5.1
