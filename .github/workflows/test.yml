@@ -7,7 +7,7 @@ on:
 
 jobs:
   event:
-    if: !contains(github.event.action, 'notrigger')
+    if: ! contains(github.event.action, 'notrigger')
     runs-on: ubuntu-latest
     steps:
       - name: print payload
@@ -34,25 +34,25 @@ jobs:
           exit 1
       - name: fail if pull_request number is missing
         if: contains(github.event.client_payload.sourceEvent, 'pull_request')
-          && github.event.client_payload.number != '1'
+          && github.event.client_payload.number == ''
         run: |
           echo "::error:: pull_request number is missing
           exit 1
       - name: fail if issue_comment number is missing
         if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
-          && github.event.client_payload.number != '1'
+          && github.event.client_payload.number == ''
         run: |
           echo "::error:: issue_comment number is missing
           exit 1
       - name: fail if pull_request payload is missing
         if: contains(github.event.client_payload.sourceEvent, 'pull_request')
-          && github.event.client_payload.pull_request.number != '1'
+          && github.event.client_payload.pull_request.number == ''
         run: |
           echo "::error:: pull_request payload is missing
           exit 1
       - name: fail if issue_comment payload is missing
         if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
-          && github.event.client_payload.comment.number != '1'
+          && github.event.client_payload.comment.number == ''
         run: |
           echo "::error:: issue_comment payload is missing
           exit 1
