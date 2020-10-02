@@ -57,8 +57,8 @@ jobs:
               args: [--frozen-lockfile, --strict-peer-dependencies]
       - name: determine ncc cache dir and version
         run: |
-          echo "::set-env name=ncc-cache::${pnpx ncc cache dir}"
-          echo "::set-env name=ncc-version::${pnpx ncc version}"
+          echo "::set-env name=ncc-cache::$(pnpx ncc cache dir)"
+          echo "::set-env name=ncc-version::$(pnpx ncc version)"
       - name: cache ncc
         uses: actions/cache@v2.1.1
         with:
