@@ -26,10 +26,13 @@ jobs:
       matrix:
         node-version: [12.x]
         os: [ubuntu-latest]
-        pnpm-version: 5.7.0
+        pnpm-version: [5.7.0]
     name: node.js ${{ matrix.node-version }}
     steps:
-      - uses: actions/checkout@v2.3.2
+      - name: checkout code
+        uses: actions/checkout@v2.3.2
+        with:
+          persist-credentials: false
       - name: setup node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2.1.1
         with:
@@ -68,13 +71,14 @@ jobs:
     needs: [wait, build]
     runs-on: ubuntu-latest
     steps:
-      uses: vahidov/github-actions-workflow-expect@v1.0.2
-      with:
-        wait-interval: 10
-        wait-max: 300
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        no-work-break: true
-        ref: main
+      - name: trace triggered workflows
+        uses: vahidov/github-actions-workflow-expect@v1.0.2
+        with:
+          wait-interval: 10
+          wait-max: 300
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          no-work-break: true
+          ref: main
   test:
     needs: [ wait, build ]
     runs-on: ubuntu-latest
@@ -134,7 +138,10 @@ jobs:
             triggered: true
             command: ''
     steps:
-      - uses: actions/checkout@v2.3.2
+      - name: checkout code
+        uses: actions/checkout@v2.3.2
+        with:
+          persist-credentials: false
       - name: test with regex
         id: test
         uses: ./
@@ -154,7 +161,7 @@ jobs:
         run: |
           echo "::error:: `outputs.triggered` was expected to be `${{ matrix.triggered }}`"
           exit 1
-      - name: check trigger
+      - name: check command
         if: steps.test.outputs.command != matrix.command
         run: |
           echo "::error:: `outputs.command` was expected to be `${{ matrix.command }}`"
