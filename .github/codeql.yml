@@ -1,0 +1,11 @@
+name: typescript code quality
+
+queries:
+  - uses: security-and-quality
+
+paths:
+  - src
+paths-ignore:
+  - node_modules
+  - lib
+  - dist
