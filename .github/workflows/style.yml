@@ -55,7 +55,9 @@ jobs:
         uses: pnpm/action-setup@v1.2.0
         with:
           version: ${{ matrix.pnpm-version }}
-          run-install: true
+          run-install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
       - name: running xo
         run: |
           pnpm fix:lint
