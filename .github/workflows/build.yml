@@ -53,10 +53,10 @@ jobs:
         with:
           version: ${{ matrix.pnpm-version }}
           run-install: true
-      - name: determine ncc cache dir
+      - name: determine ncc cache dir and version
         run: |
-          echo "::set-env name=ncc-cache::${pnpm run ncc-cache}"
-          echo "::set-env name=ncc-version::${pnpm run ncc-version}"
+          echo "::set-env name=ncc-cache::${pnpx ncc cache dir}"
+          echo "::set-env name=ncc-version::${pnpx ncc version}"
       - name: cache ncc
         uses: actions/cache@v2.1.1
         with:

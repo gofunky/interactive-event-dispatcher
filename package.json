@@ -5,8 +5,6 @@
   "main": "src/action.ts",
   "scripts": {
     "build": "ncc build --minify",
-    "ncc-cache": "ncc cache dir",
-    "ncc-version": "ncc version",
     "lint": "xo src/**/*.ts",
     "fix:lint": "xo src/**/*.ts --fix"
   },
