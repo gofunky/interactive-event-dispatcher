@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: print payload
-        run: echo "${{ toJson(github.event.client_payload) }}"
+        run: echo '${{ toJson(github.event.client_payload) }}'
       - name: fail if event is missing
         if: github.event.client_payload.sourceEvent == ''
         run: |

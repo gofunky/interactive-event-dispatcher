@@ -26,7 +26,7 @@ jobs:
           from: yaml
           to: json
       - name: store renovate config
-        run: echo "${{ steps.yaml2json.outputs.data }}" > .github/renovate.json
+        run: echo '${{ steps.yaml2json.outputs.data }}' > .github/renovate.json
       - name: run renovate bot
         uses: renovatebot/github-action@v23.26.0
         with:
