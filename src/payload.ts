@@ -12,7 +12,7 @@ export interface Payload {
 	number: number
 	body: string
 	command: string
-	event: string
+	sourceEvent: string
 	repository: string
 	ref: string
 	sha: string

@@ -1,13 +1,12 @@
 import * as core from '@actions/core'
 import {Event} from './event'
-import * as github from '@actions/github'
 import {PullRequestActionEvent} from './approval'
 import {PullRequestCommentEvent} from './comment'
 import {PullRequestEvent} from './pull'
 
 async function run(): Promise<void> {
 	let event: Event
-	switch (github.context.eventName) {
+	switch (Event.sourceEvent) {
 		case 'check_run':
 			event = new PullRequestActionEvent()
 			break

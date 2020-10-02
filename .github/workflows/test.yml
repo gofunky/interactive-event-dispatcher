@@ -1,0 +1,70 @@
+name: test event
+
+on:
+  repository_dispatch:
+    branches:
+      - master
+
+jobs:
+  test_any:
+    if: !contains(github.event.action, 'notrigger')
+    runs-on: ubuntu-latest
+    steps:
+      - name: print payload
+        run: echo "${{ toJson(github.event.client_payload) }}"
+      - name: fail if event is missing
+        if: github.event.client_payload.sourceEvent == ''
+        run: |
+          echo "::error:: event is missing
+          exit 1
+      - name: fail if repository is missing
+        if: github.event.client_payload.repository == ''
+        run: |
+          echo "::error:: repository is missing
+          exit 1
+      - name: fail if ref is missing
+        if: github.event.client_payload.ref == ''
+        run: |
+          echo "::error:: ref is missing
+          exit 1
+      - name: fail if sha is missing
+        if: github.event.client_payload.sha == ''
+        run: |
+          echo "::error:: sha is missing
+          exit 1
+      - name: fail if pull_request number is missing
+        if: contains(github.event.client_payload.sourceEvent, 'pull_request')
+          && github.event.client_payload.number != '1'
+        run: |
+          echo "::error:: pull_request number is missing
+          exit 1
+      - name: fail if issue_comment number is missing
+        if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
+          && github.event.client_payload.number != '1'
+        run: |
+          echo "::error:: issue_comment number is missing
+          exit 1
+      - name: fail if pull_request payload is missing
+        if: contains(github.event.client_payload.sourceEvent, 'pull_request')
+          && github.event.client_payload.pull_request.number != '1'
+        run: |
+          echo "::error:: pull_request payload is missing
+          exit 1
+      - name: fail if issue_comment payload is missing
+        if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
+          && github.event.client_payload.comment.number != '1'
+        run: |
+          echo "::error:: issue_comment payload is missing
+          exit 1
+      - name: fail if issue_comment command is missing
+        if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
+          && github.event.client_payload.command == ''
+        run: |
+          echo "::error:: issue_comment command is missing
+          exit 1
+      - name: fail if issue_comment body is missing
+        if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
+          && github.event.client_payload.body == ''
+        run: |
+          echo "::error:: issue_comment body is missing
+          exit 1

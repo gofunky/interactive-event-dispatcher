@@ -55,6 +55,17 @@ export class Inputs {
 	}
 
 	@lazy(true, true)
+	static get sourceEvent(): string | undefined {
+		const sourceEventOpt = core.getInput('sourceEvent')
+
+		if (sourceEventOpt === '') {
+			return undefined
+		}
+
+		return sourceEventOpt
+	}
+
+	@lazy(true, true)
 	static get event(): string {
 		return core.getInput('event')
 	}

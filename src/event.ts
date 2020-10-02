@@ -34,8 +34,8 @@ export class Event {
 		})
 	}
 
-	get sourceEvent(): string {
-		return github.context.eventName
+	static get sourceEvent(): string {
+		return Inputs.sourceEvent ?? github.context.eventName
 	}
 
 	@memoize()
@@ -72,7 +72,7 @@ export class Event {
 	@memoize()
 	async payload(): Promise<Payload> {
 		return <Payload>{
-			event: this.sourceEvent,
+			sourceEvent: Event.sourceEvent,
 			repository: await this.repository(),
 			ref: await this.ref(),
 			sha: await this.sha()

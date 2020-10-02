@@ -101,6 +101,12 @@ inputs:
       For overriding the number of the issue or pull request that triggers this action.
     required: false
     default: ''
+  sourceEvent:
+    description: |
+      <-- only for testing purposes -->
+      For overriding the source event name.
+    required: false
+    default: ''
   body:
     description: |
       <-- only for testing purposes -->

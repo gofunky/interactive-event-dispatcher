@@ -1,0 +1,161 @@
+name: build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  wait:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: wait for previous workflows to finish
+        uses: softprops/turnstyle@v1
+        with:
+          same-branch-only: true
+          poll-interval-seconds: 10
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build:
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      matrix:
+        node-version: [12.x]
+        os: [ubuntu-latest]
+        pnpm-version: 5.7.0
+    name: node.js ${{ matrix.node-version }}
+    steps:
+      - uses: actions/checkout@v2.3.2
+      - name: setup node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: cache node modules
+        uses: actions/cache@v2.1.1
+        with:
+          path: |
+            **/node_modules
+            **/.putoutcache
+          key: ${{ runner.OS }}-${{ matrix.node-version }}-${{ hashFiles('/pnpm-lock.yaml') }}-${{ matrix.pnpm-version }}
+          restore-keys: |
+            ${{ runner.OS }}-${{ matrix.node-version }}-${{ hashFiles('/pnpm-lock.yaml') }}-${{ matrix.pnpm-version }}
+            ${{ runner.OS }}-${{ matrix.node-version }}-${{ hashFiles('/pnpm-lock.yaml') }}
+            ${{ runner.OS }}-${{ matrix.node-version }}
+      - name: setup pnpm
+        uses: pnpm/action-setup@v1.2.0
+        with:
+          version: ${{ matrix.pnpm-version }}
+          run-install: true
+      - name: determine ncc cache dir
+        run: |
+          echo "::set-env name=ncc-cache::${pnpm run ncc-cache}"
+          echo "::set-env name=ncc-version::${pnpm run ncc-version}"
+      - name: cache ncc
+        uses: actions/cache@v2.1.1
+        with:
+          path: ${{ env.ncc-cache }}
+          key: ${{ runner.OS }}-${{ matrix.node-version }}-${{ env.ncc-version }}-${{ hashFiles('**/*.ts') }}
+          restore-keys: |
+            ${{ runner.OS }}-${{ matrix.node-version }}-${{ env.ncc-version }}-${{ hashFiles('**/*.ts') }}
+            ${{ runner.OS }}-${{ matrix.node-version }}-${{ env.ncc-version }}
+      - name: build
+        run: pnpm build
+  verify:
+    needs: [wait, build]
+    runs-on: ubuntu-latest
+    steps:
+      uses: vahidov/github-actions-workflow-expect@v1.0.2
+      with:
+        wait-interval: 10
+        wait-max: 300
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        no-work-break: true
+        ref: main
+  test:
+    needs: [ wait, build ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - id: test_regex
+            sourceEvent: issue_comment
+            prefixFilter: '$gofunky([-\/]bot)?'
+            commandFilter: ''
+            appendCommand: false
+            pullMode: false
+            body: |
+              $gofunky my test trigger
+              Something else
+            triggered: true
+            command: my test trigger
+          - id: test_regex_nocommand
+            sourceEvent: issue_comment
+            prefixFilter: '$gofunky([-\/]bot)?'
+            commandFilter: ''
+            appendCommand: false
+            pullMode: false
+            body: |
+              $gofunky/bot
+              Something else
+            triggered: true
+            command: ''
+          - id: test_regex_notrigger
+            sourceEvent: issue_comment
+            prefixFilter: '$gofunky([-\/]bot)?'
+            commandFilter: ''
+            appendCommand: false
+            pullMode: false
+            body: |
+              $gofunk-bot foo
+              Something else
+            triggered: false
+            command: ''
+          - id: test_empty_prefix
+            sourceEvent: issue_comment
+            prefixFilter: ''
+            commandFilter: ''
+            appendCommand: false
+            pullMode: false
+            body: |
+              Something irrelevant
+            triggered: true
+            command: ''
+          - id: test_empty_body
+            sourceEvent: issue_comment
+            prefixFilter: ''
+            commandFilter: ''
+            appendCommand: false
+            pullMode: false
+            body: ''
+            triggered: true
+            command: ''
+    steps:
+      - uses: actions/checkout@v2.3.2
+      - name: test with regex
+        id: test
+        uses: ./
+        with:
+          token: ${{ secrets.PAT }}
+          prefixFilter: ${{ matrix.prefixFilter }}
+          commandFilter: ${{ matrix.commandFilter }}
+          appendCommand: ${{ matrix.appendCommand }}
+          pullMode: ${{ matrix.pullMode }}
+          body: ${{ matrix.body }}
+          number: 1
+          event: ${{ matrix.id }}
+          sourceEvent: ${{ matrix.sourceEvent }}
+          observingChecks: false
+      - name: check trigger
+        if: steps.test.outputs.triggered != matrix.triggered
+        run: |
+          echo "::error:: `outputs.triggered` was expected to be `${{ matrix.triggered }}`"
+          exit 1
+      - name: check trigger
+        if: steps.test.outputs.command != matrix.command
+        run: |
+          echo "::error:: `outputs.command` was expected to be `${{ matrix.command }}`"
+          exit 1
