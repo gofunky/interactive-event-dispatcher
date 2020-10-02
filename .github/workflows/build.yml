@@ -85,9 +85,8 @@ jobs:
     needs: [ wait, build ]
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        strategy:
-          fail-fast: false
         include:
           - id: test_push_pullMode
             sourceEvent: push
