@@ -256,7 +256,7 @@ export class Api {
 		reason
 	}: GraphNodeParams & MinimizeReasonParams): Promise<void> {
 		await this.graphql({
-			query: `                
+			query: `
             mutation MinimizeComment($comment: ID!, $reason: ReportedContentClassifiers!) {
               minimizeComment(input:{subjectId:$comment, classifier:$reason}) {
                 minimizedComment {
