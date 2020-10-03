@@ -189,12 +189,14 @@ jobs:
             exit 1
           fi
       - name: check trigger
+        if: always()
         run: |
           if [[ "${{ steps.test.outputs.triggered }}" != "${{ matrix.triggered }}" ]]; then
             echo '::error::`outputs.command` was expected to be `${{ matrix.triggered }}` but was actually `${{ steps.test.outputs.triggered }}`'
             exit 1
           fi
       - name: validate triggered workflow status
+        if: always()
         uses: xembly/validate-workflow-status@v1.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
