@@ -80,7 +80,6 @@ jobs:
           wait-max: 300
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           no-work-break: true
-          ref: master
   test:
     needs: [ wait, build ]
     runs-on: ubuntu-latest
@@ -199,7 +198,7 @@ jobs:
           sourceEvent: ${{ matrix.sourceEvent }}
           observingChecks: false
       - name: check trigger
-        if: steps.test.outputs.triggered != matrix.triggered
+        if: toJSON(steps.test.outputs.triggered) != toJSON(matrix.triggered)
         run: |
           echo '::error::`outputs.triggered` was expected to be `${{ matrix.triggered }}` but was actually `${{ steps.test.outputs.triggered }}`'
           exit 1
