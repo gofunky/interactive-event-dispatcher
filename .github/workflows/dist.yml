@@ -86,7 +86,7 @@ jobs:
             It only needs to be merged once a release is due.
           labels: |
             chore
-          branch: dist
+          branch: distributable
           token: ${{ secrets.BOT }}
       - name: committing changed files
         if: ${{ github.head_ref != '' }}
