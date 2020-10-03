@@ -22,7 +22,7 @@ jobs:
           persist-credentials: false
           ref: master
       - name: read matrix
-        uses: mikefarah/yq:3.4.0
+        uses: mikefarah/yq@3.4.0
         with:
           cmd: |
             export MATRIX=$(yq read -j ./.github/workflows/build.yml 'jobs.test.strategy.matrix.include.(id==${{ github.event.action }})')
