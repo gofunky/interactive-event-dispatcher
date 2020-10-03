@@ -55,15 +55,15 @@ jobs:
           exit 1
       - name: fail if pull_request number is missing
         if: contains(github.event.client_payload.sourceEvent, 'pull_request')
-          && github.event.client_payload.number == ''
+          && github.event.client_payload.number != fromJSON(env.matrix).number
         run: |
-          echo "::error:: pull_request number is missing"
+          echo '::error::`github.event.client_payload.number` was expected to be `${{ fromJSON(env.matrix).number }}` but was actually `${{ github.event.client_payload.number }}`'
           exit 1
       - name: fail if issue_comment number is missing
         if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
-          && github.event.client_payload.number == ''
+          && github.event.client_payload.number != fromJSON(env.matrix).number
         run: |
-          echo "::error:: issue_comment number is missing"
+          echo '::error::`github.event.client_payload.number` was expected to be `${{ fromJSON(env.matrix).number }}` but was actually `${{ github.event.client_payload.number }}`'
           exit 1
       - name: fail if pull_request payload is missing
         if: contains(github.event.client_payload.sourceEvent, 'pull_request')
@@ -79,13 +79,13 @@ jobs:
           exit 1
       - name: fail if issue_comment command is missing
         if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
-          && github.event.client_payload.command == ''
+          && github.event.client_payload.command != fromJSON(env.matrix).command
         run: |
-          echo "::error:: issue_comment command is missing"
+          echo '::error::`github.event.client_payload.command` was expected to be `${{ fromJSON(env.matrix).command }}` but was actually `${{ github.event.client_payload.command }}`'
           exit 1
       - name: fail if issue_comment body is missing
         if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
-          && github.event.client_payload.body == ''
+          && github.event.client_payload.body != fromJSON(env.matrix).body
         run: |
-          echo "::error:: issue_comment body is missing"
+          echo '::error::`github.event.client_payload.body` was expected to be `${{ fromJSON(env.matrix).body }}` but was actually `${{ github.event.client_payload.body }}`'
           exit 1

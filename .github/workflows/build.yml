@@ -76,6 +76,7 @@ jobs:
       run:
         shell: bash
     strategy:
+      max-parallel: 1
       fail-fast: false
       matrix:
         id: [ test_push ]
@@ -194,6 +195,10 @@ jobs:
             echo '::error::`outputs.command` was expected to be `${{ matrix.triggered }}` but was actually `${{ steps.test.outputs.triggered }}`'
             exit 1
           fi
+      - name: sleep until trigger event is propagated
+        uses: jakejarvis/wait-action@v0.1.0
+        with:
+          time: '5s'
       - name: validate triggered workflow status
         if: always()
         uses: xembly/validate-workflow-status@v1.0.0
