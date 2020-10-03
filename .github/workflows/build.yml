@@ -180,7 +180,6 @@ jobs:
           number: ${{ matrix.number }}
           event: ${{ matrix.id }}
           sourceEvent: ${{ matrix.sourceEvent }}
-          observingChecks: false
       - name: check command
         if: matrix.command != ''
         run: |

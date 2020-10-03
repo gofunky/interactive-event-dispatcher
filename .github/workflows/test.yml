@@ -7,64 +7,84 @@ on:
 
 jobs:
   event:
-    if: ${{ ! contains(github.event.action, 'notrigger') }}
     runs-on: ubuntu-latest
     steps:
       - name: print payload
         run: echo '${{ toJson(github.event.client_payload) }}'
+      - name: fail if trigger contains notrigger
+        if: contains(github.event.action, 'notrigger')
+        run: |
+          echo "::error:: event type ${{ github.event.action }} was not supposed to be triggered"
+          exit 1
+      - name: checkout code
+        uses: actions/checkout@v2.3.2
+        with:
+          persist-credentials: false
+          ref: master
+      - name: read matrix
+        using: mikefarah/yq:3.4.0
+        with:
+          cmd: |
+            export MATRIX=$(yq read -j ./.github/workflows/build.yml 'jobs.test.strategy.matrix.include.(id==${{ github.event.action }})')
+            echo "::set-env name=matrix::$MATRIX"
+      - name: fail if trigger was not expected
+        if: fromJSON(env.matrix).triggered != 'true'
+        run: |
+          echo "::error:: event type ${{ github.event.action }} was not supposed to be triggered"
+          exit 1
       - name: fail if event is missing
         if: github.event.client_payload.sourceEvent == ''
         run: |
-          echo "::error:: event is missing
+          echo "::error:: event is missing"
           exit 1
       - name: fail if repository is missing
         if: github.event.client_payload.repository == ''
         run: |
-          echo "::error:: repository is missing
+          echo "::error:: repository is missing"
           exit 1
       - name: fail if ref is missing
         if: github.event.client_payload.ref == ''
         run: |
-          echo "::error:: ref is missing
+          echo "::error:: ref is missing"
           exit 1
       - name: fail if sha is missing
         if: github.event.client_payload.sha == ''
         run: |
-          echo "::error:: sha is missing
+          echo "::error:: sha is missing"
           exit 1
       - name: fail if pull_request number is missing
         if: contains(github.event.client_payload.sourceEvent, 'pull_request')
           && github.event.client_payload.number == ''
         run: |
-          echo "::error:: pull_request number is missing
+          echo "::error:: pull_request number is missing"
           exit 1
       - name: fail if issue_comment number is missing
         if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
           && github.event.client_payload.number == ''
         run: |
-          echo "::error:: issue_comment number is missing
+          echo "::error:: issue_comment number is missing"
           exit 1
       - name: fail if pull_request payload is missing
         if: contains(github.event.client_payload.sourceEvent, 'pull_request')
           && github.event.client_payload.pull_request.number == ''
         run: |
-          echo "::error:: pull_request payload is missing
+          echo "::error:: pull_request payload is missing"
           exit 1
       - name: fail if issue_comment payload is missing
         if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
           && github.event.client_payload.comment.number == ''
         run: |
-          echo "::error:: issue_comment payload is missing
+          echo "::error:: issue_comment payload is missing"
           exit 1
       - name: fail if issue_comment command is missing
         if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
           && github.event.client_payload.command == ''
         run: |
-          echo "::error:: issue_comment command is missing
+          echo "::error:: issue_comment command is missing"
           exit 1
       - name: fail if issue_comment body is missing
         if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
           && github.event.client_payload.body == ''
         run: |
-          echo "::error:: issue_comment body is missing
+          echo "::error:: issue_comment body is missing"
           exit 1
