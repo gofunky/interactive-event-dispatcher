@@ -2,8 +2,21 @@ name: rebuild
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
+    paths:
+      - '**.ts'
+      - '**.js'
+      - '**/package.json'
+      - '**/pnpm-lock.yaml'
+      - '**/dist.yml'
+  pull_request_target:
+    branches: [ master ]
+    paths:
+      - '**.ts'
+      - '**.js'
+      - '**/package.json'
+      - '**/pnpm-lock.yaml'
+      - '**/dist.yml'
 
 jobs:
   distributables:
@@ -13,16 +26,17 @@ jobs:
         shell: bash
     strategy:
       matrix:
-        node-version:
-          - 12.x
-        os:
-          - ubuntu-latest
-        pnpm-version:
-          - 5.7.0
+        node-version: [ 12.x ]
+        os: [ ubuntu-latest ]
+        pnpm-version: [ 5.7.0 ]
     name: node.js ${{ matrix.node-version }}
     steps:
       - name: checkout code
-        uses: actions/checkout@v2.3.2
+        uses: actions/checkout@v2.3.3
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.BOT }}
       - name: setup node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2.1.1
         with:
@@ -73,6 +87,7 @@ jobs:
           labels: |
             chore
           branch: dist
+          token: ${{ secrets.BOT }}
       - name: committing changed files
         if: ${{ github.head_ref != '' }}
         uses: stefanzweifel/git-auto-commit-action@v4.5.1

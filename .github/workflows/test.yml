@@ -25,8 +25,7 @@ jobs:
         uses: mikefarah/yq@3.4.0
         with:
           cmd: |
-            export MATRIX=$(yq read -j ./.github/workflows/build.yml 'jobs.test.strategy.matrix.include.(id==${{ github.event.action }})')
-            echo "::set-env name=matrix::$MATRIX"
+            printf "::set-env name=matrix::" && yq read -j ./.github/workflows/build.yml 'jobs.test.strategy.matrix.include.(id==${{ github.event.action }})'
       - name: fail if trigger was not expected
         if: fromJSON(env.matrix).triggered != 'true'
         run: |
