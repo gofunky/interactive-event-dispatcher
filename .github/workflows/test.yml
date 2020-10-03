@@ -27,10 +27,12 @@ jobs:
           cmd: |
             printf "::set-env name=matrix::" && yq read -j ./.github/workflows/build.yml 'jobs.test.strategy.matrix.include.(id==${{ github.event.action }})'
       - name: fail if trigger was not expected
-        if: fromJSON(env.matrix).triggered != 'true'
+        if: github.event.action != 'test_push'
         run: |
-          echo "::error:: event type ${{ github.event.action }} was not supposed to be triggered"
-          exit 1
+          if [[ "${{ fromJSON(env.matrix).triggered }}" != "true" ]]; then
+            echo "::error:: event type ${{ github.event.action }} was not supposed to be triggered"
+            exit 1
+          fi
       - name: fail if event is missing
         if: github.event.client_payload.sourceEvent == ''
         run: |
