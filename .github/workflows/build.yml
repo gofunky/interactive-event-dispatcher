@@ -69,8 +69,19 @@ jobs:
             ${{ runner.OS }}-${{ matrix.node-version }}-${{ env.ncc-version }}
       - name: build
         run: pnpm build
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: read matrix
+        id: set-matrix
+        uses: mikefarah/yq@3.4.0
+        with:
+          cmd: |
+            printf "::set-env name=matrix::" && yq read -j ./.github/matrix.yml
   test:
-    needs: [ wait, build ]
+    needs: [ wait, build, setup ]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -89,80 +100,7 @@ jobs:
         commandFilter: [ '' ]
         body: [ '' ]
         command: [ '' ]
-        include:
-          - id: test_push_pullMode
-            sourceEvent: push
-            pullMode: true
-            triggered: true
-          - id: test_regex
-            sourceEvent: issue_comment
-            number: 4
-            prefixFilter: '$gofunky([-\/]bot)?'
-            commandFilter: ''
-            appendCommand: false
-            pullMode: false
-            body: |
-              $gofunky my test trigger
-              Something else
-            triggered: true
-            command: my test trigger
-          - id: test_regex_nocommand
-            sourceEvent: issue_comment
-            number: 4
-            prefixFilter: '$gofunky([-\/]bot)?'
-            commandFilter: ''
-            appendCommand: false
-            pullMode: false
-            body: |
-              $gofunky/bot
-              Something else
-            triggered: true
-            command: ''
-          - id: test_regex_notrigger
-            sourceEvent: issue_comment
-            number: 4
-            prefixFilter: '$gofunky([-\/]bot)?'
-            commandFilter: ''
-            appendCommand: false
-            pullMode: false
-            body: |
-              $gofunk-bot foo
-              Something else
-            triggered: false
-            command: ''
-          - id: test_no_affiliation_notrigger
-            sourceEvent: issue_comment
-            number: 1
-            prefixFilter: '$gofunky([-\/]bot)?'
-            commandFilter: ''
-            appendCommand: false
-            pullMode: false
-            body: |
-              $gofunky my test trigger
-              Something else
-            triggered: false
-            command: my test trigger
-          - id: test_empty_prefix
-            sourceEvent: issue_comment
-            number: 4
-            prefixFilter: ''
-            commandFilter: ''
-            appendCommand: false
-            pullMode: false
-            body: |
-              Something irrelevant
-            triggered: true
-            command: ''
-          - id: test_empty_body
-            sourceEvent: issue_comment
-            number: 4
-            prefixFilter: ''
-            commandFilter: ''
-            appendCommand: false
-            pullMode: false
-            body: ''
-            triggered: true
-            command: ''
+        include: ${{ fromJson(needs.setup.outputs.matrix) }}
     steps:
       - name: checkout code
         uses: actions/checkout@v2.3.2
