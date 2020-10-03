@@ -83,6 +83,9 @@ jobs:
   test:
     needs: [ wait, build ]
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     strategy:
       fail-fast: false
       matrix:
@@ -197,13 +200,16 @@ jobs:
           event: ${{ matrix.id }}
           sourceEvent: ${{ matrix.sourceEvent }}
           observingChecks: false
-      - name: check trigger
-        if: toJSON(steps.test.outputs.triggered) != toJSON(matrix.triggered)
-        run: |
-          echo '::error::`outputs.triggered` was expected to be `${{ matrix.triggered }}` but was actually `${{ steps.test.outputs.triggered }}`'
-          exit 1
       - name: check command
-        if: matrix.command != '' && steps.test.outputs.command != matrix.command
+        if: matrix.command != ''
         run: |
-          echo '::error::`outputs.command` was expected to be `${{ matrix.command }}` but was actually `${{ steps.test.outputs.command }}`'
-          exit 1
+          if [[ "${{ steps.test.outputs.command }}" != "${{ matrix.command }}" ]]; then
+            echo '::error::`outputs.command` was expected to be `${{ matrix.command }}` but was actually `${{ steps.test.outputs.command }}`'
+            exit 1
+          fi
+      - name: check trigger
+        run: |
+          if [[ "${{ steps.test.outputs.triggered }}" != "${{ matrix.triggered }}" ]]; then
+            echo '::error::`outputs.command` was expected to be `${{ matrix.triggered }}` but was actually `${{ steps.test.outputs.triggered }}`'
+            exit 1
+          fi
