@@ -17,4 +17,4 @@ outputs:
 runs:
   using: docker
   image: docker://mikefarah/yq:3.3.4
-  entrypoint: ./entrypoint.sh
+  entrypoint: ./.github/matrix/entrypoint.sh
