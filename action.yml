@@ -41,7 +41,7 @@ inputs:
       ### Example
 
       ```yaml
-      prefixFilter: '$action(s?)'
+      prefixFilter: '\$action(s?)'
       ```
 
       #### Comment
@@ -72,7 +72,7 @@ inputs:
 
       ```yaml
       event: dispatched
-      prefixFilter: '$action(s?)'
+      prefixFilter: '\$action(s?)'
       commandFilter: |
         publish docs
         publish release

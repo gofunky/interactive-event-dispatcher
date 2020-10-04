@@ -1,3 +1,4 @@
+import 'source-map-support/register'
 import {CHECK_NAME, PullRequestEvent} from './pull'
 import * as github from '@actions/github'
 import {Inputs} from './inputs'

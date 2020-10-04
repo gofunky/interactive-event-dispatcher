@@ -1,3 +1,4 @@
+import 'source-map-support/register'
 import type {Payload} from './payload'
 import {PullRequestEvent} from './pull'
 import {Inputs} from './inputs'

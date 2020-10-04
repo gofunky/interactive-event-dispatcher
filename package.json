@@ -64,7 +64,8 @@
         {
           "rules": {
             "remove-unused-variables": "off",
-            "convert-generic-to-shorthand": "off"
+            "convert-generic-to-shorthand": "off",
+            "remove-empty/import": "off"
           }
         }
       ],

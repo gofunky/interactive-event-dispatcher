@@ -6,7 +6,7 @@
   sourceEvent: issue_comment
   number: 4
   commentId: 703256402
-  prefixFilter: '$gofunky([-\/]bot)?'
+  prefixFilter: '\$gofunky([-\/]bot)?'
   appendCommand: false
   pullMode: false
   body: |
@@ -18,7 +18,7 @@
   sourceEvent: issue_comment
   number: 4
   commentId: 703256402
-  prefixFilter: '$gofunky([-\/]bot)?'
+  prefixFilter: '\$gofunky([-\/]bot)?'
   appendCommand: false
   pullMode: false
   body: |
@@ -29,7 +29,7 @@
   sourceEvent: issue_comment
   number: 4
   commentId: 703256402
-  prefixFilter: '$gofunky([-\/]bot)?'
+  prefixFilter: '\$gofunky([-\/]bot)?'
   appendCommand: false
   pullMode: false
   body: |
@@ -40,7 +40,7 @@
   sourceEvent: issue_comment
   number: 4
   commentId: 702809803
-  prefixFilter: '$gofunky([-\/]bot)?'
+  prefixFilter: '\$gofunky([-\/]bot)?'
   appendCommand: false
   pullMode: false
   body: |

@@ -1,3 +1,5 @@
+import 'source-map-support/register'
+
 export type AffiliationType = 'direct' | 'outside' | 'all'
 export type WorkflowStatusType = 'status' | 'completed' | 'conclusion'
 export type CheckStatusType = 'queued' | 'in_progress' | 'completed'

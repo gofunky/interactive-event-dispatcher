@@ -1,3 +1,4 @@
+import 'source-map-support/register'
 import * as core from '@actions/core'
 import {Event} from './event'
 import type {PullsGetResponseData} from '@octokit/types'

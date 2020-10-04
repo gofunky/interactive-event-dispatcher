@@ -1,3 +1,4 @@
+import 'source-map-support/register'
 import {graphql} from '@octokit/graphql'
 import type {
 	AffiliationType,

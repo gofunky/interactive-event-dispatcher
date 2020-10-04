@@ -140,9 +140,9 @@ jobs:
             exit 1
           fi
       - name: sleep until trigger event is propagated
-        uses: jakejarvis/wait-action@v0.1.0
+        uses: juliangruber/sleep-action@v1.0.1
         with:
-          time: '5s'
+          time: 5s
       - name: validate triggered workflow status
         if: always()
         uses: xembly/validate-workflow-status@v1.0.0

@@ -1,3 +1,4 @@
+import 'source-map-support/register'
 import * as core from '@actions/core'
 import {LazyGetter as lazy} from 'lazy-get-decorator'
 import type {AffiliationType} from './types'

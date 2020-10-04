@@ -1,3 +1,5 @@
+import 'source-map-support/register'
+
 export async function wrapMap<K, V>(
 	map: Map<K, Promise<V>>
 ): Promise<Array<{key: K; value: V}>> {
