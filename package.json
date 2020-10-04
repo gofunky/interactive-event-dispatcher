@@ -13,6 +13,7 @@
   "dependencies": {
     "@actions/core": "1.2.6",
     "@actions/github": "4.0.0",
+    "@magna_shogun/catch-decorator": "^1.0.1",
     "@octokit/graphql": "^4.5.6",
     "@octokit/webhooks": "^7.11.3",
     "lazy-get-decorator": "^2.2.0",
