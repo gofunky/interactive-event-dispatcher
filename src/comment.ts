@@ -8,7 +8,6 @@ import {LazyGetter as lazy} from 'lazy-get-decorator'
 import type {EventPayloads} from '@octokit/webhooks'
 import {memoize} from 'memoize-cache-decorator'
 import {context} from '@actions/github'
-import {ClassLogger as classLogger} from 'rich-logger-decorator/dist/src/class-logger.decorator'
 
 interface Match {
 	triggered: boolean
@@ -16,12 +15,6 @@ interface Match {
 	sha?: string
 }
 
-@classLogger({
-	methodOptions: {
-		logFunction: core.debug,
-		withTime: false
-	}
-})
 export class PullRequestCommentEvent extends PullRequestEvent {
 	@lazy()
 	get number(): number {
@@ -96,7 +89,9 @@ export class PullRequestCommentEvent extends PullRequestEvent {
 	@memoize()
 	async matchedPrefix(): Promise<Match> {
 		const body = await this.body()
-		const regex = new RegExp(`${Inputs.prefixFilter}'\\s*(.*)\\s*$`)
+		const exp = `${Inputs.prefixFilter}'\\s*(.*)\\s*$`
+		core.debug(`Matching prefix ${exp} against body '${body}'`)
+		const regex = new RegExp(exp)
 		const matches = regex.exec(body)
 
 		if (!matches || matches.length < 2 || matches[0] === '') {

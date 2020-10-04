@@ -1,14 +1,7 @@
 import * as core from '@actions/core'
 import {LazyGetter as lazy} from 'lazy-get-decorator'
 import type {AffiliationType} from './types'
-import {ClassLogger as classLogger} from 'rich-logger-decorator/dist/src/class-logger.decorator'
 
-@classLogger({
-	methodOptions: {
-		logFunction: core.debug,
-		withTime: false
-	}
-})
 export class Inputs {
 	@lazy(true, true)
 	static get token(): string {
