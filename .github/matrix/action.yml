@@ -16,5 +16,4 @@ outputs:
     description: returns the body value of the selected matrix action
 runs:
   using: docker
-  image: docker://mikefarah/yq:3.3.4
-  entrypoint: ./.github/matrix/entrypoint.sh
+  image: Dockerfile
