@@ -7,9 +7,13 @@ inputs:
     default: ${{ github.event.action }}
 outputs:
   triggered:
+    description: returns the triggered value of the selected matrix action
   number:
+    description: returns the number value of the selected matrix action
   command:
+    description: returns the command value of the selected matrix action
   body:
+    description: returns the body value of the selected matrix action
 runs:
   using: docker
   image: docker://mikefarah/yq:3.4.0
