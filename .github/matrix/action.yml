@@ -1,0 +1,16 @@
+name: read matrix
+description: read test matrix to output
+inputs:
+  actionName:
+    description: the action name
+    required: false
+    default: ${{ github.event.action }}
+outputs:
+  triggered:
+  number:
+  command:
+  body:
+runs:
+  using: docker
+  image: docker://mikefarah/yq:3.4.0
+  entrypoint: ./entrypoint.sh

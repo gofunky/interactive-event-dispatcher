@@ -21,19 +21,12 @@ jobs:
         with:
           persist-credentials: false
       - name: read matrix
-        uses: mikefarah/yq@3.4.0
-        with:
-          cmd: |
-            if type_match=$(yq read -j -e ./matrix.yml '(typeName==${{ github.event.action }})'); \
-            then \
-              printf "::set-env name=matrix::" && echo "$type_match" \
-            else \
-              printf "::set-env name=matrix::" && yq read -j -e ./matrix.yml '(id==${{ github.event.action }})' \
-            fi
+        uses: ./.github/matrix/
+        id: matrix
       - name: fail if trigger was not expected
         if: github.event.action != 'test_push'
         run: |
-          if [[ "${{ fromJSON(env.matrix).triggered }}" != "true" ]]; then
+          if [[ "${{ steps.matrix.outputs.triggered }}" != "true" ]]; then
             echo "::error:: event type ${{ github.event.action }} was not supposed to be triggered"
             exit 1
           fi
@@ -59,15 +52,15 @@ jobs:
           exit 1
       - name: fail if pull_request number is missing
         if: contains(github.event.client_payload.sourceEvent, 'pull_request')
-          && github.event.client_payload.number != fromJSON(env.matrix).number
+          && github.event.client_payload.number != steps.matrix.outputs.number
         run: |
-          echo '::error::`github.event.client_payload.number` was expected to be `${{ fromJSON(env.matrix).number }}` but was actually `${{ github.event.client_payload.number }}`'
+          echo '::error::`github.event.client_payload.number` was expected to be `${{ steps.matrix.outputs.number }}` but was actually `${{ github.event.client_payload.number }}`'
           exit 1
       - name: fail if issue_comment number is missing
         if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
-          && github.event.client_payload.number != fromJSON(env.matrix).number
+          && github.event.client_payload.number != steps.matrix.outputs.number
         run: |
-          echo '::error::`github.event.client_payload.number` was expected to be `${{ fromJSON(env.matrix).number }}` but was actually `${{ github.event.client_payload.number }}`'
+          echo '::error::`github.event.client_payload.number` was expected to be `${{ steps.matrix.outputs.number }}` but was actually `${{ github.event.client_payload.number }}`'
           exit 1
       - name: fail if pull_request payload is missing
         if: contains(github.event.client_payload.sourceEvent, 'pull_request')
@@ -83,13 +76,13 @@ jobs:
           exit 1
       - name: fail if issue_comment command is missing
         if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
-          && github.event.client_payload.command != fromJSON(env.matrix).command
+          && github.event.client_payload.command != steps.matrix.outputs.command
         run: |
-          echo '::error::`github.event.client_payload.command` was expected to be `${{ fromJSON(env.matrix).command }}` but was actually `${{ github.event.client_payload.command }}`'
+          echo '::error::`github.event.client_payload.command` was expected to be `${{ steps.matrix.outputs.command }}` but was actually `${{ github.event.client_payload.command }}`'
           exit 1
       - name: fail if issue_comment body is missing
         if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
-          && github.event.client_payload.body != fromJSON(env.matrix).body
+          && github.event.client_payload.body != steps.matrix.outputs.body
         run: |
-          echo '::error::`github.event.client_payload.body` was expected to be `${{ fromJSON(env.matrix).body }}` but was actually `${{ github.event.client_payload.body }}`'
+          echo '::error::`github.event.client_payload.body` was expected to be `${{ steps.matrix.outputs.body }}` but was actually `${{ github.event.client_payload.body }}`'
           exit 1
