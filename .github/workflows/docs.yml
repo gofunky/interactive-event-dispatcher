@@ -74,8 +74,7 @@ jobs:
   update:
     name: update gh-pages
     if: github.head_ref == ''
-    needs:
-      - examples
+    needs: [ templates ]
     runs-on: ubuntu-latest
     defaults:
       run:

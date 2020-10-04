@@ -1,4 +1,3 @@
-import 'source-map-support/register'
 import {Inputs} from './inputs'
 import * as github from '@actions/github'
 import * as core from '@actions/core'

@@ -1,4 +1,3 @@
-import 'source-map-support/register'
 import type {Payload} from './payload'
 import {PullRequestEvent} from './pull'
 import {Inputs} from './inputs'
@@ -90,7 +89,7 @@ export class PullRequestCommentEvent extends PullRequestEvent {
 	@memoize()
 	async matchedPrefix(): Promise<Match> {
 		const body = await this.body()
-		const regex = new RegExp(`${Inputs.prefixFilter}\\s*(.*)\\s*$`)
+		const regex = new RegExp(`${Inputs.prefixFilter}\s*(.*)\s*$`)
 		const matches = regex.exec(body)
 
 		if (!matches || matches.length < 2 || matches[0] === '') {
@@ -175,7 +174,7 @@ export class PullRequestCommentEvent extends PullRequestEvent {
 	}
 
 	async matchedCheck(command: string): Promise<Match> {
-		const checkExp = /^check\\s+([\da-f]+)$/
+		const checkExp = /^check\s+([\da-f]+)$/
 		const checkMatch = checkExp.exec(command)
 
 		if (checkMatch && checkMatch.length >= 2 && checkMatch[0] !== '') {
