@@ -53,7 +53,7 @@ export class PullRequestCommentEvent extends PullRequestEvent {
 		| IssuesGetCommentResponseData
 		| EventPayloads.WebhookPayloadIssueCommentComment
 	> {
-		const commentId = context.payload.comment?.id ?? 0
+		const commentId = Inputs.commentId ?? context.payload.comment?.id ?? 0
 		return (
 			this.commentEvent?.comment ?? (await this.api.commentById({commentId}))
 		)

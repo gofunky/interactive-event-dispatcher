@@ -5,8 +5,8 @@
 - id: test_regex
   sourceEvent: issue_comment
   number: 4
+  commentId: 703256402
   prefixFilter: '$gofunky([-\/]bot)?'
-  commandFilter: ''
   appendCommand: false
   pullMode: false
   body: |
@@ -17,32 +17,30 @@
 - id: test_regex_nocommand
   sourceEvent: issue_comment
   number: 4
+  commentId: 703256402
   prefixFilter: '$gofunky([-\/]bot)?'
-  commandFilter: ''
   appendCommand: false
   pullMode: false
   body: |
     $gofunky/bot
     Something else
   triggered: true
-  command: ''
 - id: test_regex_notrigger
   sourceEvent: issue_comment
   number: 4
+  commentId: 703256402
   prefixFilter: '$gofunky([-\/]bot)?'
-  commandFilter: ''
   appendCommand: false
   pullMode: false
   body: |
     $gofunk-bot foo
     Something else
   triggered: false
-  command: ''
 - id: test_no_affiliation_notrigger
   sourceEvent: issue_comment
-  number: 1
+  number: 4
+  commentId: 702809803
   prefixFilter: '$gofunky([-\/]bot)?'
-  commandFilter: ''
   appendCommand: false
   pullMode: false
   body: |
@@ -53,21 +51,16 @@
 - id: test_empty_prefix
   sourceEvent: issue_comment
   number: 4
-  prefixFilter: ''
-  commandFilter: ''
+  commentId: 703256402
   appendCommand: false
   pullMode: false
   body: |
     Something irrelevant
   triggered: true
-  command: ''
 - id: test_empty_body
   sourceEvent: issue_comment
   number: 4
-  prefixFilter: ''
-  commandFilter: ''
+  commentId: 703256402
   appendCommand: false
   pullMode: false
-  body: ''
   triggered: true
-  command: ''

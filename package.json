@@ -4,7 +4,7 @@
   "private": true,
   "main": "src/action.ts",
   "scripts": {
-    "build": "ncc build --minify",
+    "build": "ncc build --minify --source-map",
     "lint": "xo src/**/*.ts",
     "fix:lint": "xo src/**/*.ts --fix"
   },

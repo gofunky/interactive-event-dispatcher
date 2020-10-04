@@ -55,6 +55,17 @@ export class Inputs {
 	}
 
 	@lazy(true, true)
+	static get commentId(): number | undefined {
+		const commentIdOpt = Number(core.getInput('commentId'))
+
+		if (commentIdOpt <= 0) {
+			return undefined
+		}
+
+		return commentIdOpt
+	}
+
+	@lazy(true, true)
 	static get sourceEvent(): string | undefined {
 		const sourceEventOpt = core.getInput('sourceEvent')
 
@@ -85,17 +96,19 @@ export class Inputs {
 		return core.getInput('appendCommand').toLowerCase() === 'true'
 	}
 
-	@lazy(true, true, (value) => value >= 200)
+	@lazy(true, true, (value: number) => value >= 200)
 	static get interval(): number {
 		return Number(core.getInput('interval'))
 	}
 
-	@lazy(true, true, (value) => value >= 10 && value <= 100)
+	@lazy(true, true, (value: number) => value >= 10 && value <= 100)
 	static get perPage(): number {
 		return Number(core.getInput('perPage'))
 	}
 
-	@lazy(true, true, (value) => ['direct', 'outside', 'all'].includes(value))
+	@lazy(true, true, (value: string) =>
+		['direct', 'outside', 'all'].includes(value)
+	)
 	static get affiliation(): AffiliationType {
 		return <AffiliationType>core.getInput('perPage')
 	}

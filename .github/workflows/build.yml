@@ -83,7 +83,7 @@ jobs:
         uses: mikefarah/yq@3.4.0
         with:
           cmd: |
-            printf "::set-output name=matrix::" && yq read -j ./.github/matrix.yml
+            printf "::set-output name=matrix::" && yq read -j ./matrix.yml
   test:
     needs: [ wait, build, setup ]
     runs-on: ubuntu-latest
@@ -103,6 +103,7 @@ jobs:
         prefixFilter: [ '' ]
         commandFilter: [ '' ]
         body: [ '' ]
+        commentId: [ '' ]
         command: [ '' ]
         include: ${{ fromJson(needs.setup.outputs.matrix) }}
     steps:

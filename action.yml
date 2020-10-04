@@ -113,6 +113,12 @@ inputs:
       For overriding the body of the issue comment that triggers this action.
     required: false
     default: ''
+  commentId:
+    description: |
+      <-- only for testing purposes -->
+      For overriding the comment ID of the issue comment that triggers this action.
+    required: false
+    default: ''
   affiliation:
     description: |
       Collaborators are determined by the given affiliation status.
