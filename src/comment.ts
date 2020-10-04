@@ -53,7 +53,12 @@ export class PullRequestCommentEvent extends PullRequestEvent {
 		| IssuesGetCommentResponseData
 		| EventPayloads.WebhookPayloadIssueCommentComment
 	> {
-		const commentId = Inputs.commentId ?? context.payload.comment?.id ?? 0
+		const commentId = Inputs.commentId ?? context.payload.comment?.id
+
+		if (!commentId) {
+			throw new Error('The comment id could not be determined from the context')
+		}
+
 		return (
 			this.commentEvent?.comment ?? (await this.api.commentById({commentId}))
 		)

@@ -121,6 +121,7 @@ jobs:
           appendCommand: ${{ matrix.appendCommand }}
           pullMode: ${{ matrix.pullMode }}
           body: ${{ matrix.body }}
+          commentId: ${{ matrix.commentId }}
           number: ${{ matrix.number }}
           event: ${{ matrix.id }}
           sourceEvent: ${{ matrix.sourceEvent }}
