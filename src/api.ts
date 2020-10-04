@@ -91,10 +91,10 @@ export class Api {
 		})
 	}
 
-	async pullByNumber(pullNumber: number): Promise<PullsGetResponseData> {
+	async pullByNumber(pull_number: number): Promise<PullsGetResponseData> {
 		const {data} = await this.octokit.pulls.get({
 			...this.repo,
-			pull_number: pullNumber
+			pull_number
 		})
 		return data
 	}

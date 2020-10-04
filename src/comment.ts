@@ -8,6 +8,7 @@ import {LazyGetter as lazy} from 'lazy-get-decorator'
 import type {EventPayloads} from '@octokit/webhooks'
 import {memoize} from 'memoize-cache-decorator'
 import {context} from '@actions/github'
+import {log} from 'logerator'
 
 interface Match {
 	triggered: boolean
@@ -15,6 +16,7 @@ interface Match {
 	sha?: string
 }
 
+@log({logFunction: core.debug})
 export class PullRequestCommentEvent extends PullRequestEvent {
 	@lazy()
 	get number(): number {

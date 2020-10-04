@@ -25,6 +25,7 @@
     $gofunky/bot
     Something else
   triggered: true
+  command: Something else
 - id: test_regex_notrigger
   sourceEvent: issue_comment
   number: 4

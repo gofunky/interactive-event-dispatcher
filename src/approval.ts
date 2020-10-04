@@ -5,7 +5,9 @@ import type {EventPayloads} from '@octokit/webhooks'
 import * as core from '@actions/core'
 import {LazyGetter as lazy} from 'lazy-get-decorator'
 import {memoize} from 'memoize-cache-decorator'
+import {log} from 'logerator'
 
+@log({logFunction: core.debug})
 export class PullRequestActionEvent extends PullRequestEvent {
 	@lazy()
 	get number(): number {
