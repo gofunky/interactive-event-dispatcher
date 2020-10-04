@@ -89,8 +89,7 @@ export class PullRequestCommentEvent extends PullRequestEvent {
 	@memoize()
 	async matchedPrefix(): Promise<Match> {
 		const body = await this.body()
-		const exp = `${Inputs.prefixFilter}'\\s*(.*)\\s*$`
-		core.debug(`Matching prefix ${exp} against body '${body}'`)
+		const exp = `${Inputs.prefixFilter}\\s*(.*)\\s*$`
 		const regex = new RegExp(exp)
 		const matches = regex.exec(body)
 
