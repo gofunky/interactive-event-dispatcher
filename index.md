@@ -59,7 +59,7 @@ The type name can be extended by the determined command name.
 
 ```yaml
 event: dispatched
-prefixFilter: '\$action(s?)'
+prefixFilter: '[$]action(s?)'
 commandFilter: \|
   publish docs
   publish release
@@ -147,7 +147,7 @@ This input is enabled if any non-empty value is set.
 ### Example
 
 ```yaml
-prefixFilter: '\$action(s?)'
+prefixFilter: '[$]action(s?)'
 ```
 
 #### Comment
