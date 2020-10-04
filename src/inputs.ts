@@ -1,9 +1,12 @@
 import * as core from '@actions/core'
 import {LazyGetter as lazy} from 'lazy-get-decorator'
 import type {AffiliationType} from './types'
-import {log} from 'logerator'
+import {LogClass as log} from 'class-logger'
 
-@log({logFunction: core.debug})
+log({
+	log: core.debug,
+	logError: core.error
+})
 export class Inputs {
 	@lazy(true, true)
 	static get token(): string {
