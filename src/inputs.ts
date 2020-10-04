@@ -3,7 +3,7 @@ import {LazyGetter as lazy} from 'lazy-get-decorator'
 import type {AffiliationType} from './types'
 import {LogClass as log} from 'class-logger'
 
-log({
+@log({
 	log: core.debug,
 	logError: core.error
 })

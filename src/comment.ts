@@ -16,7 +16,7 @@ interface Match {
 	sha?: string
 }
 
-log({
+@log({
 	log: core.debug,
 	logError: core.error
 })

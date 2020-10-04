@@ -53,7 +53,7 @@ interface RepoListRequest extends RepoRequest {
 	per_page: number
 }
 
-log({
+@log({
 	log: core.debug,
 	logError: (err) => {
 		core.error(err)

@@ -21,7 +21,7 @@ export const checkMessageTpl = compile(
 export const ACCEPTED_ASSOCIATIONS = ['OWNER', 'MEMBER', 'COLLABORATOR']
 export const CHECK_NAME = 'Pending Check'
 
-log({
+@log({
 	log: core.debug,
 	logError: core.error
 })

@@ -7,7 +7,7 @@ import {LazyGetter as lazy} from 'lazy-get-decorator'
 import {memoize} from 'memoize-cache-decorator'
 import {LogClass as log} from 'class-logger/dist/src/log-class.decorator'
 
-log({
+@log({
 	log: core.debug,
 	logError: core.error
 })
