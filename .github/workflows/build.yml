@@ -83,7 +83,7 @@ jobs:
         uses: mikefarah/yq@3.4.0
         with:
           cmd: |
-            printf "::set-output name=matrix::" && yq read -j ./matrix.yml
+            printf "::set-output name=matrix::" && yq read -j ./.github/matrix/tests.yml
   test:
     needs: [ wait, build, setup ]
     runs-on: ubuntu-latest
@@ -94,18 +94,6 @@ jobs:
       max-parallel: 1
       fail-fast: false
       matrix:
-        id: [ test_push ]
-        sourceEvent: [ push ]
-        typeName: [ '' ]
-        appendCommand: [ false ]
-        pullMode: [ false ]
-        triggered: [ true ]
-        number: [ '' ]
-        prefixFilter: [ '' ]
-        commandFilter: [ '' ]
-        body: [ '' ]
-        commentId: [ '' ]
-        command: [ '' ]
         include: ${{ fromJson(needs.setup.outputs.matrix) }}
     steps:
       - name: checkout code
