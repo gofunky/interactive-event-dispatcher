@@ -24,7 +24,7 @@ jobs:
         if: github.event.pull_request.number != ''
         uses: actions/checkout@v2.3.2
         with:
-          ref: pull/${{ github.event.pull_request.number }}/head
+          ref: refs/pull/${{ github.event.pull_request.number }}/head
           fetch-depth: 2
           persist-credentials: false
       - name: initialize CodeQL
