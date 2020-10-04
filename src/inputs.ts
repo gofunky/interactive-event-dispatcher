@@ -1,11 +1,10 @@
 import * as core from '@actions/core'
 import {LazyGetter as lazy} from 'lazy-get-decorator'
 import type {AffiliationType} from './types'
-import {LogClass as log} from 'class-logger'
+import log from 'ts-log-class'
 
 @log({
-	log: core.debug,
-	logError: core.error
+	out: core.debug
 })
 export class Inputs {
 	@lazy(true, true)

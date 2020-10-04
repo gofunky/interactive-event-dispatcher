@@ -5,11 +5,10 @@ import type {EventPayloads} from '@octokit/webhooks'
 import * as core from '@actions/core'
 import {LazyGetter as lazy} from 'lazy-get-decorator'
 import {memoize} from 'memoize-cache-decorator'
-import {LogClass as log} from 'class-logger/dist/src/log-class.decorator'
+import log from 'ts-log-class'
 
 @log({
-	log: core.debug,
-	logError: core.error
+	out: core.debug
 })
 export class PullRequestActionEvent extends PullRequestEvent {
 	@lazy()

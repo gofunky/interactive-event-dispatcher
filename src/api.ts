@@ -35,7 +35,7 @@ import type {
 import {GitHub} from '@actions/github/lib/utils'
 import {context, getOctokit} from '@actions/github'
 import * as core from '@actions/core'
-import {LogClass as log} from 'class-logger/dist/src/log-class.decorator'
+import {CatchAll as catchAll} from '@magna_shogun/catch-decorator'
 
 const ConstLogger = {
 	debug: core.debug,
@@ -53,12 +53,9 @@ interface RepoListRequest extends RepoRequest {
 	per_page: number
 }
 
-@log({
-	log: core.debug,
-	logError: (err) => {
-		core.error(err)
-		throw new Error('This API call failed')
-	}
+@catchAll((err) => {
+	core.error(err.stack ?? err)
+	throw new Error('This API call failed')
 })
 export class Api {
 	octokit: InstanceType<typeof GitHub>

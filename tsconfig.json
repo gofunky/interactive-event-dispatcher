@@ -2,7 +2,6 @@
   "exclude": ["__test__", "lib", "node_modules"],
   "compilerOptions": {
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "declaration": false,
     "strict": true,
     "target": "ES2019",

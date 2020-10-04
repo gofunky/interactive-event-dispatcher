@@ -9,7 +9,7 @@ import {LazyGetter as lazy} from 'lazy-get-decorator'
 import {memoize} from 'memoize-cache-decorator'
 import {context} from '@actions/github'
 import {compile} from 'micromustache'
-import {LogClass as log} from 'class-logger/dist/src/log-class.decorator'
+import log from 'ts-log-class'
 
 export const NOTICE_HEADER = '<!-- pull request condition notice -->'
 export const noticeTpl = compile(
@@ -22,8 +22,7 @@ export const ACCEPTED_ASSOCIATIONS = ['OWNER', 'MEMBER', 'COLLABORATOR']
 export const CHECK_NAME = 'Pending Check'
 
 @log({
-	log: core.debug,
-	logError: core.error
+	out: core.debug
 })
 export class PullRequestEvent extends Event {
 	@lazy()
