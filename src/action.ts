@@ -25,6 +25,7 @@ async function run(): Promise<void> {
 			break
 	}
 	core.setOutput('command', command)
+	core.setOutput('typeName', await event.triggerEvent())
 	core.setOutput('triggered', await event.triggered())
 
 	await event.dispatch()

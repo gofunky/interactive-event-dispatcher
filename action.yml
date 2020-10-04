@@ -8,6 +8,9 @@ outputs:
     description: |
       If [inputs.prefixFilter](#prefixFilter) is enabled,
       this output contains the matched subsequent command of a filtered command comment.
+  typeName:
+    description: |
+      This output depicts the event's action type name that is triggered.
 runs:
   using: node12
   main: dist/index.js

@@ -24,7 +24,11 @@ jobs:
         uses: mikefarah/yq@3.4.0
         with:
           cmd: |
-            printf "::set-env name=matrix::" && yq read -j ./matrix.yml '(id==${{ github.event.action }})'
+            if typeMatch=$(yq read -j -e ./matrix.yml '(typeName==${{ github.event.action }})'); then
+              printf "::set-env name=matrix::" && echo "$typeMatch"
+            else
+              printf "::set-env name=matrix::" && yq read -j -e ./matrix.yml '(id==${{ github.event.action }})'
+            fi
       - name: fail if trigger was not expected
         if: github.event.action != 'test_push'
         run: |

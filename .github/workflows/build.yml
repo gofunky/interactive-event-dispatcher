@@ -96,6 +96,7 @@ jobs:
       matrix:
         id: [ test_push ]
         sourceEvent: [ push ]
+        typeName: [ '' ]
         appendCommand: [ false ]
         pullMode: [ false ]
         triggered: [ true ]
@@ -138,6 +139,18 @@ jobs:
           if [[ "${{ steps.test.outputs.triggered }}" != "${{ matrix.triggered }}" ]]; then
             echo '::error::`outputs.command` was expected to be `${{ matrix.triggered }}` but was actually `${{ steps.test.outputs.triggered }}`'
             exit 1
+          fi
+      - name: check typeName
+        if: always()
+        run: |
+          if [[ "${{ matrix.typeName }}" != "" && "${{ steps.test.outputs.typeName }}" != "${{ matrix.typeName }}" ]]; then
+            echo '::error::`outputs.typeName` was expected to be `${{ matrix.typeName }}` but was actually `${{ steps.test.outputs.typeName }}`'
+            exit 1
+          else
+            if [[ "${{ steps.test.outputs.typeName }}" != "${{ matrix.id }}" ]]; then
+              echo '::error::`outputs.typeName` was expected to be `${{ matrix.id }}` but was actually `${{ steps.test.outputs.typeName }}`'
+              exit 1
+            fi
           fi
       - name: sleep until trigger event is propagated
         uses: juliangruber/sleep-action@v1.0.1
