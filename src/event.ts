@@ -13,10 +13,13 @@ import type {
 import type {CheckConclusionType, CheckParams, CheckStatusType} from './types'
 import {memoize} from 'memoize-cache-decorator'
 import {wrapMap} from './helpers'
-import log from 'ts-log-class'
+import {ClassLogger as classLogger} from 'rich-logger-decorator/dist/src/class-logger.decorator'
 
-@log({
-	out: core.debug
+@classLogger({
+	methodOptions: {
+		logFunction: core.debug,
+		withTime: false
+	}
 })
 export class Event {
 	api: Api

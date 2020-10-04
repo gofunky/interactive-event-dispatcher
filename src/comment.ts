@@ -8,7 +8,7 @@ import {LazyGetter as lazy} from 'lazy-get-decorator'
 import type {EventPayloads} from '@octokit/webhooks'
 import {memoize} from 'memoize-cache-decorator'
 import {context} from '@actions/github'
-import log from 'ts-log-class'
+import {ClassLogger as classLogger} from 'rich-logger-decorator/dist/src/class-logger.decorator'
 
 interface Match {
 	triggered: boolean
@@ -16,8 +16,11 @@ interface Match {
 	sha?: string
 }
 
-@log({
-	out: core.debug
+@classLogger({
+	methodOptions: {
+		logFunction: core.debug,
+		withTime: false
+	}
 })
 export class PullRequestCommentEvent extends PullRequestEvent {
 	@lazy()
