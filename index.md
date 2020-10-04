@@ -195,6 +195,11 @@ this output contains the matched subsequent command of a filtered command commen
 
 If [inputs.prefixFilter](#prefixFilter) is enabled, only true if the prefix was matched, otherwise always true.
 
+
+### typeName
+
+This output depicts the event's action type name that is triggered.
+
 <!--- END_ACTION_DOCS --->
 
 ## Example
