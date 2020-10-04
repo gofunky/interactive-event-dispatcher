@@ -2,6 +2,16 @@
   sourceEvent: push
   pullMode: true
   triggered: true
+- id: test_regex_simple
+  sourceEvent: issue_comment
+  number: 4
+  commentId: 703256402
+  prefixFilter: expression
+  appendCommand: false
+  pullMode: false
+  body: expression my test trigger
+  triggered: true
+  command: my test trigger
 - id: test_regex
   sourceEvent: issue_comment
   number: 4
