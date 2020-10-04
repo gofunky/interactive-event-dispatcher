@@ -54,8 +54,7 @@ interface RepoListRequest extends RepoRequest {
 }
 
 @catchAll((err) => {
-	core.error(err)
-	core.error(err.stack ?? '')
+	core.error(err.stack ?? err)
 	throw new Error('This API call failed')
 })
 export class Api {
@@ -92,10 +91,10 @@ export class Api {
 		})
 	}
 
-	async pullByNumber(pull_number: number): Promise<PullsGetResponseData> {
+	async pullByNumber(pullNumber: number): Promise<PullsGetResponseData> {
 		const {data} = await this.octokit.pulls.get({
 			...this.repo,
-			pull_number
+			pull_number: pullNumber
 		})
 		return data
 	}

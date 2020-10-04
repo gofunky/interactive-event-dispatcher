@@ -89,7 +89,7 @@ export class PullRequestCommentEvent extends PullRequestEvent {
 	@memoize()
 	async matchedPrefix(): Promise<Match> {
 		const body = await this.body()
-		const regex = new RegExp(`${Inputs.prefixFilter}\s*(.*)\s*$`)
+		const regex = new RegExp(`${Inputs.prefixFilter}'\\s*(.*)\\s*$`)
 		const matches = regex.exec(body)
 
 		if (!matches || matches.length < 2 || matches[0] === '') {
