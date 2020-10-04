@@ -90,7 +90,7 @@ export class PullRequestCommentEvent extends PullRequestEvent {
 	async matchedPrefix(): Promise<Match> {
 		const body = await this.body()
 		const exp = `${Inputs.prefixFilter}\\s*(.*)\\s*$`
-		const regex = new RegExp(exp)
+		const regex = new RegExp(exp, 'm')
 		const matches = regex.exec(body)
 
 		if (!matches || matches.length < 2 || matches[0] === '') {

@@ -91,12 +91,19 @@ export class Api {
 		})
 	}
 
-	async pullByNumber(pull_number: number): Promise<PullsGetResponseData> {
-		const {data} = await this.octokit.pulls.get({
-			...this.repo,
-			pull_number
-		})
-		return data
+	async pullByNumber(
+		pull_number: number
+	): Promise<PullsGetResponseData | undefined> {
+		try {
+			const {data} = await this.octokit.pulls.get({
+				...this.repo,
+				pull_number
+			})
+			return data
+		} catch {
+			core.warning(`Issue number ${pull_number} is not a pull request`)
+			return undefined
+		}
 	}
 
 	async dispatchEvent({
