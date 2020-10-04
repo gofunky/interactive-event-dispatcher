@@ -16,8 +16,12 @@ jobs:
         run: |
           echo "::error:: event type ${{ github.event.action }} was not supposed to be triggered"
           exit 1
+      - name: checkout code
+        uses: actions/checkout@v2.3.2
+        with:
+          persist-credentials: false
       - name: read matrix
-        uses: gofunky/interactive-event-dispatcher/.github/matrix@master
+        uses: ./.github/matrix/
         id: matrix
       - name: fail if trigger was not expected
         run: |
