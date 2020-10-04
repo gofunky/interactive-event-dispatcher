@@ -83,7 +83,7 @@ jobs:
         uses: mikefarah/yq@3.4.0
         with:
           cmd: |
-            printf "::set-output name=matrix::" && yq read -j ./.github/matrix/tests.yml
+            printf "::set-output name=matrix::" && yq read -j ./tests.yml
   test:
     needs: [ wait, build, setup ]
     runs-on: ubuntu-latest
