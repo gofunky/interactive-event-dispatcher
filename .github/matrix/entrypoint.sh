@@ -2,10 +2,15 @@
 
 export MATCH=""
 
-if type_match=$(yq read -j -e ./matrix.yml "(typeName==$INPUTS_ACTIONNAME})"); then
+if type_match=$(yq read -j -e ./cases.yml "(typeName==$INPUTS_ACTIONNAME})"); then
   MATCH="$type_match"
 else
-  MATCH=$(yq read -j -e ./matrix.yml "(id==$INPUTS_ACTIONNAME)")
+  if id_match=$(yq read -j -e ./cases.yml "(id==$INPUTS_ACTIONNAME})"); then
+    MATCH="$id_match"
+  else
+    echo "::error:: this event was not defined in the matrix"
+    exit 1
+  fi
 fi
 
 echo "::set-output name=triggered::$(echo "$MATCH" | yq read - "triggered" --defaultValue "false")"

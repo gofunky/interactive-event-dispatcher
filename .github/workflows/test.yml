@@ -24,7 +24,6 @@ jobs:
         uses: ./.github/matrix/
         id: matrix
       - name: fail if trigger was not expected
-        if: github.event.action != 'test_push'
         run: |
           if [[ "${{ steps.matrix.outputs.triggered }}" != "true" ]]; then
             echo "::error:: event type ${{ github.event.action }} was not supposed to be triggered"

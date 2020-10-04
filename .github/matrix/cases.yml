@@ -1,5 +1,8 @@
+- id: test_push
+  sourceEvent: push
+  pullMode: false
+  triggered: true
 - id: test_push_pullMode
-  typeName: test_push_pullMode
   sourceEvent: push
   pullMode: true
   triggered: true
