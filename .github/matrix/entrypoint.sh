@@ -2,13 +2,14 @@
 
 export MATCH=""
 
-if type_match=$(yq read -j -e ./tests.yml "(typeName==$INPUT_ACTIONNAME})"); then
+if type_match=$(yq read -j -e tests.yml "(typeName==$INPUT_ACTIONNAME})"); then
   MATCH="$type_match"
 else
-  if id_match=$(yq read -j -e ./tests.yml "(id==$INPUT_ACTIONNAME})"); then
+  if id_match=$(yq read -j -e tests.yml "(id==$INPUT_ACTIONNAME})"); then
     MATCH="$id_match"
   else
     echo "::error:: this event was not defined in the matrix"
+    echo "::error::$?"
     exit 1
   fi
 fi
