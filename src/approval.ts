@@ -9,7 +9,7 @@ import {ClassLogger as classLogger} from 'rich-logger-decorator/dist/src'
 
 @classLogger({
 	methodOptions: {
-		logFunction: core.debug,
+		logFunction: core.info,
 		withTime: false
 	}
 })
