@@ -1,0 +1,12 @@
+name: workflow run event test
+
+on:
+  workflow_run:
+    workflows: 
+      - test
+
+jobs:
+  print:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo '${{ toJSON(github.event) }}'
