@@ -95,24 +95,6 @@ A list can be set via a line separation.
 This input defines the type name of the `repository\_dispatch` event to trigger.
 
 
-### interval
-![Required](https://img.shields.io/badge/Required-no-inactive?style=flat-square)
-![Default](https://img.shields.io/badge/Default-500-f83a38?style=flat-square)
-
-If [observingChecks](#observingChecks) is enabled, the workflows are observed with a given tick rate.
-This interval defines the the miliseconds to sleep between each tick.
-
-
-
-### observingChecks
-![Required](https://img.shields.io/badge/Required-no-inactive?style=flat-square)
-![Default](https://img.shields.io/badge/Default-true-5ffe53?style=flat-square)
-
-Triggered events do not create any checks by default because they naturally do not belong to any commit.
-This action can still create the checks by observing the triggered workflows and updating the checks as they
-progress.
-This input allows to disable this behavior.
-
 
 ### outsiderCommands
 ![Required](https://img.shields.io/badge/Required-no-inactive?style=flat-square)
@@ -179,7 +161,7 @@ from any source (i.e. pull requests and issues). Check commands will not be proc
 ![Required](https://img.shields.io/badge/Required-yes-important?style=flat-square)
 ![Default](https://img.shields.io/badge/Default-none-inactive?style=flat-square)
 
-A repository-scoped personal access token is necessary because for API access.
+A repository-scoped personal access token is necessary for API access.
 The default GitHub token will not work because events from this token are ignored by GitHub's event controller.
 
 
