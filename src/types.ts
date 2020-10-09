@@ -1,5 +1,6 @@
+import {EventPayloads} from '@octokit/webhooks'
+
 export type AffiliationType = 'direct' | 'outside' | 'all'
-export type WorkflowStatusType = 'status' | 'completed' | 'conclusion'
 export type CheckStatusType = 'queued' | 'in_progress' | 'completed'
 export type CheckConclusionType =
 	| 'success'
@@ -47,7 +48,7 @@ export interface DispatchEventParams extends EventParams {
 }
 
 export interface ListRunsParams extends EventParams {
-	status?: WorkflowStatusType | undefined
+	status?: CheckStatusType | CheckConclusionType | undefined
 }
 
 export interface CheckIdParams {
@@ -78,6 +79,11 @@ export interface CheckParams extends CheckRelationParams {
 	}
 }
 
+export interface JobParams {
+	id: number
+	jobData: CheckParams
+}
+
 export interface Reaction {
 	reaction: ReactionType
 }
@@ -103,7 +109,7 @@ export interface FilterParams {
 }
 
 export interface CheckSelectorParams {
-	name: string
+	name: string | undefined
 	ref: string
 }
 
@@ -111,4 +117,40 @@ export interface ApiParams {
 	token: string
 	actionsToken: string
 	perPage?: number
+}
+
+export interface WorkflowRunPayload
+	extends EventPayloads.WebhookPayloadWorkflowRun {
+	workflow: {
+		badge_url: string
+		created_at: string
+		html_url: string
+		id: number
+		name: string
+		node_id: string
+		path: string
+		state: string
+		updated_at: string
+		url: string
+	}
+	workflow_run: {
+		conclusion: string
+		created_at: string
+		event: string
+		head_branch: string
+		head_commit: EventPayloads.WebhookPayloadCheckSuiteCheckSuiteHeadCommit
+		head_repository: EventPayloads.WebhookPayloadPullRequestPullRequestHeadRepo
+		head_sha: string
+		html_url: string
+		node_id: string
+		repository: EventPayloads.PayloadRepository
+		rerun_url: string
+		run_number: number
+		status: string
+		updated_at: string
+		url: string
+		workflow_id: number
+		workflow_url: string
+		id: number
+	}
 }

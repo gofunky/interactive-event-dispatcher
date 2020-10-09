@@ -20,7 +20,7 @@ branding:
 inputs:
   token:
     description: |
-      A repository-scoped personal access token is necessary because for API access.
+      A repository-scoped personal access token is necessary for API access.
       The default GitHub token will not work because events from this token are ignored by GitHub's event controller.
     required: true
   actionsToken:
@@ -130,20 +130,6 @@ inputs:
       `outside` defines collaborators who are not part of your organization.
     required: false
     default: all
-  observingChecks:
-    description: |
-      Triggered events do not create any checks by default because they naturally do not belong to any commit.
-      This action can still create the checks by observing the triggered workflows and updating the checks as they
-      progress.
-      This input allows to disable this behavior.
-    required: false
-    default: 'true'
-  interval:
-    description: |
-      If [observingChecks](#observingChecks) is enabled, the workflows are observed with a given tick rate.
-      This interval defines the the miliseconds to sleep between each tick.
-    required: false
-    default: '500'
   pullMode:
     description: |
       **WARNING:** Do not disable this for target workflows that execute code or tests on pull requests.

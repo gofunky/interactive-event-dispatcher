@@ -1,0 +1,17 @@
+name: validate check
+description: validate the given check run
+inputs:
+  token:
+    description: the token for the API access
+    required: false
+    default: ${{ github.token }}
+  typeName:
+    description: the expected complete event type name
+    required: true
+  sha:
+    description: the check's sha
+    required: false
+    default: ${{ github.sha }}
+runs:
+  using: docker
+  image: Dockerfile

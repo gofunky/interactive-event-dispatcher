@@ -1,0 +1,18 @@
+name: workflow observer
+description: observe triggered workflows and create and update their checks on the fly
+runs:
+  using: node12
+  main: '../dist/index.js'
+  post: '../dist/index.js'
+  post-if: github.event_name == 'repository_dispatch' && env.interactiveEventDispatcher == 'true'
+inputs:
+  token:
+    description: |
+      A repository-scoped personal access token is necessary for API access.
+    required: false
+    default: ${{ github.token }}
+  actionsToken:
+    description: |
+      **WARNING:** Do not change this! It will be used for API requests that only the default token can perform.
+    required: false
+    default: ${{ github.token }}

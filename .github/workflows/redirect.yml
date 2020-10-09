@@ -1,0 +1,12 @@
+name: build
+
+on:
+  workflow_run:
+    workflows: ['test']
+
+jobs:
+  wait:
+    runs-on: ubuntu-latest
+    steps:
+      - name: execute observer
+        uses: ./observer/

@@ -8,11 +8,13 @@ export interface Payload {
 	pull_request:
 		| PullsGetResponseData
 		| EventPayloads.WebhookPayloadPullRequestPullRequest
-	comment: IssuesGetCommentResponseData
-	number: number
-	body: string
-	command: string
+		| undefined
+	comment: IssuesGetCommentResponseData | undefined
+	number: number | undefined
+	body: string | undefined
+	command: string | undefined
 	sourceEvent: string
+	triggerEvent: string
 	repository: string
 	ref: string
 	sha: string

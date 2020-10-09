@@ -9,8 +9,8 @@ jobs:
   event:
     runs-on: ubuntu-latest
     steps:
-      - name: print payload
-        run: echo '${{ toJson(github.event.client_payload) }}'
+      - name: execute observer
+        uses: ./observer/
       - name: fail if trigger contains notrigger
         if: contains(github.event.action, 'notrigger')
         run: |
@@ -49,13 +49,13 @@ jobs:
         run: |
           echo "::error:: sha is missing"
           exit 1
-      - name: fail if pull_request number is missing
+      - name: assert pull_request number
         if: contains(github.event.client_payload.sourceEvent, 'pull_request')
           && github.event.client_payload.number != steps.matrix.outputs.number
         run: |
           echo '::error::`github.event.client_payload.number` was expected to be `${{ steps.matrix.outputs.number }}` but was actually `${{ github.event.client_payload.number }}`'
           exit 1
-      - name: fail if issue_comment number is missing
+      - name: assert issue_comment number
         if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
           && github.event.client_payload.number != steps.matrix.outputs.number
         run: |
@@ -73,13 +73,13 @@ jobs:
         run: |
           echo "::error:: issue_comment payload is missing"
           exit 1
-      - name: fail if issue_comment command is missing
+      - name: assert issue_comment command
         if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
           && github.event.client_payload.command != steps.matrix.outputs.command
         run: |
           echo '::error::`github.event.client_payload.command` was expected to be `${{ steps.matrix.outputs.command }}` but was actually `${{ github.event.client_payload.command }}`'
           exit 1
-      - name: fail if issue_comment body is missing
+      - name: assert issue_comment body
         if: contains(github.event.client_payload.sourceEvent, 'issue_comment')
           && github.event.client_payload.body != steps.matrix.outputs.body
         run: |

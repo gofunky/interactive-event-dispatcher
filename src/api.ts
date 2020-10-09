@@ -9,13 +9,13 @@ import type {
 	GraphNodeParams,
 	IssueParams,
 	FilterParams,
-	ListRunsParams,
 	MinimizeReasonParams,
 	NewCommentParams,
 	Reaction,
-	WorkflowParams,
 	WorkflowRunParams,
-	CheckSelectorParams
+	CheckSelectorParams,
+	WorkflowParams,
+	ListRunsParams
 } from './types'
 import type {
 	ActionsGetWorkflowResponseData,
@@ -36,6 +36,7 @@ import {GitHub} from '@actions/github/lib/utils'
 import {context, getOctokit} from '@actions/github'
 import * as core from '@actions/core'
 import {CatchAll as catchAll} from '@magna_shogun/catch-decorator'
+import axios from 'axios'
 
 const ConstLogger = {
 	debug: core.debug,
@@ -187,12 +188,13 @@ export class Api {
 	}
 
 	async listRuns({
-		eventName,
-		status
+		status,
+		eventName
 	}: ListRunsParams): Promise<ActionsListWorkflowRunsForRepoResponseData> {
 		const {data} = await this.octokit.actions.listWorkflowRunsForRepo({
 			...this.repoList,
 			event: eventName,
+			// @ts-expect-error
 			status
 		})
 		return data
@@ -219,6 +221,19 @@ export class Api {
 			run_id: runId,
 			filter
 		})
+		return data
+	}
+
+	async logForJob({runId}: WorkflowRunParams): Promise<string | undefined> {
+		const {headers} = await this.octokit.actions.downloadJobLogsForWorkflowRun({
+			...this.repo,
+			job_id: runId
+		})
+
+		if (headers.location === undefined || headers.location === '') {
+			return undefined
+		}
+		const {data} = await axios.get(headers.location)
 		return data
 	}
 

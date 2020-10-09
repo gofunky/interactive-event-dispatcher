@@ -87,18 +87,8 @@ export class Inputs {
 	}
 
 	@lazy(true, true)
-	static get observingChecks(): boolean {
-		return core.getInput('observingChecks').toLowerCase() === 'true'
-	}
-
-	@lazy(true, true)
 	static get appendCommand(): boolean {
 		return core.getInput('appendCommand').toLowerCase() === 'true'
-	}
-
-	@lazy(true, true, (value: number) => value >= 200)
-	static get interval(): number {
-		return Number(core.getInput('interval'))
 	}
 
 	@lazy(true, true, (value: number) => value >= 10 && value <= 100)

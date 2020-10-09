@@ -91,7 +91,6 @@ jobs:
       run:
         shell: bash
     strategy:
-      max-parallel: 1
       fail-fast: false
       matrix:
         include: ${{ fromJson(needs.setup.outputs.matrix) }}
@@ -141,13 +140,12 @@ jobs:
             fi
           fi
       - name: sleep until trigger event is propagated
+        if: matrix.triggered == true
         uses: juliangruber/sleep-action@v1.0.1
         with:
           time: 5s
-      - name: validate triggered workflow status
-        if: always()
-        uses: xembly/validate-workflow-status@v1.0.0
+      - name: validate checks
+        if: matrix.triggered == true
+        uses: ./.github/validate/
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          workflow: test
-          branch: master
+          typeName: ${{ matrix.id }}

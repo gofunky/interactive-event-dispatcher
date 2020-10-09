@@ -9,7 +9,6 @@ else
     MATCH="$id_match"
   else
     echo "::error:: this event was not defined in the matrix"
-    echo "::error::$?"
     exit 1
   fi
 fi
