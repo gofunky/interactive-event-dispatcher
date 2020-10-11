@@ -74,6 +74,9 @@ export class Event extends Reference implements Dispatchable {
 			})
 
 			if (existing.total_count > 0) {
+				core.info(
+					'Skipping event creating since there already exists at least one check with this ref and name'
+				)
 				continue
 			}
 

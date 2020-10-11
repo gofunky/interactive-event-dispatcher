@@ -1,11 +1,12 @@
-name: build
+name: observe
 
 on:
   workflow_run:
-    workflows: ['test']
+    workflows:
+      - 'test'
 
 jobs:
-  wait:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
