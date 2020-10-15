@@ -33,16 +33,14 @@ export class WorkflowRun extends Observer implements Dispatchable {
 		const payload = this.workflowData
 
 		if (!payload) {
-			core.error(`The workflow payload seems to be of unexpected type.`)
-			return
+			throw new Error(`The workflow payload seems to be of unexpected type.`)
 		}
 
 		if (
 			payload.workflow_run?.event !== 'repository_dispatch' ||
 			payload.workflow?.name === undefined
 		) {
-			core.error(`The workflow payload seems to be invalid.`)
-			return
+			throw new Error(`The workflow payload seems to be invalid.`)
 		}
 
 		const runId = payload.workflow_run.id
@@ -52,36 +50,29 @@ export class WorkflowRun extends Observer implements Dispatchable {
 		})
 
 		if (!jobs || jobs.jobs.length === 0) {
-			core.error(`No jobs could be found with run id ${runId}.`)
-			return
+			throw new Error(`No jobs could be found with run id ${runId}.`)
 		}
 
-		const clientPayloadMatcher = /<interactive-event-dispatcher>(.*)<interactive-event-dispatcher>/.compile()
+		const clientPayloadMatcher = /<interactive-event-dispatcher>(.*)<interactive-event-dispatcher>/s.compile()
 
-		const jobLogPromises = jobs.jobs.map(async (value) => {
+		const jobLogPromises = jobs.jobs.map(async (job) => {
 			const log = await this.api.logForJob({
-				runId: value.id
+				id: job.id
 			})
 			const payloadOpt = clientPayloadMatcher.exec(log ?? '')
-			let clientPayload
 
-			if (payloadOpt && payloadOpt.length === 2 && payloadOpt[0] !== '') {
-				clientPayload = <Payload>JSON.parse(payloadOpt[1])
+			if (!payloadOpt || payloadOpt.length < 2 || payloadOpt[0] === '') {
+				throw new Error(`For job ${job.id}, no payload log could be fetched.`)
 			}
 
 			return {
-				job: value,
-				clientPayload
+				job,
+				clientPayload: <Payload>JSON.parse(payloadOpt[1])
 			}
 		})
 		const jobsWithLogs = await Promise.all(jobLogPromises)
 
 		for (const {job, clientPayload} of jobsWithLogs) {
-			if (!clientPayload) {
-				core.error(`For job ${job.id}, no payload log could be fetched.`)
-				continue
-			}
-
 			const jobData = <CheckParams>{
 				sha: clientPayload.sha,
 				name: `${payload.workflow.name} / ${job.name} (${clientPayload.triggerEvent})`,

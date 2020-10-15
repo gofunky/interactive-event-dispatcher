@@ -15,7 +15,8 @@ import type {
 	WorkflowRunParams,
 	CheckSelectorParams,
 	WorkflowParams,
-	ListRunsParams
+	ListRunsParams,
+	JobId
 } from './types'
 import type {
 	ActionsGetWorkflowResponseData,
@@ -224,10 +225,10 @@ export class Api {
 		return data
 	}
 
-	async logForJob({runId}: WorkflowRunParams): Promise<string | undefined> {
+	async logForJob({id}: JobId): Promise<string | undefined> {
 		const {headers} = await this.octokit.actions.downloadJobLogsForWorkflowRun({
 			...this.repo,
-			job_id: runId
+			job_id: id
 		})
 
 		if (headers.location === undefined || headers.location === '') {

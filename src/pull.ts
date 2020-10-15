@@ -102,10 +102,9 @@ export class PullRequestEvent extends Event {
 		}
 
 		if (!this.number) {
-			core.error(
+			throw new Error(
 				'Event condition check failed because the issue number could not be determined.'
 			)
-			return false
 		}
 
 		const pullRequest = await this.pullData()

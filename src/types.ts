@@ -77,8 +77,11 @@ export interface CheckParams extends CheckRelationParams {
 	}
 }
 
-export interface JobParams {
+export interface JobId {
 	id: number
+}
+
+export interface JobParams extends JobId {
 	jobData: CheckParams
 }
 
