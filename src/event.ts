@@ -46,7 +46,9 @@ export class Event extends Reference implements Dispatchable {
 
 	async dispatch(): Promise<void> {
 		if (!(await this.triggered())) {
-			core.info('Skipping event dispatch because trigger condition is not true')
+			core.info(
+				'Skipping event dispatch because trigger condition is not true.'
+			)
 			return
 		}
 
@@ -56,7 +58,9 @@ export class Event extends Reference implements Dispatchable {
 			eventName,
 			payload
 		})
-		core.info(`Event with type '${eventName}' has been dispatched successfully`)
+		core.info(
+			`Event with type '${eventName}' has been dispatched successfully.`
+		)
 
 		await Reference.sleep(1000)
 		await this.checkWorkflows()
@@ -74,14 +78,14 @@ export class Event extends Reference implements Dispatchable {
 
 			if (existing.total_count > 0) {
 				core.info(
-					`Skipping check creation since there already exists at least one check with this ref and name '${job.jobData.name}'`
+					`Skipping check creation since there already exists at least one check with this ref and name '${job.jobData.name}'.`
 				)
 				continue
 			}
 
-			await this.api.createCheck(job.jobData)
+			const check = await this.api.createCheck(job.jobData)
 			core.info(
-				`A check with title '${job.jobData.name}' has been created successfully`
+				`A check with title '${job.jobData.name}' has been created successfully under id '${check.id}'.`
 			)
 		}
 	}

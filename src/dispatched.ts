@@ -27,7 +27,7 @@ export class RepositoryDispatch extends Observer implements Dispatchable {
 		}
 
 		throw new Error(
-			'This repository_dispatch event does not contain the expected client payload'
+			'This repository_dispatch event does not contain the expected client payload.'
 		)
 	}
 

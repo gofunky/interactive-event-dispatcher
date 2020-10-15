@@ -1,11 +1,10 @@
 on:
-  pull_request_target:
   push:
 
 name: example
 
 jobs:
   dispatch:
-    if: false
+    if: 0
     steps:
       - run: echo "Test"
