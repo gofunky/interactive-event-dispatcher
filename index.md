@@ -190,5 +190,16 @@ This is an example that includes all typical inputs.
 
 <!-- add-file: ./.github/workflows/example.yml -->
 ``` yml 
+on:
+  pull_request_target:
+  push:
+
+name: example
+
+jobs:
+  dispatch:
+    if: false
+    steps:
+      - run: echo "Test"
 
 ```
