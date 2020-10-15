@@ -1,5 +1,6 @@
 import {JobParams} from './types'
 import {Reference} from './reference'
+import * as core from '@actions/core'
 
 export class Observer extends Reference {
 	async updateCheck(job: JobParams): Promise<void> {
@@ -10,12 +11,18 @@ export class Observer extends Reference {
 		})
 
 		if (existing.total_count === 1) {
-			await this.api.updateCheck({
+			const check = await this.api.updateCheck({
 				checkId: existing.check_runs[0].id,
 				...job.jobData
 			})
+			core.info(
+				`The check '${job.jobData.name}' has been updated successfully with id '${check.id}'.`
+			)
 		} else {
-			await this.api.createCheck(job.jobData)
+			const check = await this.api.createCheck(job.jobData)
+			core.info(
+				`The check '${job.jobData.name}' has been created successfully with id '${check.id}'.`
+			)
 		}
 	}
 }

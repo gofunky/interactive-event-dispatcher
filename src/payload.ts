@@ -18,4 +18,5 @@ export interface Payload {
 	repository: string
 	ref: string
 	sha: string
+	short: string
 }

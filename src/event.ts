@@ -40,7 +40,8 @@ export class Event extends Reference implements Dispatchable {
 			triggerEvent: await this.triggerEvent(),
 			repository: await this.repository(),
 			ref: await this.ref(),
-			sha: await this.sha()
+			sha: await this.sha(),
+			short: await this.short()
 		}
 	}
 
@@ -85,7 +86,7 @@ export class Event extends Reference implements Dispatchable {
 
 			const check = await this.api.createCheck(job.jobData)
 			core.info(
-				`A check with title '${job.jobData.name}' has been created successfully under id '${check.id}'.`
+				`The check '${job.jobData.name}' has been created successfully with id '${check.id}'.`
 			)
 		}
 	}
