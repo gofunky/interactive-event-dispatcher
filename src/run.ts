@@ -33,6 +33,7 @@ export class WorkflowRun extends Observer implements Dispatchable {
 		const payload = this.workflowData
 
 		if (!payload) {
+			core.error(`The workflow payload seems to be of unexpected type.`)
 			return
 		}
 
@@ -40,7 +41,7 @@ export class WorkflowRun extends Observer implements Dispatchable {
 			payload.workflow_run?.event !== 'repository_dispatch' ||
 			payload.workflow?.name === undefined
 		) {
-			core.error(`The workflow payload seems to be missing.`)
+			core.error(`The workflow payload seems to be invalid.`)
 			return
 		}
 
@@ -51,7 +52,7 @@ export class WorkflowRun extends Observer implements Dispatchable {
 		})
 
 		if (!jobs || jobs.jobs.length === 0) {
-			core.warning(`No jobs could be found with run id ${runId}.`)
+			core.error(`No jobs could be found with run id ${runId}.`)
 			return
 		}
 
@@ -76,24 +77,27 @@ export class WorkflowRun extends Observer implements Dispatchable {
 		const jobsWithLogs = await Promise.all(jobLogPromises)
 
 		for (const {job, clientPayload} of jobsWithLogs) {
-			if (clientPayload) {
-				const jobData = <CheckParams>{
-					sha: clientPayload.sha,
-					name: `${payload.workflow.name} / ${job.name} (${clientPayload.triggerEvent})`,
-					conclusion: job.conclusion
-						? <CheckConclusionType>job.conclusion
-						: undefined,
-					status: <CheckStatusType>job.status,
-					externalId: String(job.id),
-					detailsUrl: job.html_url,
-					completedAt: job.completed_at,
-					startedAt: job.started_at
-				}
+			if (!clientPayload) {
+				core.error(`For job ${job.id}, no payload log could be fetched.`)
+				continue
+			}
 
-				yield {
-					id: job.id,
-					jobData
-				}
+			const jobData = <CheckParams>{
+				sha: clientPayload.sha,
+				name: `${payload.workflow.name} / ${job.name} (${clientPayload.triggerEvent})`,
+				conclusion: job.conclusion
+					? <CheckConclusionType>job.conclusion
+					: undefined,
+				status: <CheckStatusType>job.status,
+				externalId: String(job.id),
+				detailsUrl: job.html_url,
+				completedAt: job.completed_at,
+				startedAt: job.started_at
+			}
+
+			yield {
+				id: job.id,
+				jobData
 			}
 		}
 	}
@@ -109,6 +113,13 @@ export class WorkflowRun extends Observer implements Dispatchable {
 		for await (const job of this.jobDataFor()) {
 			await Reference.sleep(1000)
 			await this.updateCheck(job)
+			core.info(
+				`The check for job ${
+					job.id
+				} was updated successfully with parameters: ${JSON.stringify(
+					job.jobData
+				)}`
+			)
 		}
 	}
 }
