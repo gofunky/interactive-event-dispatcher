@@ -9,6 +9,7 @@ import {Observer} from './observe'
 import {Payload} from './payload'
 import {Dispatchable, Reference} from './reference'
 import {EventPayloads} from '@octokit/webhooks'
+import * as core from '@actions/core'
 
 export class WorkflowRun extends Observer implements Dispatchable {
 	get completed(): boolean {
@@ -39,15 +40,18 @@ export class WorkflowRun extends Observer implements Dispatchable {
 			payload.workflow_run?.event !== 'repository_dispatch' ||
 			payload.workflow?.name === undefined
 		) {
+			core.error(`The workflow payload seems to be missing.`)
 			return
 		}
 
+		const runId = payload.workflow_run.id
 		const jobs = await this.api.jobsForWorkflow({
-			runId: payload.workflow_run.id,
+			runId,
 			filter: 'latest'
 		})
 
-		if (!jobs) {
+		if (!jobs || jobs.jobs.length === 0) {
+			core.warning(`No jobs could be found with run id ${runId}.`)
 			return
 		}
 
@@ -96,6 +100,9 @@ export class WorkflowRun extends Observer implements Dispatchable {
 
 	async dispatch(): Promise<void> {
 		if (!this.completed) {
+			core.warning(
+				`This workflow is triggered by type ${context.action} but should be filtered for 'completed'.`
+			)
 			return
 		}
 
