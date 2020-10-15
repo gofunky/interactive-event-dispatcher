@@ -197,6 +197,7 @@ name: example
 
 jobs:
   dispatch:
+    runs-on: ubuntu-latest
     if: 0
     steps:
       - run: echo "Test"
