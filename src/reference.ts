@@ -21,6 +21,10 @@ export class Reference {
 		return Inputs.sourceEvent ?? context.eventName
 	}
 
+	static get action(): string {
+		return context.payload.action ?? ''
+	}
+
 	protected static async sleep(duration: number): Promise<void> {
 		return new Promise((resolve) => setTimeout(resolve, duration))
 	}

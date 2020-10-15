@@ -6,7 +6,7 @@ import {CheckParams} from './types'
 import {memoize} from 'memoize-cache-decorator'
 import {Observer} from './observe'
 import {LazyGetter as lazy} from 'lazy-get-decorator'
-import {Dispatchable} from './reference'
+import {Dispatchable, Reference} from './reference'
 
 export class RepositoryDispatch extends Observer implements Dispatchable {
 	@lazy()
@@ -35,7 +35,7 @@ export class RepositoryDispatch extends Observer implements Dispatchable {
 	get jobData(): {id: number; jobData: CheckParams} {
 		const jobData = <CheckParams>{
 			sha: this.clientPayload.sha,
-			name: `${context.workflow} / ${context.job} (${context.action})`,
+			name: `${context.workflow} / ${context.job} (${Reference.action})`,
 			externalId: String(context.runId)
 		}
 
@@ -61,7 +61,7 @@ export class RepositoryDispatch extends Observer implements Dispatchable {
 
 	@memoize()
 	async triggerEvent(): Promise<string> {
-		return context.action
+		return Reference.action
 	}
 
 	@memoize()

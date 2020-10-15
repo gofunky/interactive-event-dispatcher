@@ -13,7 +13,7 @@ import * as core from '@actions/core'
 
 export class WorkflowRun extends Observer implements Dispatchable {
 	get completed(): boolean {
-		return context.action === 'completed'
+		return Reference.action === 'completed'
 	}
 
 	get workflowData(): EventPayloads.WebhookPayloadWorkflowRun | undefined {
@@ -101,7 +101,7 @@ export class WorkflowRun extends Observer implements Dispatchable {
 	async dispatch(): Promise<void> {
 		if (!this.completed) {
 			core.warning(
-				`This workflow is triggered by type ${context.action} but should be filtered for 'completed'.`
+				`This workflow is triggered by type ${Reference.action} but should be filtered for 'completed'.`
 			)
 			return
 		}
