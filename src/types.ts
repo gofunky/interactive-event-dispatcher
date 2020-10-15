@@ -1,5 +1,3 @@
-import {EventPayloads} from '@octokit/webhooks'
-
 export type AffiliationType = 'direct' | 'outside' | 'all'
 export type CheckStatusType = 'queued' | 'in_progress' | 'completed'
 export type CheckConclusionType =
@@ -117,40 +115,4 @@ export interface ApiParams {
 	token: string
 	actionsToken: string
 	perPage?: number
-}
-
-export interface WorkflowRunPayload
-	extends EventPayloads.WebhookPayloadWorkflowRun {
-	workflow: {
-		badge_url: string
-		created_at: string
-		html_url: string
-		id: number
-		name: string
-		node_id: string
-		path: string
-		state: string
-		updated_at: string
-		url: string
-	}
-	workflow_run: {
-		conclusion: string
-		created_at: string
-		event: string
-		head_branch: string
-		head_commit: EventPayloads.WebhookPayloadCheckSuiteCheckSuiteHeadCommit
-		head_repository: EventPayloads.WebhookPayloadPullRequestPullRequestHeadRepo
-		head_sha: string
-		html_url: string
-		node_id: string
-		repository: EventPayloads.PayloadRepository
-		rerun_url: string
-		run_number: number
-		status: string
-		updated_at: string
-		url: string
-		workflow_id: number
-		workflow_url: string
-		id: number
-	}
 }

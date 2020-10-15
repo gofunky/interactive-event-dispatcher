@@ -3,20 +3,20 @@ import {
 	CheckConclusionType,
 	CheckParams,
 	CheckStatusType,
-	JobParams,
-	WorkflowRunPayload
+	JobParams
 } from './types'
 import {Observer} from './observe'
 import {Payload} from './payload'
 import {Dispatchable, Reference} from './reference'
+import {EventPayloads} from '@octokit/webhooks'
 
 export class WorkflowRun extends Observer implements Dispatchable {
 	get completed(): boolean {
 		return context.action === 'completed'
 	}
 
-	get workflowData(): WorkflowRunPayload | undefined {
-		const payload = context.payload as WorkflowRunPayload
+	get workflowData(): EventPayloads.WebhookPayloadWorkflowRun | undefined {
+		const payload = context.payload as EventPayloads.WebhookPayloadWorkflowRun
 
 		if (
 			payload?.workflow_run !== undefined &&
@@ -35,7 +35,10 @@ export class WorkflowRun extends Observer implements Dispatchable {
 			return
 		}
 
-		if (payload.workflow_run.event !== 'repository_dispatch') {
+		if (
+			payload.workflow_run?.event !== 'repository_dispatch' ||
+			payload.workflow?.name === undefined
+		) {
 			return
 		}
 

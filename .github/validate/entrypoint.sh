@@ -6,7 +6,7 @@ if checks=$( \
         -H "Authorization: Bearer $INPUT_TOKEN" \
     );
 then
-  if ! echo "$checks" | yq read - "check_runs.(name==test*($INPUT_TYPENAME))" --collect; then
+  if ! echo "$checks" | yq read - "check_runs.(name==test*($INPUT_TYPENAME))" --collect --exitStatus; then
     echo "::error:: no check could be found with type name '$INPUT_TYPENAME' and workflow name 'test'"
     exit 1
   fi
