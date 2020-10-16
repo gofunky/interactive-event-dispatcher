@@ -53,7 +53,7 @@ export class WorkflowRun extends Observer implements Dispatchable {
 			throw new Error(`No jobs could be found with run id ${runId}.`)
 		}
 
-		const clientPayloadMatcher = /<interactive-event-dispatcher>(.*)<interactive-event-dispatcher>/s.compile()
+		const clientPayloadMatcher = /.*<interactive-event-dispatcher>(.*)<interactive-event-dispatcher>.*/s.compile()
 
 		const jobLogPromises = jobs.jobs.map(async (job) => {
 			const log = await this.api.logForJob({
