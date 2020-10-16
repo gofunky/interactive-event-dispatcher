@@ -231,7 +231,7 @@ export class Api {
 		return data
 	}
 
-	async logForJob({id}: JobId): Promise<string | undefined> {
+	async logForJob({id}: JobId): Promise<string> {
 		const {data} = await this.octokit.actions.downloadJobLogsForWorkflowRun({
 			...this.repo,
 			job_id: id
