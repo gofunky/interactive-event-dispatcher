@@ -59,10 +59,16 @@ export class WorkflowRun extends Observer implements Dispatchable {
 			const log = await this.api.logForJob({
 				id: job.id
 			})
+
+			if (!log) {
+				throw new Error(`For job ${job.id}, no payload log could be fetched.`)
+			}
 			const payloadOpt = clientPayloadMatcher.exec(log ?? '')
 
 			if (!payloadOpt || payloadOpt.length < 2 || payloadOpt[0] === '') {
-				throw new Error(`For job ${job.id}, no payload log could be fetched.`)
+				throw new Error(
+					`For job ${job.id}, the client payload could not be found in the job log.`
+				)
 			}
 
 			return {

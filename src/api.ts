@@ -37,7 +37,7 @@ import {GitHub} from '@actions/github/lib/utils'
 import {context, getOctokit} from '@actions/github'
 import * as core from '@actions/core'
 import {CatchAll as catchAll} from '@magna_shogun/catch-decorator'
-import axios from 'axios'
+import axios, {AxiosRequestConfig} from 'axios'
 
 const ConstLogger = {
 	debug: core.debug,
@@ -62,6 +62,7 @@ interface RepoListRequest extends RepoRequest {
 export class Api {
 	octokit: InstanceType<typeof GitHub>
 	actionsKit: InstanceType<typeof GitHub>
+	axiosConfig: AxiosRequestConfig
 	graphql: any
 
 	private readonly repo: RepoRequest
@@ -76,6 +77,11 @@ export class Api {
 			log: ConstLogger,
 			userAgent: 'gofunky/interactive-event-dispatcher/gh'
 		})
+		this.axiosConfig = {
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		}
 		this.repo = {
 			repo: context.repo.repo,
 			owner: context.repo.owner
@@ -231,10 +237,12 @@ export class Api {
 			job_id: id
 		})
 
-		if (headers.location === undefined || headers.location === '') {
+		const logSource = headers.location
+
+		if (logSource === undefined || logSource === '') {
 			return undefined
 		}
-		const {data} = await axios.get(headers.location)
+		const {data} = await axios.get(logSource, this.axiosConfig)
 		return data
 	}
 
