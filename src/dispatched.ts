@@ -79,7 +79,7 @@ export class RepositoryDispatch extends Observer implements Dispatchable {
 			core.info(
 				`<interactive-event-dispatcher>${JSON.stringify(
 					this.clientPayload
-				)}</interactive-event-dispatcher>`
+				)}<interactive-event-dispatcher>`
 			)
 			core.exportVariable('interactiveEventDispatcher', true)
 			core.exportVariable('sha', this.clientPayload.sha)
