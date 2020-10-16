@@ -76,10 +76,9 @@ export class RepositoryDispatch extends Observer implements Dispatchable {
 
 	async dispatch(): Promise<void> {
 		if (!this.postStep) {
+			const payloadJson = JSON.stringify(this.clientPayload)
 			core.info(
-				`<interactive-event-dispatcher>${JSON.stringify(
-					this.clientPayload
-				)}<interactive-event-dispatcher>`
+				`<interactive-event-dispatcher>${payloadJson}</interactive-event-dispatcher>`
 			)
 			core.exportVariable('interactiveEventDispatcher', true)
 			core.exportVariable('sha', this.clientPayload.sha)
