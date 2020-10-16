@@ -3,8 +3,8 @@ dependencies:
   '@actions/github': 4.0.0
   '@magna_shogun/catch-decorator': 1.0.1
   '@octokit/graphql': 4.5.6
+  '@octokit/plugin-retry': 3.0.3
   '@octokit/webhooks': 7.13.1
-  axios: 0.20.0
   lazy-get-decorator: 2.2.0
   memoize-cache-decorator: 1.3.2
   micromustache: 8.0.3
@@ -462,6 +462,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-1/qn1q1C1hGz6W/iEDm9DoyNoG/xdFDt78E3eZ5hHeUfJTLJgyAMdj9chL/cNBHjcjd+FH5aO1x0VCqR2RE0mw==
+  /@octokit/plugin-retry/3.0.3:
+    dependencies:
+      '@octokit/types': 5.5.0
+      bottleneck: 2.19.5
+    dev: false
+    resolution:
+      integrity: sha512-RFvcBg4JGyfWTWE35EIF7jf/eglIk5MuvfygzdIMLIVK3/4Ywz3X1x9Ri75nlyAmk53EpVWB4DwM/xEB1NXxXA==
   /@octokit/request-error/2.0.2:
     dependencies:
       '@octokit/types': 5.5.0
@@ -1950,12 +1957,6 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
-  /axios/0.20.0:
-    dependencies:
-      follow-redirects: 1.13.0
-    dev: false
-    resolution:
-      integrity: sha512-ANA4rr2BDcmmAQLOKft2fufrtuvlqR+cXNNinUmvfeSNCOF98PZL+7M/v1zIdGo7OLjEA9J2gXJL+j4zGsl0bA==
   /babel-core/7.0.0-bridge.0_@babel+core@7.12.0:
     dependencies:
       '@babel/core': 7.12.0
@@ -2023,6 +2024,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-GkTiFpjFtUzU9CbMeJ5iazkCzGL3jrhzerzZIuqLABjbwRaFt33I9tUdSNryIptM+RxDet6OKm2WnLXzW51KsQ==
+  /bottleneck/2.19.5:
+    dev: false
+    resolution:
+      integrity: sha512-VHiNCbI1lKdl44tGrhNfU3lup0Tj/ZBMJB5/2ZbNXRCPuRCO7ed2mgcK4r17y+KB2EfuYuRaVlwNbAeaWGSpbw==
   /boxen/4.2.0:
     dependencies:
       ansi-align: 3.0.0
@@ -3536,12 +3541,6 @@ packages:
       node: '>=0.4.0'
     resolution:
       integrity: sha512-ev8SvmG+XU9D6WgHVezP4kY3Myr1tJvTUTEi7mbhhj+rn889K7YXdakte6oqXNLIJYJ2f5Fuw18zXTVa1NO8Kw==
-  /follow-redirects/1.13.0:
-    dev: false
-    engines:
-      node: '>=4.0'
-    resolution:
-      integrity: sha512-aq6gF1BEKje4a9i9+5jimNFIpq4Q1WiwBToeRK5NvZBd/TRsmW8BsJfOEGkr76TbOyPVD3OVDN910EcUNtRYEA==
   /for-in/1.0.2:
     dev: true
     engines:
@@ -4833,6 +4832,7 @@ packages:
     dev: true
     resolution:
       integrity: sha512-iNWfHsFJSXsGVqMXKS5RqdaEnQsWaxEApRmP3WdldI3NFqZTkQfmaZ28+U60/cAjEBK5AjFZZg5KwH9vhv+nvA==
+      tarball: nano-memoize/-/nano-memoize-1.2.0.tgz
   /nanomatch/1.2.13:
     dependencies:
       arr-diff: 4.0.0
@@ -6850,11 +6850,11 @@ specifiers:
   '@actions/github': 4.0.0
   '@magna_shogun/catch-decorator': ^1.0.1
   '@octokit/graphql': ^4.5.6
+  '@octokit/plugin-retry': ^3.0.3
   '@octokit/types': ^5.5.0
   '@octokit/webhooks': ^7.13.1
   '@types/node': ^14.11.8
   '@vercel/ncc': ^0.24.1
-  axios: ^0.20.0
   eslint-plugin-putout: ^5.2.0
   html-loader: ^1.3.2
   lazy-get-decorator: ^2.2.0

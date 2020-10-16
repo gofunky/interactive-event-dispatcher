@@ -33,11 +33,11 @@ import type {
 	ReactionsCreateForIssueCommentResponseData,
 	ReposListCollaboratorsResponseData
 } from '@octokit/types'
-import {GitHub} from '@actions/github/lib/utils'
-import {context, getOctokit} from '@actions/github'
+import {getOctokitOptions, GitHub} from '@actions/github/lib/utils'
+import {context} from '@actions/github'
 import * as core from '@actions/core'
 import {CatchAll as catchAll} from '@magna_shogun/catch-decorator'
-import axios, {AxiosRequestConfig} from 'axios'
+import {retry} from '@octokit/plugin-retry'
 
 const ConstLogger = {
 	debug: core.debug,
@@ -45,6 +45,8 @@ const ConstLogger = {
 	warn: core.warning,
 	error: core.error
 }
+
+const RetryingOctokit = GitHub.plugin(retry)
 
 interface RepoRequest {
 	repo: string
@@ -62,26 +64,24 @@ interface RepoListRequest extends RepoRequest {
 export class Api {
 	octokit: InstanceType<typeof GitHub>
 	actionsKit: InstanceType<typeof GitHub>
-	axiosConfig: AxiosRequestConfig
 	graphql: any
 
 	private readonly repo: RepoRequest
 	private readonly repoList: RepoListRequest
 
 	constructor({token, actionsToken, perPage}: ApiParams) {
-		this.octokit = getOctokit(token, {
-			log: ConstLogger,
-			userAgent: 'gofunky/interactive-event-dispatcher/pat'
-		})
-		this.actionsKit = getOctokit(actionsToken, {
-			log: ConstLogger,
-			userAgent: 'gofunky/interactive-event-dispatcher/gh'
-		})
-		this.axiosConfig = {
-			headers: {
-				Authorization: `Bearer ${token}`
-			}
-		}
+		this.octokit = new RetryingOctokit(
+			getOctokitOptions(token, {
+				log: ConstLogger,
+				userAgent: 'gofunky/interactive-event-dispatcher/pat'
+			})
+		)
+		this.actionsKit = new RetryingOctokit(
+			getOctokitOptions(actionsToken, {
+				log: ConstLogger,
+				userAgent: 'gofunky/interactive-event-dispatcher/gh'
+			})
+		)
 		this.repo = {
 			repo: context.repo.repo,
 			owner: context.repo.owner
@@ -232,17 +232,10 @@ export class Api {
 	}
 
 	async logForJob({id}: JobId): Promise<string | undefined> {
-		const {headers} = await this.octokit.actions.downloadJobLogsForWorkflowRun({
+		const {data} = await this.octokit.actions.downloadJobLogsForWorkflowRun({
 			...this.repo,
 			job_id: id
 		})
-
-		const logSource = headers.location
-
-		if (logSource === undefined || logSource === '') {
-			return undefined
-		}
-		const {data} = await axios.get(logSource, this.axiosConfig)
 		return data
 	}
 
