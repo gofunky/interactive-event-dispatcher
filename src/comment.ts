@@ -175,7 +175,7 @@ export class PullRequestCommentEvent extends PullRequestEvent {
 	}
 
 	async matchedCheck(command: string): Promise<Match> {
-		const checkExp = /^check\s+([\da-f]+)$/m
+		const checkExp = /^check\s+([\da-f]+)$/mu
 		const checkMatch = checkExp.exec(command)
 
 		if (checkMatch && checkMatch.length >= 2 && checkMatch[0] !== '') {

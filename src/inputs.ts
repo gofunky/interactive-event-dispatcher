@@ -24,7 +24,7 @@ export class Inputs {
 			.getInput('commandFilter')
 			.split('\n')
 			.filter((x) => x !== '')
-			.map((cmd) => new RegExp(cmd).compile())
+			.map((cmd) => new RegExp(cmd, 'u'))
 	}
 
 	@lazy(true, true)
