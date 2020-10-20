@@ -78,7 +78,11 @@ export class WorkflowRun extends Observer implements Dispatchable {
 		for (const {job, clientPayload} of jobsWithLogs) {
 			const jobData = <CheckParams>{
 				sha: clientPayload.sha,
-				name: `${payload.workflow.name} / ${job.name} (${clientPayload.triggerEvent})`,
+				name: Reference.checkName({
+					workflowName: payload.workflow.name,
+					jobName: job.name,
+					eventName: clientPayload.triggerEvent
+				}),
 				conclusion: job.conclusion
 					? <CheckConclusionType>job.conclusion
 					: undefined,

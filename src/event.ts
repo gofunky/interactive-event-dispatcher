@@ -122,7 +122,11 @@ export class Event extends Reference implements Dispatchable {
 				if (job.status !== 'queued') {
 					continue
 				}
-				const name = `${wf.name} / ${job.name} (${eventName})`
+				const name = Reference.checkName({
+					workflowName: wf.name,
+					jobName: job.name,
+					eventName
+				})
 				yield {
 					id: job.id,
 					jobData: {

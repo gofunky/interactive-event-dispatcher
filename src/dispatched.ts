@@ -35,7 +35,10 @@ export class RepositoryDispatch extends Observer implements Dispatchable {
 	get jobData(): {id: number; jobData: CheckParams} {
 		const jobData = <CheckParams>{
 			sha: this.clientPayload.sha,
-			name: `${context.workflow} / ${context.job} (${Reference.action})`,
+			name: Reference.checkName({
+				workflowName: context.workflow,
+				jobName: context.job
+			}),
 			externalId: String(context.runId)
 		}
 

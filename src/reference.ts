@@ -6,6 +6,12 @@ export interface Dispatchable {
 	dispatch: () => Promise<void>
 }
 
+interface NameParams {
+	workflowName: string
+	jobName: string
+	eventName?: string
+}
+
 export class Reference {
 	api: Api
 
@@ -23,6 +29,10 @@ export class Reference {
 
 	static get action(): string {
 		return context.payload.action ?? ''
+	}
+
+	static checkName({workflowName, jobName, eventName}: NameParams): string {
+		return `${workflowName}_${jobName}_${eventName ?? Reference.action}`
 	}
 
 	protected static async sleep(duration: number): Promise<void> {
