@@ -189,17 +189,3 @@ This output depicts the event's action type name that is triggered.
 This is an example that includes all typical inputs.
 
 <!-- add-file: ./.github/workflows/example.yml -->
-``` yml 
-on:
-  push:
-
-name: example
-
-jobs:
-  dispatch:
-    runs-on: ubuntu-latest
-    if: 0
-    steps:
-      - run: echo "Test"
-
-```
