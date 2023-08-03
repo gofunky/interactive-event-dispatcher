@@ -11,7 +11,7 @@
   "repository": "https://github.com/gofunky/interactive-event-dispatcher.git",
   "license": "GPL-3",
   "dependencies": {
-    "@actions/core": "1.2.6",
+    "@actions/core": "1.9.1",
     "@actions/github": "4.0.0",
     "@magna_shogun/catch-decorator": "^1.0.1",
     "@octokit/graphql": "^4.5.6",
